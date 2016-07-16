@@ -24,12 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 		
 		FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
-			if user == nil { // user not logged in, so go to login screen
+			if user == nil { // user not logged in: load login screen
 				let storyboard = UIStoryboard(name: "Main", bundle: nil)
 				let rootVC = storyboard.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
 				self.window?.rootViewController = rootVC
 			}
-			// user is logged in, so go to Goals screen
+			// user is logged in: load their info, then go to Goals screen
+			AppState.sharedInstance.setState(user)
 		}
 		return true
 	}
