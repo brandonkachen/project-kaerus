@@ -11,60 +11,112 @@ import Firebase
 import JSQMessagesViewController
 
 class ChatViewController: JSQMessagesViewController {
-//	let incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.lightGrayColor())
-//	let outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor(red: 10/255, green: 180/255, blue: 230/255, alpha: 1.0))
-	var outgoingBubbleImageView: JSQMessagesBubbleImage!
-	var incomingBubbleImageView: JSQMessagesBubbleImage!
+	var outgoingBubbleImageView, incomingBubbleImageView: JSQMessagesBubbleImage!
 	var messages = [JSQMessage]()
 	var avatars = Dictionary<String, UIImage>()
-	var messageRef: FIRDatabaseReference!
-	var userIsTypingRef: FIRDatabaseReference!
+	var messageRef, userIsTypingRef: FIRDatabaseReference!
 	private var localTyping = false
-	
-	override func viewWillAppear(animated: Bool) {
-		self.senderId = AppState.sharedInstance.userID
-		self.senderDisplayName = AppState.sharedInstance.displayName
-		self.title = "Messages"
-	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		self.edgesForExtendedLayout = UIRectEdge.None
-		self.setupBubbles()
-		messages.removeAll()
+
 		// No avatars
 		collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero
 		collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero
 		
-		messageRef = FIRDatabase.database().reference().child("messages")
+		// set up view controller
+		self.senderId = AppState.sharedInstance.userID
+		self.senderDisplayName = AppState.sharedInstance.displayName
+		self.title = "Messages"
+		self.edgesForExtendedLayout = UIRectEdge.None
+		self.setupBubbles()
+		
+		// set up Firebase branch where messages will be stored
+		let roomID = "messages/" + self.senderId
+		messageRef = FIRDatabase.database().reference().child(roomID)
+		
+		// get latest messages
 		observeMessages()
 	}
 	
 	override func viewDidAppear(animated: Bool) {
-	  super.viewDidAppear(animated)
-	  observeMessages()
-	  observeTyping()
+		super.viewDidAppear(animated)
+		observeTyping()
 	}
 	
-	override func textViewDidChange(textView: UITextView) {
-	  super.textViewDidChange(textView)
-		
-	  // If the text is not empty, the user is typing
-	  isTyping = textView.text != ""
+	
+	// MARK: - messaging
+	
+	func addMessage(id: String, name: String, content: String) {
+		let message = JSQMessage(senderId: id, displayName: name, text: content)
+		messages.append(message)
+	}
+	
+	private func observeMessages() {
+		let messagesQuery = messageRef.queryLimitedToLast(25)
+		messagesQuery.observeEventType(.ChildAdded) { (snapshot: FIRDataSnapshot!) in
+			
+			// get the info from snapshot
+			let id = snapshot.childSnapshotForPath("id").value as! String
+			let displayName = snapshot.childSnapshotForPath("displayName").value as! String
+			let text = snapshot.childSnapshotForPath("text").value as! String
+			
+			// add to local messages array
+			self.addMessage(id, name: displayName, content: text)
+			self.finishReceivingMessage()
+		}
 	}
 	
 	override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!,
 	                                 senderDisplayName: String!, date: NSDate!) {
-		let itemRef = messageRef.childByAutoId()
-		let messageItem = [ 
+		// get timestamp to order things in Firebase
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
+		dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
+		
+		// add sender's ID so if users send messages at the exact same time, they won't erase one another
+		let timestamp = dateFormatter.stringFromDate(NSDate()) + "<" + self.senderId + ">"
+		
+		// create the new entry
+		let itemRef = messageRef.child(timestamp)
+		let messageItem =
+		[
 			"id": senderId,
 			"displayName": senderDisplayName,
 			"text": text
-			]
+		]
 		itemRef.setValue(messageItem)
+		
+		// finishing touches
 		JSQSystemSoundPlayer.jsq_playMessageSentSound()
 		finishSendingMessage()
 		isTyping = false
+	}
+	
+	
+	// MARK: - check if user is typing
+	
+	var isTyping: Bool {
+		get {
+			return localTyping
+		}
+		set {
+			localTyping = newValue
+			userIsTypingRef.setValue(newValue)
+		}
+	}
+
+	private func observeTyping() {
+		let typingIndicatorRef = FIRDatabase.database().reference().child("typingIndicator")
+		userIsTypingRef = typingIndicatorRef.child(senderId)
+		userIsTypingRef.onDisconnectRemoveValue()
+	}
+	
+	override func textViewDidChange(textView: UITextView) {
+		super.textViewDidChange(textView)
+		
+		// If the text is not empty, the user is typing
+		isTyping = textView.text != ""
 	}
 	
 	
@@ -79,10 +131,10 @@ class ChatViewController: JSQMessagesViewController {
 	}
 	
 	override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
-  let message = messages[indexPath.item] 
+		let message = messages[indexPath.item]
 		if message.senderId == senderId { 
 			return outgoingBubbleImageView
-		} else { 
+		} else {
 			return incomingBubbleImageView
 		}
 	}
@@ -123,44 +175,4 @@ class ChatViewController: JSQMessagesViewController {
 		self.collectionView?.reloadData()
 	}
 
-	
-	// MARK: - messaging
-	func addMessage(id: String, text: String) {
-	  let message = JSQMessage(senderId: id, displayName: "", text: text)
-	  messages.append(message)
-	}
-	
-	private func observeMessages() {
-		let messagesQuery = messageRef.queryLimitedToLast(25)
-		messagesQuery.observeEventType(.ChildAdded) { (snapshot: FIRDataSnapshot!) in
-		
-		let item : Dictionary<String, AnyObject?> = [
-			"id" : snapshot.childSnapshotForPath("id").value as! String,
-			"displayName": snapshot.childSnapshotForPath("displayName").value as! String,
-			"text" : snapshot.childSnapshotForPath("text").value as! String
-		]
-		
-		let id = item["id"] as! String
-		let text = item["text"] as! String
-		self.addMessage(id, text: text)
-		self.finishReceivingMessage()
-		}
-	}
-	
-	//MARK: - check if user is typing
-	var isTyping: Bool {
-		get {
-			return localTyping
-		}
-		set {
-			localTyping = newValue
-			userIsTypingRef.setValue(newValue)
-		}
-	}
-
-	private func observeTyping() {
-		let typingIndicatorRef = FIRDatabase.database().reference().child("typingIndicator")
-		userIsTypingRef = typingIndicatorRef.child(senderId)
-		userIsTypingRef.onDisconnectRemoveValue()
-	}
 }
