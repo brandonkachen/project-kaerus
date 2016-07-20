@@ -113,8 +113,7 @@ class FindFriendsTableViewController: UITableViewController {
 					// TODO: check if friend_status is already pending or not!
 					
 					// set friend info
-					let friend_info =
-					[
+					let friend_info = [
 						"friend_status" : "PENDING",
 						"friend_id" : AppState.sharedInstance.userID!,
 						"friend_name" : AppState.sharedInstance.username!,
@@ -125,8 +124,7 @@ class FindFriendsTableViewController: UITableViewController {
 					setFriendInfoRef.setValue(friend_info)
 					
 					// now set user's info
-					let my_info =
-					[
+					let my_info = [
 						"friend_status" : "ASKING",
 						"friend_id" : fir_id,
 						"friend_name" : self.friendData[row].name,
