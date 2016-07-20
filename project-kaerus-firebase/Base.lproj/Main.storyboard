@@ -30,7 +30,7 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Tx-DU-33d">
                                 <rect key="frame" x="194" y="418" width="213" height="60"/>
-                                <color key="backgroundColor" red="0.29495649870000001" green="0.56198815710000005" blue="0.99160850050000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.17122942482552839" green="0.57299019712294452" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="460" id="Owq-wX-n5q"/>
                                     <constraint firstAttribute="width" constant="213" id="nyl-qm-QRe"/>
@@ -69,14 +69,14 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.34901960780000002" green="0.70196078429999997" blue="0.56470588239999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.13658961610000001" green="0.35300565820000002" blue="0.52466662180000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="027-RP-sSa" secondAttribute="bottom" constant="25" id="BEg-FR-Pbj"/>
                                     <constraint firstAttribute="trailing" secondItem="027-RP-sSa" secondAttribute="trailing" constant="31" id="xTg-Bi-t9B"/>
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.34901960780000002" green="0.70196078429999997" blue="0.56470588239999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="j6z-Qd-1JC" firstAttribute="bottom" secondItem="2zl-lB-bqA" secondAttribute="top" id="3qo-Yb-1OL"/>
                             <constraint firstItem="6Tx-DU-33d" firstAttribute="centerX" secondItem="KQV-em-ZC8" secondAttribute="centerX" id="4ON-07-8rZ"/>
@@ -578,6 +578,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Add a Goal" id="h7f-y2-hHI">
+                        <barButtonItem key="backBarButtonItem" title="back" id="3tX-ZW-vpE"/>
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="uOP-Uz-Fve">
                             <connections>
                                 <action selector="cancelPressed:" destination="maN-XY-aAa" id="1Ej-Ly-OMb"/>

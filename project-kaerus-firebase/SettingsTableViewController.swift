@@ -58,9 +58,10 @@ class SettingsTableViewController: UITableViewController {
 			
 			let secondViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
 			self.navigationController!.pushViewController(secondViewController, animated: true)
-			self.tabBarController!.tabBar.hidden = true
-			self.navigationController!.navigationBarHidden = true
-//			self.navigationController!.popToRootViewControllerAnimated(true)
+			
+			self.tabBarController?.tabBar.hidden = true
+			self.tabBarController?.tabBar.backgroundColor = UIColor.clearColor()
+			self.navigationController?.navigationBarHidden = true
 			
 		} catch let signOutError as NSError {
 			print ("Error signing out: \(signOutError)")
