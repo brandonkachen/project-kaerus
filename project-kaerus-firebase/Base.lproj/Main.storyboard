@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nTh-wV-HoB">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
@@ -709,17 +708,21 @@
                         <leftBarButtonItems>
                             <barButtonItem title="←" id="JjQ-XA-3Pv">
                                 <connections>
-                                    <action selector="didPressBackward:" destination="Jrc-ai-7bv" id="OEI-6u-S51"/>
+                                    <action selector="didPressFriendBackward:" destination="SNq-Ma-7lX" id="s8V-xC-wlR"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="→" id="QOI-XH-Q1x">
                                 <connections>
-                                    <action selector="didPressForward:" destination="Jrc-ai-7bv" id="y58-LS-pSe"/>
+                                    <action selector="didPressFriendForward:" destination="SNq-Ma-7lX" id="oqv-Sk-Y6W"/>
                                 </connections>
                             </barButtonItem>
                         </leftBarButtonItems>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="friendBackwardOneDay" destination="JjQ-XA-3Pv" id="ecj-xS-FtX"/>
+                        <outlet property="friendForwardOneDay" destination="QOI-XH-Q1x" id="EOw-xO-v2x"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xar-dG-xEt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
