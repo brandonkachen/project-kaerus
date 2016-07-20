@@ -15,7 +15,7 @@ class ChatViewController: JSQMessagesViewController {
 	var messages = [JSQMessage]()
 	var avatars = Dictionary<String, UIImage>()
 	var messageRef, userIsTypingRef: FIRDatabaseReference!
-	private var localTyping = false
+//	private var localTyping = false
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -32,8 +32,7 @@ class ChatViewController: JSQMessagesViewController {
 		self.setupBubbles()
 		
 		// set up Firebase branch where messages will be stored
-		let roomID = "messages/" + self.senderId
-		messageRef = FIRDatabase.database().reference().child(roomID)
+		messageRef = FIRDatabase.database().reference().child("Messages/\(AppState.sharedInstance.groupchat_id!)")
 		
 		// get latest messages
 		observeMessages()
@@ -43,7 +42,7 @@ class ChatViewController: JSQMessagesViewController {
 		super.viewDidAppear(animated)
 		
 		// see if partner is typing
-		observeTyping()
+//		observeTyping()
 	}
 	
 	
@@ -76,13 +75,12 @@ class ChatViewController: JSQMessagesViewController {
 		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
 		dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
 		
-		// add sender's ID so if users send messages at the exact same time, they won't erase one another
+		// add sender's ID so if users send messages at the exact same time (however unlikely), they won't erase one another
 		let timestamp = dateFormatter.stringFromDate(NSDate()) + "<" + self.senderId + ">"
 		
 		// create the new entry
 		let itemRef = messageRef.child(timestamp)
-		let messageItem =
-		[
+		let messageItem = [
 			"id" : senderId,
 			"displayName" : senderDisplayName,
 			"text" : text
@@ -92,34 +90,33 @@ class ChatViewController: JSQMessagesViewController {
 		// finishing touches
 		JSQSystemSoundPlayer.jsq_playMessageSentSound()
 		finishSendingMessage()
-		isTyping = false
+//		isTyping = false
 	}
 	
 	
-	// MARK: - check if user is typing
-	
-	var isTyping: Bool {
-		get {
-			return localTyping
-		}
-		set {
-			localTyping = newValue
-			userIsTypingRef.setValue(newValue)
-		}
-	}
-
-	private func observeTyping() {
-		let typingIndicatorRef = FIRDatabase.database().reference().child("typingIndicator")
-		userIsTypingRef = typingIndicatorRef.child(senderId)
-		userIsTypingRef.onDisconnectRemoveValue()
-	}
-	
-	override func textViewDidChange(textView: UITextView) {
-		super.textViewDidChange(textView)
-		
-		// If the text is not empty, the user is typing
-		isTyping = textView.text != ""
-	}
+//	// MARK: - check if user is typing
+//	
+//	var isTyping: Bool {
+//		get {
+//			return localTyping
+//		} set {
+//			localTyping = newValue
+//			userIsTypingRef.setValue(newValue)
+//		}
+//	}
+//
+//	private func observeTyping() {
+//		let typingIndicatorRef = FIRDatabase.database().reference().child("typingIndicator")
+//		userIsTypingRef = typingIndicatorRef.child(senderId)
+//		userIsTypingRef.onDisconnectRemoveValue()
+//	}
+//	
+//	override func textViewDidChange(textView: UITextView) {
+//		super.textViewDidChange(textView)
+//		
+//		// If the text is not empty, the user is typing
+//		isTyping = textView.text != ""
+//	}
 	
 	
 	// MARK: - Collections

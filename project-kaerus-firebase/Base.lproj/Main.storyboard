@@ -55,14 +55,14 @@
                                     <action selector="facebookLogin:" destination="nTh-wV-HoB" eventType="touchUpInside" id="edX-CH-ByK"/>
                                 </connections>
                             </button>
-                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wVe-Xi-qjl">
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j6z-Qd-1JC">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gr" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="HUw-ma-woo">
-                                        <rect key="frame" x="370" y="436" width="191" height="141"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PK" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="027-RP-sSa">
+                                        <rect key="frame" x="378" y="400" width="191" height="175"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="141" id="3gs-1z-ket"/>
-                                            <constraint firstAttribute="width" constant="191" id="mep-Xg-Wcv"/>
+                                            <constraint firstAttribute="width" constant="191" id="ON1-la-1Xs"/>
+                                            <constraint firstAttribute="height" constant="175" id="iCH-ZY-B7I"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="128"/>
                                         <color key="textColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -71,26 +71,26 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.34901960780000002" green="0.70196078429999997" blue="0.56470588239999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="HUw-ma-woo" secondAttribute="trailing" constant="39" id="Brm-z3-k3C"/>
-                                    <constraint firstAttribute="bottom" secondItem="HUw-ma-woo" secondAttribute="bottom" constant="23" id="kQD-1P-8Uz"/>
+                                    <constraint firstAttribute="bottom" secondItem="027-RP-sSa" secondAttribute="bottom" constant="25" id="BEg-FR-Pbj"/>
+                                    <constraint firstAttribute="trailing" secondItem="027-RP-sSa" secondAttribute="trailing" constant="31" id="xTg-Bi-t9B"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.34901960780000002" green="0.70196078429999997" blue="0.56470588239999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="j6z-Qd-1JC" firstAttribute="bottom" secondItem="2zl-lB-bqA" secondAttribute="top" id="3qo-Yb-1OL"/>
                             <constraint firstItem="6Tx-DU-33d" firstAttribute="centerX" secondItem="KQV-em-ZC8" secondAttribute="centerX" id="4ON-07-8rZ"/>
-                            <constraint firstItem="wVe-Xi-qjl" firstAttribute="leading" secondItem="Nhy-ax-Df6" secondAttribute="leadingMargin" constant="-20" id="IPr-1H-Ege"/>
+                            <constraint firstItem="j6z-Qd-1JC" firstAttribute="leading" secondItem="Nhy-ax-Df6" secondAttribute="leading" id="HsE-p9-SRe"/>
+                            <constraint firstItem="j6z-Qd-1JC" firstAttribute="centerX" secondItem="KQV-em-ZC8" secondAttribute="centerX" id="QrK-7d-iR5"/>
+                            <constraint firstItem="j6z-Qd-1JC" firstAttribute="top" secondItem="Nhy-ax-Df6" secondAttribute="top" id="UuK-6T-8Un"/>
                             <constraint firstAttribute="centerX" secondItem="KQV-em-ZC8" secondAttribute="centerX" id="VVz-aE-kmK"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="wVe-Xi-qjl" secondAttribute="trailing" constant="-20" id="bE4-nm-xxW"/>
                             <constraint firstItem="KQV-em-ZC8" firstAttribute="top" secondItem="vFi-OU-T29" secondAttribute="bottom" constant="92" id="bfb-LM-be1"/>
                             <constraint firstItem="2zl-lB-bqA" firstAttribute="top" secondItem="6Tx-DU-33d" secondAttribute="bottom" constant="122" id="eMb-9a-WZy"/>
-                            <constraint firstItem="wVe-Xi-qjl" firstAttribute="top" secondItem="vFi-OU-T29" secondAttribute="bottom" constant="-20" id="f6F-Tn-iRq"/>
-                            <constraint firstItem="2zl-lB-bqA" firstAttribute="top" secondItem="wVe-Xi-qjl" secondAttribute="bottom" id="hva-3t-bnU"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="logo" destination="HUw-ma-woo" id="hTL-kR-sG4"/>
-                        <outlet property="splashScreen" destination="wVe-Xi-qjl" id="YD0-XA-WV0"/>
+                        <outlet property="logo" destination="027-RP-sSa" id="YUM-WN-vaZ"/>
+                        <outlet property="splashScreen" destination="j6z-Qd-1JC" id="QQU-eK-gUY"/>
                         <outlet property="titleLabel" destination="KQV-em-ZC8" id="ASA-9h-Gbx"/>
                         <segue destination="SzM-MK-Kq3" kind="presentation" identifier="LoggedIn" modalTransitionStyle="crossDissolve" id="TN3-F0-fk2"/>
                     </connections>
@@ -98,63 +98,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4QX-10-gld" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-488" y="720"/>
-        </scene>
-        <!--Grocery List-->
-        <scene sceneID="ieN-od-HKZ">
-            <objects>
-                <tableViewController title="Grocery List" id="pQ9-fr-AsT" customClass="GroceryListTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="XGH-aD-lhC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemCell" textLabel="Fpu-r1-KYP" detailTextLabel="9az-Jz-dGZ" rowHeight="60" style="IBUITableViewCellStyleSubtitle" id="kSU-qc-Ahu">
-                                <rect key="frame" x="0.0" y="22" width="600" height="60"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kSU-qc-Ahu" id="dvh-Ub-nBF">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="59.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Fpu-r1-KYP">
-                                            <rect key="frame" x="15" y="9" width="35" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="18"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9az-Jz-dGZ">
-                                            <rect key="frame" x="15" y="34" width="41.5" height="16.5"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="12"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="pQ9-fr-AsT" id="HdR-UL-Qfp"/>
-                            <outlet property="delegate" destination="pQ9-fr-AsT" id="DSh-Xd-n08"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Grocery List" id="lQd-fb-Gk9">
-                        <barButtonItem key="leftBarButtonItem" title="Sign Out" id="WZ0-pS-O0w">
-                            <connections>
-                                <action selector="signOut:" destination="pQ9-fr-AsT" id="215-Kl-EzN"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="R6y-bd-T1U">
-                            <color key="tintColor" red="0.4464988426" green="0.4363136574" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <connections>
-                                <action selector="addButtonDidTouch:" destination="pQ9-fr-AsT" id="45b-Sr-bJG"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="z0v-k8-FP9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1955" y="-823"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="GrH-Zl-PUg">
@@ -169,6 +112,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="LAK-b1-NOB" kind="relationship" relationship="viewControllers" id="P2z-PN-fCC"/>
+                        <segue destination="M1f-OM-Bez" kind="relationship" relationship="viewControllers" id="Xum-qu-cB4"/>
                         <segue destination="i8p-Bc-gsN" kind="relationship" relationship="viewControllers" id="qxH-GV-lrF"/>
                         <segue destination="lqS-Oe-W5X" kind="relationship" relationship="viewControllers" id="dWr-nu-aOd"/>
                     </connections>
@@ -260,7 +204,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ZC-he-CEx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1963" y="1129"/>
+            <point key="canvasLocation" x="2023" y="2469"/>
         </scene>
         <!--Respond To Request View Controller-->
         <scene sceneID="wOv-iI-VY5">
@@ -316,7 +260,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uY8-q9-MOm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2698" y="1598"/>
+            <point key="canvasLocation" x="2758" y="2938"/>
         </scene>
         <!--Find Friends Table View Controller-->
         <scene sceneID="uqp-Jk-uex">
@@ -382,7 +326,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GY4-DY-51B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2698" y="793"/>
+            <point key="canvasLocation" x="2758" y="2133"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="9P1-Ma-qPK">
@@ -434,7 +378,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w6z-LL-5CW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3344" y="433"/>
+            <point key="canvasLocation" x="3404" y="1773"/>
         </scene>
         <!--Settings-->
         <scene sceneID="bbo-V0-INZ">
@@ -451,13 +395,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gxS-9r-bUv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1143" y="1129"/>
+            <point key="canvasLocation" x="1203" y="2469"/>
         </scene>
-        <!--Deadlines-->
+        <!--Me-->
         <scene sceneID="3Fs-0U-3Dw">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LAK-b1-NOB" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Deadlines" id="pa6-Wu-67m"/>
+                    <tabBarItem key="tabBarItem" title="Me" id="pa6-Wu-67m"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="nPc-ON-YoL">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -476,7 +420,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FY9-ej-m87" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1143" y="-377"/>
+            <point key="canvasLocation" x="1115" y="-705"/>
         </scene>
         <!--ChatChat-->
         <scene sceneID="For-IT-Eng">
@@ -495,7 +439,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vBW-a0-7Fj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1955" y="360"/>
+            <point key="canvasLocation" x="2015" y="1700"/>
         </scene>
         <!--Messages-->
         <scene sceneID="NNj-0C-fAA">
@@ -518,7 +462,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kED-hd-XNg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1143" y="360"/>
+            <point key="canvasLocation" x="1203" y="1700"/>
         </scene>
         <!--MD-->
         <scene sceneID="9EK-hI-OT4">
@@ -574,7 +518,7 @@
                             <outlet property="delegate" destination="Jrc-ai-7bv" id="OxQ-Zt-VEw"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="My Goals" id="gSV-zh-hGt">
+                    <navigationItem key="navigationItem" title="My Deadlines" id="gSV-zh-hGt">
                         <barButtonItem key="leftBarButtonItem" title="Show All" style="plain" id="yQR-fl-VBb">
                             <connections>
                                 <action selector="showAll:" destination="Jrc-ai-7bv" id="tfY-YM-Mia"/>
@@ -587,18 +531,17 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="clientTable" destination="TIz-UN-ZxS" id="7W4-he-rft"/>
                         <outlet property="showAllButton" destination="yQR-fl-VBb" id="ArE-ox-wCX"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="irv-bF-8Q2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2717" y="-377"/>
+            <point key="canvasLocation" x="1913" y="-705"/>
         </scene>
         <!--Add a Goal-->
         <scene sceneID="GfZ-q9-e9y">
             <objects>
-                <viewController id="maN-XY-aAa" customClass="MyGoalsItemViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="maN-XY-aAa" customClass="MyGoalsAddItemViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="odM-mV-zL3"/>
                         <viewControllerLayoutGuide type="bottom" id="JOh-sc-vGs"/>
@@ -607,8 +550,8 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="71h-Xd-c0a">
-                                <rect key="frame" x="20" y="84" width="560" height="316"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="71h-Xd-c0a">
+                                <rect key="frame" x="20" y="20" width="560" height="266"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your goal" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Iuw-bO-wTt">
                                         <rect key="frame" x="0.0" y="0.0" width="560" height="30"/>
@@ -624,11 +567,6 @@
                                             <action selector="timePickerAction:" destination="maN-XY-aAa" eventType="valueChanged" id="gpN-y4-HMA"/>
                                         </connections>
                                     </datePicker>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Explain why you're changing your goal" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="57D-5d-dG2">
-                                        <rect key="frame" x="0.0" y="286" width="560" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -642,26 +580,25 @@
                     <navigationItem key="navigationItem" title="Add a Goal" id="h7f-y2-hHI">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="uOP-Uz-Fve">
                             <connections>
-                                <action selector="cancelPressed:" destination="maN-XY-aAa" id="ecJ-76-J2z"/>
+                                <action selector="cancelPressed:" destination="maN-XY-aAa" id="1Ej-Ly-OMb"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="tsl-Ga-DCM">
                             <connections>
-                                <segue destination="gG8-AD-9qT" kind="unwind" unwindAction="unwindToGoalsList:" id="vMS-Wd-O9e"/>
+                                <segue destination="gG8-AD-9qT" kind="unwind" unwindAction="unwindToGoalsList:" id="udh-dx-fPc"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="UserSetTime" destination="kBS-Bt-HwT" id="8S3-vT-8Ut"/>
-                        <outlet property="explanation" destination="57D-5d-dG2" id="pb0-my-FDC"/>
-                        <outlet property="saveButton" destination="tsl-Ga-DCM" id="cAR-MQ-ypy"/>
+                        <outlet property="saveButton" destination="tsl-Ga-DCM" id="vTc-TN-vmW"/>
                         <outlet property="text" destination="Iuw-bO-wTt" id="59Z-48-14k"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ork-0Y-cgK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="gG8-AD-9qT" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4280" y="-377"/>
+            <point key="canvasLocation" x="3476" y="-705"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nKj-co-4Ar">
@@ -679,7 +616,98 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JX6-BO-TgE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3488" y="-812"/>
+            <point key="canvasLocation" x="2684" y="-1140"/>
+        </scene>
+        <!--Friend-->
+        <scene sceneID="hPX-de-mzU">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="M1f-OM-Bez" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Friend" id="7Cj-yU-pfh"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="az5-nn-XIl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.44705882349999998" green="0.4431372549" blue="0.43529411759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.2705448249107667" green="0.58321971136407469" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="SNq-Ma-7lX" kind="relationship" relationship="rootViewController" id="Yi6-nF-C2y"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZkE-ps-DNx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1115" y="35"/>
+        </scene>
+        <!--MD-->
+        <scene sceneID="LJh-8J-GGq">
+            <objects>
+                <tableViewController title="FD" id="SNq-Ma-7lX" userLabel="MD" customClass="FriendGoalsTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" pagingEnabled="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" id="afR-J2-pSh">
+                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationLevel="1" indentationWidth="10" reuseIdentifier="FriendGoalsTableViewCell" textLabel="E0G-E9-HK9" detailTextLabel="BT9-g0-zru" style="IBUITableViewCellStyleSubtitle" id="tmI-so-eHc" userLabel="MyGoalsTableViewCell" customClass="FriendGoalsTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="49.5" width="600" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tmI-so-eHc" id="6dw-rQ-qTF">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E0G-E9-HK9">
+                                            <rect key="frame" x="25" y="12" width="32.5" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="goal">
+                                                    <attributes>
+                                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BT9-g0-zru">
+                                            <rect key="frame" x="25" y="32" width="32" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="goalText" destination="E0G-E9-HK9" id="K5z-v4-Xgv"/>
+                                    <outlet property="timeDueText" destination="BT9-g0-zru" id="eRk-MJ-IMI"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="SNq-Ma-7lX" id="hve-W9-Nya"/>
+                            <outlet property="delegate" destination="SNq-Ma-7lX" id="AKG-J0-ti4"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Friend's Deadlines" id="pMS-Gk-82h">
+                        <barButtonItem key="leftBarButtonItem" title="Show All" style="plain" id="A2B-2n-Eg2">
+                            <connections>
+                                <action selector="showAll:" destination="SNq-Ma-7lX" id="6DW-am-lQk"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="showAllButton" destination="A2B-2n-Eg2" id="Y4z-a9-2LP"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xar-dG-xEt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1913" y="35"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
