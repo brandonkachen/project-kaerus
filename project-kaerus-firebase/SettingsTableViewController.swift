@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SettingsTableViewController: UITableViewController {
 	
@@ -45,7 +46,26 @@ class SettingsTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+	
+	
+	// MARK:- sign out
+	
+	@IBAction func signOut(sender: AnyObject) {
+		let firebaseAuth = FIRAuth.auth()
+		do {
+			try firebaseAuth?.signOut()
+			AppState.sharedInstance.signedIn = false
+			
+			let secondViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
+			self.navigationController!.pushViewController(secondViewController, animated: true)
+			self.tabBarController!.tabBar.hidden = true
+			self.navigationController!.navigationBarHidden = true
+//			self.navigationController!.popToRootViewControllerAnimated(true)
+			
+		} catch let signOutError as NSError {
+			print ("Error signing out: \(signOutError)")
+		}
+	}
     // MARK: - Table view data source
 	
 //	override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?

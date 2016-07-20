@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="SzM-MK-Kq3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nTh-wV-HoB">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -55,30 +55,56 @@
                                     <action selector="facebookLogin:" destination="nTh-wV-HoB" eventType="touchUpInside" id="edX-CH-ByK"/>
                                 </connections>
                             </button>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wVe-Xi-qjl">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gr" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="HUw-ma-woo">
+                                        <rect key="frame" x="370" y="436" width="191" height="141"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="141" id="3gs-1z-ket"/>
+                                            <constraint firstAttribute="width" constant="191" id="mep-Xg-Wcv"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="128"/>
+                                        <color key="textColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.34901960780000002" green="0.70196078429999997" blue="0.56470588239999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="HUw-ma-woo" secondAttribute="trailing" constant="39" id="Brm-z3-k3C"/>
+                                    <constraint firstAttribute="bottom" secondItem="HUw-ma-woo" secondAttribute="bottom" constant="23" id="kQD-1P-8Uz"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.34901960780000002" green="0.70196078429999997" blue="0.56470588239999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tx-DU-33d" firstAttribute="centerX" secondItem="KQV-em-ZC8" secondAttribute="centerX" id="4ON-07-8rZ"/>
+                            <constraint firstItem="wVe-Xi-qjl" firstAttribute="leading" secondItem="Nhy-ax-Df6" secondAttribute="leadingMargin" constant="-20" id="IPr-1H-Ege"/>
                             <constraint firstAttribute="centerX" secondItem="KQV-em-ZC8" secondAttribute="centerX" id="VVz-aE-kmK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="wVe-Xi-qjl" secondAttribute="trailing" constant="-20" id="bE4-nm-xxW"/>
                             <constraint firstItem="KQV-em-ZC8" firstAttribute="top" secondItem="vFi-OU-T29" secondAttribute="bottom" constant="92" id="bfb-LM-be1"/>
                             <constraint firstItem="2zl-lB-bqA" firstAttribute="top" secondItem="6Tx-DU-33d" secondAttribute="bottom" constant="122" id="eMb-9a-WZy"/>
+                            <constraint firstItem="wVe-Xi-qjl" firstAttribute="top" secondItem="vFi-OU-T29" secondAttribute="bottom" constant="-20" id="f6F-Tn-iRq"/>
+                            <constraint firstItem="2zl-lB-bqA" firstAttribute="top" secondItem="wVe-Xi-qjl" secondAttribute="bottom" id="hva-3t-bnU"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="logo" destination="HUw-ma-woo" id="hTL-kR-sG4"/>
+                        <outlet property="splashScreen" destination="wVe-Xi-qjl" id="YD0-XA-WV0"/>
                         <outlet property="titleLabel" destination="KQV-em-ZC8" id="ASA-9h-Gbx"/>
                         <segue destination="SzM-MK-Kq3" kind="presentation" identifier="LoggedIn" modalTransitionStyle="crossDissolve" id="TN3-F0-fk2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4QX-10-gld" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="274" y="-127"/>
+            <point key="canvasLocation" x="-488" y="720"/>
         </scene>
         <!--Grocery List-->
         <scene sceneID="ieN-od-HKZ">
             <objects>
                 <tableViewController title="Grocery List" id="pQ9-fr-AsT" customClass="GroceryListTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="XGH-aD-lhC">
-                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -125,13 +151,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="clientTable" destination="XGH-aD-lhC" id="gP5-tF-CgQ"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z0v-k8-FP9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1955" y="-377"/>
+            <point key="canvasLocation" x="1955" y="-823"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="GrH-Zl-PUg">
@@ -227,7 +250,13 @@
                             <outlet property="delegate" destination="Xuc-dL-X0K" id="bG3-aT-O9J"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Settings" id="aGN-cX-ioh"/>
+                    <navigationItem key="navigationItem" title="Settings" id="aGN-cX-ioh">
+                        <barButtonItem key="leftBarButtonItem" title="Sign Out" id="d6K-SX-Cv9">
+                            <connections>
+                                <action selector="signOut:" destination="Xuc-dL-X0K" id="SF2-ax-5S6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ZC-he-CEx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -442,7 +471,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="pQ9-fr-AsT" kind="relationship" relationship="rootViewController" id="Jsh-KA-S8e"/>
+                        <segue destination="Jrc-ai-7bv" kind="relationship" relationship="rootViewController" id="Hzm-Qp-wq5"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FY9-ej-m87" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -491,5 +520,169 @@
             </objects>
             <point key="canvasLocation" x="1143" y="360"/>
         </scene>
+        <!--MD-->
+        <scene sceneID="9EK-hI-OT4">
+            <objects>
+                <tableViewController title="YD" id="Jrc-ai-7bv" userLabel="MD" customClass="GoalsTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" pagingEnabled="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" id="TIz-UN-ZxS">
+                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationLevel="1" indentationWidth="10" reuseIdentifier="GoalsTableViewCell" textLabel="Vgc-Fc-Dfs" detailTextLabel="9Iv-WK-xaH" style="IBUITableViewCellStyleSubtitle" id="yz5-0l-DKa" userLabel="MyGoalsTableViewCell" customClass="GoalsTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="49.5" width="600" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yz5-0l-DKa" id="PLE-9y-G6p">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Vgc-Fc-Dfs">
+                                            <rect key="frame" x="25" y="12" width="32.5" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="goal">
+                                                    <attributes>
+                                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Iv-WK-xaH">
+                                            <rect key="frame" x="25" y="32" width="32" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="goalText" destination="Vgc-Fc-Dfs" id="ILv-aj-HIX"/>
+                                    <outlet property="timeDueText" destination="9Iv-WK-xaH" id="cwd-A8-YOl"/>
+                                    <segue destination="maN-XY-aAa" kind="show" identifier="editItem" id="8h8-TN-IE2">
+                                        <nil key="action"/>
+                                    </segue>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Jrc-ai-7bv" id="pBn-MH-XCV"/>
+                            <outlet property="delegate" destination="Jrc-ai-7bv" id="OxQ-Zt-VEw"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="My Goals" id="gSV-zh-hGt">
+                        <barButtonItem key="leftBarButtonItem" title="Show All" style="plain" id="yQR-fl-VBb">
+                            <connections>
+                                <action selector="showAll:" destination="Jrc-ai-7bv" id="tfY-YM-Mia"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="JJO-ys-k2X">
+                            <connections>
+                                <segue destination="dMN-vT-uzh" kind="presentation" identifier="addItem" id="tbL-CP-xB3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="clientTable" destination="TIz-UN-ZxS" id="7W4-he-rft"/>
+                        <outlet property="showAllButton" destination="yQR-fl-VBb" id="ArE-ox-wCX"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="irv-bF-8Q2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2717" y="-377"/>
+        </scene>
+        <!--Add a Goal-->
+        <scene sceneID="GfZ-q9-e9y">
+            <objects>
+                <viewController id="maN-XY-aAa" customClass="MyGoalsItemViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="odM-mV-zL3"/>
+                        <viewControllerLayoutGuide type="bottom" id="JOh-sc-vGs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="K6g-k5-Osp">
+                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="71h-Xd-c0a">
+                                <rect key="frame" x="20" y="84" width="560" height="316"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your goal" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Iuw-bO-wTt">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                    </textField>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="kBS-Bt-HwT">
+                                        <rect key="frame" x="0.0" y="50" width="560" height="216"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="488252744.31813103">
+                                            <!--2016-06-22 01:45:44 +0000-->
+                                        </date>
+                                        <connections>
+                                            <action selector="timePickerAction:" destination="maN-XY-aAa" eventType="valueChanged" id="gpN-y4-HMA"/>
+                                        </connections>
+                                    </datePicker>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Explain why you're changing your goal" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="57D-5d-dG2">
+                                        <rect key="frame" x="0.0" y="286" width="560" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="71h-Xd-c0a" secondAttribute="trailing" id="H24-6I-HoD"/>
+                            <constraint firstItem="71h-Xd-c0a" firstAttribute="leading" secondItem="K6g-k5-Osp" secondAttribute="leadingMargin" id="Ryp-cL-85o"/>
+                            <constraint firstItem="71h-Xd-c0a" firstAttribute="top" secondItem="odM-mV-zL3" secondAttribute="bottom" constant="20" id="cxU-cz-i9K"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add a Goal" id="h7f-y2-hHI">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="uOP-Uz-Fve">
+                            <connections>
+                                <action selector="cancelPressed:" destination="maN-XY-aAa" id="ecJ-76-J2z"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="tsl-Ga-DCM">
+                            <connections>
+                                <segue destination="gG8-AD-9qT" kind="unwind" unwindAction="unwindToGoalsList:" id="vMS-Wd-O9e"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="UserSetTime" destination="kBS-Bt-HwT" id="8S3-vT-8Ut"/>
+                        <outlet property="explanation" destination="57D-5d-dG2" id="pb0-my-FDC"/>
+                        <outlet property="saveButton" destination="tsl-Ga-DCM" id="cAR-MQ-ypy"/>
+                        <outlet property="text" destination="Iuw-bO-wTt" id="59Z-48-14k"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ork-0Y-cgK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="gG8-AD-9qT" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="4280" y="-377"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="nKj-co-4Ar">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dMN-vT-uzh" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eav-Qw-e10">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="maN-XY-aAa" kind="relationship" relationship="rootViewController" id="QKo-Je-SUv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JX6-BO-TgE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3488" y="-812"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="8h8-TN-IE2"/>
+    </inferredMetricsTieBreakers>
 </document>
