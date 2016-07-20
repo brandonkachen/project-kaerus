@@ -1,6 +1,5 @@
 //
 //  SettingsTableViewController.swift
-//  Pods
 //
 //  Created by Brandon Chen on 7/16/16.
 //
@@ -9,6 +8,8 @@
 import UIKit
 
 class SettingsTableViewController: UITableViewController {
+	
+	var savedSelectedIndexPath: NSIndexPath?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,34 +19,59 @@ class SettingsTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-    }
+	}
 
+	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+		self.savedSelectedIndexPath = nil
+	}
+	
+	override func viewWillDisappear(animated: Bool) {
+		super.viewWillDisappear(animated)
+		if let indexPath = self.savedSelectedIndexPath {
+			self.tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+		}
+	}
+	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
+		self.savedSelectedIndexPath = tableView.indexPathForSelectedRow
+		if let indexPath = self.savedSelectedIndexPath {
+			self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+		}
+	}
+	
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
+	
+//	override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
+//	{
+//		return
+//	}
+	
+//	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//		self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+//	}
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
+//    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+//        return 1
+//    }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
+//    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return settingItems.count
+//    }
+//
+//    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+//		let cellIdentifier = "SettingTableViewCell"
+//		let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SettingTableViewCell
+//		cell.titleLabel.text = settingItems[indexPath.row]
+//		cell.subtitleLabel.text = ""
+//        return cell
+//    }
 
     /*
     // Override to support conditional editing of the table view.

@@ -19,14 +19,14 @@ class ChatViewController: JSQMessagesViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
+		
 		// No avatars
 		collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero
 		collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero
 		
 		// set up view controller
 		self.senderId = AppState.sharedInstance.userID
-		self.senderDisplayName = AppState.sharedInstance.displayName
+		self.senderDisplayName = AppState.sharedInstance.username
 		self.title = "Messages"
 		self.edgesForExtendedLayout = UIRectEdge.None
 		self.setupBubbles()
@@ -41,6 +41,8 @@ class ChatViewController: JSQMessagesViewController {
 	
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
+		
+		// see if partner is typing
 		observeTyping()
 	}
 	
@@ -81,9 +83,9 @@ class ChatViewController: JSQMessagesViewController {
 		let itemRef = messageRef.child(timestamp)
 		let messageItem =
 		[
-			"id": senderId,
-			"displayName": senderDisplayName,
-			"text": text
+			"id" : senderId,
+			"displayName" : senderDisplayName,
+			"text" : text
 		]
 		itemRef.setValue(messageItem)
 		
@@ -174,5 +176,4 @@ class ChatViewController: JSQMessagesViewController {
 	func reloadMessagesView() {
 		self.collectionView?.reloadData()
 	}
-
 }
