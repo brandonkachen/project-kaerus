@@ -12,9 +12,6 @@
 		6943E9A91D3F557500C2642C /* RespondToRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943E9A81D3F557500C2642C /* RespondToRequestViewController.swift */; };
 		6943E9AB1D3F7FE700C2642C /* GoalsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943E9AA1D3F7FE700C2642C /* GoalsTableViewCell.swift */; };
 		6943E9AD1D3F986C00C2642C /* MyGoalsAddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943E9AC1D3F986C00C2642C /* MyGoalsAddItemViewController.swift */; };
-		6943E9B01D3FC81B00C2642C /* FriendGoalsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943E9AE1D3FC81B00C2642C /* FriendGoalsTableViewController.swift */; };
-		6943E9B31D3FC82900C2642C /* FriendGoalsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6943E9B21D3FC82900C2642C /* FriendGoalsTableViewCell.swift */; };
-		694DB10D1D3976F400570A6B /* Goals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1091D3976F400570A6B /* Goals.swift */; };
 		694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB10A1D3976F400570A6B /* LoginViewController.swift */; };
 		694DB10F1D3976F400570A6B /* MyGoalsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB10B1D3976F400570A6B /* MyGoalsListTableViewController.swift */; };
 		694DB1161D39775B00570A6B /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1131D39775B00570A6B /* AppState.swift */; };
@@ -30,6 +27,7 @@
 		6989E3D81D396703003924EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6989E3D61D396703003924EC /* Main.storyboard */; };
 		6989E3DA1D396703003924EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6989E3D91D396703003924EC /* Assets.xcassets */; };
 		6989E3E81D396703003924EC /* project_kaerus_firebaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6989E3E71D396703003924EC /* project_kaerus_firebaseTests.swift */; };
+		69B775501D40743800ED712A /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B7754F1D40743800ED712A /* Goal.swift */; };
 		AD96B8849CE61CF128853A0A /* Pods_project_kaerus_firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */; };
 		FF214860D4F7733C24CC41C0 /* Pods_project_kaerus_firebaseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */; };
 /* End PBXBuildFile section */
@@ -52,9 +50,6 @@
 		6943E9A81D3F557500C2642C /* RespondToRequestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RespondToRequestViewController.swift; sourceTree = "<group>"; };
 		6943E9AA1D3F7FE700C2642C /* GoalsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoalsTableViewCell.swift; sourceTree = "<group>"; };
 		6943E9AC1D3F986C00C2642C /* MyGoalsAddItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyGoalsAddItemViewController.swift; sourceTree = "<group>"; };
-		6943E9AE1D3FC81B00C2642C /* FriendGoalsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendGoalsTableViewController.swift; sourceTree = "<group>"; };
-		6943E9B21D3FC82900C2642C /* FriendGoalsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendGoalsTableViewCell.swift; sourceTree = "<group>"; };
-		694DB1091D3976F400570A6B /* Goals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Goals.swift; sourceTree = "<group>"; };
 		694DB10A1D3976F400570A6B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		694DB10B1D3976F400570A6B /* MyGoalsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyGoalsListTableViewController.swift; sourceTree = "<group>"; };
 		694DB1131D39775B00570A6B /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -74,6 +69,7 @@
 		6989E3E31D396703003924EC /* project-kaerus-firebaseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "project-kaerus-firebaseTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6989E3E71D396703003924EC /* project_kaerus_firebaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = project_kaerus_firebaseTests.swift; sourceTree = "<group>"; };
 		6989E3E91D396703003924EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69B7754F1D40743800ED712A /* Goal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D68677377F84113A90F3D9 /* Pods-project-kaerus-firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-kaerus-firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-project-kaerus-firebase/Pods-project-kaerus-firebase.release.xcconfig"; sourceTree = "<group>"; };
@@ -131,7 +127,6 @@
 			isa = PBXGroup;
 			children = (
 				6989E3D41D396703003924EC /* ChatViewController.swift */,
-				6943E9AE1D3FC81B00C2642C /* FriendGoalsTableViewController.swift */,
 				694DB10A1D3976F400570A6B /* LoginViewController.swift */,
 				6943E9AC1D3F986C00C2642C /* MyGoalsAddItemViewController.swift */,
 				694DB10B1D3976F400570A6B /* MyGoalsListTableViewController.swift */,
@@ -146,7 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				696287C41D3D4763000F94F2 /* FriendData.swift */,
-				694DB1091D3976F400570A6B /* Goals.swift */,
+				69B7754F1D40743800ED712A /* Goal.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -168,7 +163,6 @@
 			children = (
 				696287BE1D3C8136000F94F2 /* FindFriendsTableViewCell.swift */,
 				6943E9AA1D3F7FE700C2642C /* GoalsTableViewCell.swift */,
-				6943E9B21D3FC82900C2642C /* FriendGoalsTableViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -433,14 +427,12 @@
 				6943E9AD1D3F986C00C2642C /* MyGoalsAddItemViewController.swift in Sources */,
 				696287BF1D3C8136000F94F2 /* FindFriendsTableViewCell.swift in Sources */,
 				6943E9A91D3F557500C2642C /* RespondToRequestViewController.swift in Sources */,
-				6943E9B31D3FC82900C2642C /* FriendGoalsTableViewCell.swift in Sources */,
 				696287C51D3D4763000F94F2 /* FriendData.swift in Sources */,
-				694DB10D1D3976F400570A6B /* Goals.swift in Sources */,
 				693359591D3F063600608454 /* requestDialog.swift in Sources */,
 				6989E3D51D396703003924EC /* ChatViewController.swift in Sources */,
 				694DB1161D39775B00570A6B /* AppState.swift in Sources */,
-				6943E9B01D3FC81B00C2642C /* FriendGoalsTableViewController.swift in Sources */,
 				6989E3D11D396703003924EC /* AppDelegate.swift in Sources */,
+				69B775501D40743800ED712A /* Goal.swift in Sources */,
 				696287C91D3DA1CC000F94F2 /* FindFriendsTableViewController.swift in Sources */,
 				6943E9AB1D3F7FE700C2642C /* GoalsTableViewCell.swift in Sources */,
 				694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */,

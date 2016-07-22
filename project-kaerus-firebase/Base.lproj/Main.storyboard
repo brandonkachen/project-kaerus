@@ -112,7 +112,6 @@
                     </tabBar>
                     <connections>
                         <segue destination="LAK-b1-NOB" kind="relationship" relationship="viewControllers" id="P2z-PN-fCC"/>
-                        <segue destination="M1f-OM-Bez" kind="relationship" relationship="viewControllers" id="Xum-qu-cB4"/>
                         <segue destination="i8p-Bc-gsN" kind="relationship" relationship="viewControllers" id="qxH-GV-lrF"/>
                         <segue destination="lqS-Oe-W5X" kind="relationship" relationship="viewControllers" id="dWr-nu-aOd"/>
                     </connections>
@@ -204,7 +203,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ZC-he-CEx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1935" y="1573"/>
+            <point key="canvasLocation" x="1935" y="1489"/>
         </scene>
         <!--Respond To Request View Controller-->
         <scene sceneID="wOv-iI-VY5">
@@ -260,7 +259,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uY8-q9-MOm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2670" y="2042"/>
+            <point key="canvasLocation" x="2670" y="1958"/>
         </scene>
         <!--Find Friends Table View Controller-->
         <scene sceneID="uqp-Jk-uex">
@@ -326,7 +325,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GY4-DY-51B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2670" y="1237"/>
+            <point key="canvasLocation" x="2670" y="1153"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="9P1-Ma-qPK">
@@ -378,7 +377,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w6z-LL-5CW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3316" y="877"/>
+            <point key="canvasLocation" x="3316" y="793"/>
         </scene>
         <!--Settings-->
         <scene sceneID="bbo-V0-INZ">
@@ -395,18 +394,18 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gxS-9r-bUv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1115" y="1573"/>
+            <point key="canvasLocation" x="1115" y="1489"/>
         </scene>
-        <!--Me-->
+        <!--Deadlines-->
         <scene sceneID="3Fs-0U-3Dw">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LAK-b1-NOB" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Me" id="pa6-Wu-67m"/>
+                    <tabBarItem key="tabBarItem" title="Deadlines" id="pa6-Wu-67m"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="nPc-ON-YoL">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.44705882349999998" green="0.4431372549" blue="0.43529411759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="0.14703147368837235" green="0.29478571206627457" blue="0.29726225754310343" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.34901960780000002" green="0.70196078429999997" blue="0.56470588239999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
@@ -420,7 +419,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FY9-ej-m87" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1115" y="-705"/>
+            <point key="canvasLocation" x="1115" y="-97"/>
         </scene>
         <!--ChatChat-->
         <scene sceneID="For-IT-Eng">
@@ -439,7 +438,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vBW-a0-7Fj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1927" y="804"/>
+            <point key="canvasLocation" x="1927" y="720"/>
         </scene>
         <!--Messages-->
         <scene sceneID="NNj-0C-fAA">
@@ -462,7 +461,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kED-hd-XNg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1115" y="804"/>
+            <point key="canvasLocation" x="1115" y="720"/>
         </scene>
         <!--MD-->
         <scene sceneID="9EK-hI-OT4">
@@ -518,7 +517,8 @@
                             <outlet property="delegate" destination="Jrc-ai-7bv" id="OxQ-Zt-VEw"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="My Deadlines" id="gSV-zh-hGt">
+                    <navigationItem key="navigationItem" id="gSV-zh-hGt">
+                        <nil key="title"/>
                         <leftBarButtonItems>
                             <barButtonItem title="←" id="g3W-Fz-X8O">
                                 <connections>
@@ -531,6 +531,17 @@
                                 </connections>
                             </barButtonItem>
                         </leftBarButtonItems>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" id="aWR-LI-OHW">
+                            <rect key="frame" x="201" y="7" width="198" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="Me"/>
+                                <segment title="Partner"/>
+                            </segments>
+                            <connections>
+                                <action selector="didChangeSegmentControl:" destination="Jrc-ai-7bv" eventType="valueChanged" id="F6Z-mZ-CeI"/>
+                            </connections>
+                        </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="JJO-ys-k2X">
                             <connections>
                                 <segue destination="dMN-vT-uzh" kind="presentation" identifier="addItem" id="tbL-CP-xB3"/>
@@ -538,13 +549,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addDeadlineButton" destination="JJO-ys-k2X" id="JgQ-Dc-yxl"/>
                         <outlet property="backwardOneDay" destination="g3W-Fz-X8O" id="qeV-E1-b23"/>
                         <outlet property="forwardOneDay" destination="f1a-dI-XPA" id="Wpo-Vb-Zmv"/>
+                        <outlet property="segmentedControl" destination="aWR-LI-OHW" id="CWu-tw-uFf"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="irv-bF-8Q2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1913" y="-705"/>
+            <point key="canvasLocation" x="1913" y="-97"/>
         </scene>
         <!--Add a Goal-->
         <scene sceneID="GfZ-q9-e9y">
@@ -607,7 +620,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ork-0Y-cgK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="gG8-AD-9qT" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3476" y="-705"/>
+            <point key="canvasLocation" x="3476" y="-97"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nKj-co-4Ar">
@@ -625,108 +638,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JX6-BO-TgE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2684" y="-1140"/>
-        </scene>
-        <!--Friend-->
-        <scene sceneID="hPX-de-mzU">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="M1f-OM-Bez" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Friend" id="7Cj-yU-pfh"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="az5-nn-XIl">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.44705882349999998" green="0.4431372549" blue="0.43529411759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.2705448249107667" green="0.58321971136407469" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="SNq-Ma-7lX" kind="relationship" relationship="rootViewController" id="Yi6-nF-C2y"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZkE-ps-DNx" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1115" y="35"/>
-        </scene>
-        <!--MD-->
-        <scene sceneID="LJh-8J-GGq">
-            <objects>
-                <tableViewController title="FD" id="SNq-Ma-7lX" userLabel="MD" customClass="FriendGoalsTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" pagingEnabled="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" id="afR-J2-pSh">
-                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationLevel="1" indentationWidth="10" reuseIdentifier="FriendGoalsTableViewCell" textLabel="E0G-E9-HK9" detailTextLabel="BT9-g0-zru" style="IBUITableViewCellStyleSubtitle" id="tmI-so-eHc" userLabel="MyGoalsTableViewCell" customClass="FriendGoalsTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="49.5" width="600" height="60"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tmI-so-eHc" id="6dw-rQ-qTF">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E0G-E9-HK9">
-                                            <rect key="frame" x="25" y="12" width="32.5" height="20"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <attributedString key="attributedText">
-                                                <fragment content="goal">
-                                                    <attributes>
-                                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <font key="NSFont" size="17" name="HelveticaNeue"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                    </attributes>
-                                                </fragment>
-                                            </attributedString>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BT9-g0-zru">
-                                            <rect key="frame" x="25" y="32" width="32" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="goalText" destination="E0G-E9-HK9" id="K5z-v4-Xgv"/>
-                                    <outlet property="timeDueText" destination="BT9-g0-zru" id="eRk-MJ-IMI"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="SNq-Ma-7lX" id="hve-W9-Nya"/>
-                            <outlet property="delegate" destination="SNq-Ma-7lX" id="AKG-J0-ti4"/>
-                        </connections>
-                    </tableView>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Friend's Deadlines" id="pMS-Gk-82h">
-                        <leftBarButtonItems>
-                            <barButtonItem title="←" id="JjQ-XA-3Pv">
-                                <connections>
-                                    <action selector="didPressFriendBackward:" destination="SNq-Ma-7lX" id="s8V-xC-wlR"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="→" id="QOI-XH-Q1x">
-                                <connections>
-                                    <action selector="didPressFriendForward:" destination="SNq-Ma-7lX" id="oqv-Sk-Y6W"/>
-                                </connections>
-                            </barButtonItem>
-                        </leftBarButtonItems>
-                    </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="friendBackwardOneDay" destination="JjQ-XA-3Pv" id="ecj-xS-FtX"/>
-                        <outlet property="friendForwardOneDay" destination="QOI-XH-Q1x" id="EOw-xO-v2x"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xar-dG-xEt" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1913" y="35"/>
+            <point key="canvasLocation" x="2684" y="-532"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
