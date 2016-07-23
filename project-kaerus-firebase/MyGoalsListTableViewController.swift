@@ -90,6 +90,7 @@ class GoalsTableViewController: UITableViewController {
 			if let day = snapshot.value as? Int {
 				self.dayUserIsLookingAt = day
 			}
+			
 			// disable back button if day == 1
 			if self.dayUserIsLookingAt == 1 {
 				self.backwardOneDay.enabled = false
@@ -127,7 +128,6 @@ class GoalsTableViewController: UITableViewController {
 			// User looking at their own deadlines
 			addDeadlineButton.enabled = true
 			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID!
-			
 		} else {
 			// User looking at friend's deadlines
 			addDeadlineButton.enabled = false
@@ -296,7 +296,7 @@ class GoalsTableViewController: UITableViewController {
 		let goalItem = self.items[indexPath.row]
 		
 		let delete_button = UITableViewRowAction(style: .Destructive, title: "delete") { (action, indexPath) in
-			let alert = UIAlertController(title: "Delete Goal", message: "Are you sure you want to delete this goal?", preferredStyle: .ActionSheet)
+			let alert = UIAlertController(title: "Delete Deadline", message: "Are you sure you want to delete this deadline?", preferredStyle: .ActionSheet)
 			let DeleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: { (action: UIAlertAction!) in
 				goalItem.ref?.removeValue()
 			})
@@ -315,7 +315,7 @@ class GoalsTableViewController: UITableViewController {
 		// Get the new completion status
 		let toggledCompletion = !goalItem.complete
 		
-		let done_button = UITableViewRowAction(style: .Normal, title: "done") { (action, indexPath) in
+		let done_button = UITableViewRowAction(style: .Normal, title: "complete") { (action, indexPath) in
 			// Determine whether the cell is checked and modify it's view properties
 			self.toggleCellCheckbox(cell, isCompleted: toggledCompletion)
 
@@ -327,7 +327,7 @@ class GoalsTableViewController: UITableViewController {
 		let blue = UIColor(red: 63/255, green: 202/255, blue: 62/255, alpha: 1)
 		let green = UIColor(red: 66/255, green: 155/255, blue: 224/255, alpha: 1)
 		
-		done_button.title = toggledCompletion ? "done" : "not\ndone"
+		done_button.title = toggledCompletion ? "mark as\ncomplete" : "mark as\nincomplete"
 		done_button.backgroundColor = toggledCompletion ? blue : green
 		
 		return [delete_button, done_button]
