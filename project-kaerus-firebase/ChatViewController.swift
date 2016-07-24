@@ -16,7 +16,7 @@ class ChatViewController: JSQMessagesViewController {
 	var avatars = Dictionary<String, UIImage>()
 	var messageRef, userIsTypingRef: FIRDatabaseReference!
 //	private var localTyping = false
-	
+		
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -31,11 +31,17 @@ class ChatViewController: JSQMessagesViewController {
 		self.edgesForExtendedLayout = UIRectEdge.None
 		self.setupBubbles()
 		
-		// set up Firebase branch where messages will be stored
-		messageRef = FIRDatabase.database().reference().child("Messages/\(AppState.sharedInstance.groupchat_id!)")
+		print("AppState.sharedInstance.groupchat_id is: ", AppState.sharedInstance.groupchat_id)
 		
-		// get latest messages
-		observeMessages()
+		// set up Firebase branch where messages will be stored
+		if let chat_id = AppState.sharedInstance.groupchat_id {
+			messageRef = FIRDatabase.database().reference().child("Messages/\(chat_id)")
+			// get latest messages
+			observeMessages()
+		} else { // user doesn't have a partner; show "get partner" screen
+//			noPartnerScreen.hidden = false
+//			noPartnerScreen.alpha = 1
+		}
 	}
 	
 	override func viewDidAppear(animated: Bool) {

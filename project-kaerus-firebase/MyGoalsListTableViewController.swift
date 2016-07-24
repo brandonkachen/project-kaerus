@@ -112,7 +112,6 @@ class GoalsTableViewController: UITableViewController {
 
 			for item in snapshot.children {
 				let goalItem = Goal(snapshot: item as! FIRDataSnapshot)
-				
 				newItems.append(goalItem)
 			}
 			self.items = newItems
