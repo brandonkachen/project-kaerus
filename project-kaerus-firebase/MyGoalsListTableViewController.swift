@@ -131,7 +131,11 @@ class GoalsTableViewController: UITableViewController {
 		} else {
 			// User looking at friend's deadlines
 			addDeadlineButton.enabled = false
-			userWhoseDeadlinesAreShown = AppState.sharedInstance.f_FIRid!
+			if let f_id = AppState.sharedInstance.f_FIRid {
+				userWhoseDeadlinesAreShown = f_id
+			} else {
+				return
+			}
 		}
 		setup()
 	}
@@ -171,9 +175,18 @@ class GoalsTableViewController: UITableViewController {
 		return 40.0
 	}
 	
+	// header title
 	override func tableView( tableView : UITableView,  titleForHeaderInSection section: Int) -> String {
 		let day = "DAY " + String(dayUserIsLookingAt)
 		return day
+	}
+	
+	override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+		return UITableViewAutomaticDimension
+	}
+	
+	override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+		return UITableViewAutomaticDimension
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -266,8 +279,8 @@ class GoalsTableViewController: UITableViewController {
 						AppState.sharedInstance.f_FIRid = friend_id
 					}
 					
-					if let friend_pic_url = postDict["friend_pic_url"] as? NSURL {
-						print(friend_pic_url)
+					if let friend_pic_string = postDict["friend_pic"] as? String {
+						let friend_pic_url = NSURL(string: friend_pic_string)
 						AppState.sharedInstance.f_photoURL = friend_pic_url
 					}
 					
