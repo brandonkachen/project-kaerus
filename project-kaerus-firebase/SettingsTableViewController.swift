@@ -55,14 +55,8 @@ class SettingsTableViewController: UITableViewController {
 		do {
 			try firebaseAuth?.signOut()
 			AppState.sharedInstance.signedIn = false
-			
-			let secondViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
-			self.navigationController!.pushViewController(secondViewController, animated: true)
-			
-			self.tabBarController?.tabBar.hidden = true
-			self.tabBarController?.tabBar.backgroundColor = UIColor.clearColor()
-			self.navigationController?.navigationBarHidden = true
-			
+			let loginScreenViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
+			self.presentViewController(loginScreenViewController, animated: true, completion: nil)
 		} catch let signOutError as NSError {
 			print ("Error signing out: \(signOutError)")
 		}

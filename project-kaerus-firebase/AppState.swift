@@ -22,17 +22,21 @@ class AppState: NSObject {
 
 	// user's info
 	var signedIn = false
-	var username: String?
-	var photoUrl: NSURL?
-	var userID: String?
-	var email: String?
-	var friend_status: String?
-	var groupchat_id: String?
+	var username: String!
+	var photoUrl: NSURL!
+	var userID: String!
+	var email: String!
+	var firstName: String!
 	
 	// friend's info
-	var f_displayName: String?
-	var f_FIRid: String?
+	var f_firstName: String?
+	var f_name: String?
+	var f_firID: String?
 	var f_photoURL: NSURL?
+	
+	// partner stuff
+	var partnerStatus: Bool!
+	var groupchat_id: String?
 
 	func setState(user: FIRUser?) {
 		self.signedIn = true

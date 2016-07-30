@@ -30,20 +30,26 @@ class ChatViewController: JSQMessagesViewController {
 
 		// set up Firebase branch where messages will be stored
 		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
-			self.title = AppState.sharedInstance.f_displayName
+			self.navigationItem.title = AppState.sharedInstance.f_firstName
 			let userPhoto = NSData(contentsOfURL: AppState.sharedInstance.photoUrl!)!
 			let friendPhoto = NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!
 			
+//			let userProfilePic = UIImageView(image: UIImage(data: userPhoto))
+			
+			
+//			userProfilePic.layer.cornerRadius = userProfilePic.frame.size.width / 2
+//			cell.profilePic.clipsToBounds = true
+			
+//			let test = JSQMessagesAvatarImage.avatarWithImage(UIImage(data: userPhoto))
+			
 			avatars[senderId] = UIImage(data: userPhoto)
-			avatars[AppState.sharedInstance.f_FIRid!] = UIImage(data: friendPhoto)
+			avatars[AppState.sharedInstance.f_firID!] = UIImage(data: friendPhoto)
 			
 			messageRef = FIRDatabase.database().reference().child("Messages/\(chat_id)")
 			// get latest messages
 			observeMessages()
-		} else {
-			self.title = "Messages"
-			// user doesn't have a partner
-			let sys_message = JSQMessage(senderId: "Project Kaerus", displayName: "Project Kaerus", text: "Looks like you don't have a friend working with you yet  :(\n\nPlease ask them to install this app, then tap the icon on the top-right!")
+			} else {	// user doesn't have a partner
+			let sys_message = JSQMessage(senderId: "Project Kaerus", displayName: "Project Kaerus", text: "Looks like you don't have a friend working with you yet  :(\n\nPlease ask them to install this app, then add them in the 'Settings' pane!")
 			messages.append(sys_message)
 			self.inputToolbar.removeFromSuperview()
 		}
@@ -152,7 +158,7 @@ class ChatViewController: JSQMessagesViewController {
 	override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
 		let message = messages[indexPath.item]
 		if let avatar = avatars[message.senderId] {
-			return JSQMessagesAvatarImage(placeholder: avatar)
+			return JSQMessagesAvatarImage.avatarWithImage(avatar) //JSQMessagesAvatarImage(placeholder: avatar)
 		}
 		// TODO: show system avatar
 		return nil

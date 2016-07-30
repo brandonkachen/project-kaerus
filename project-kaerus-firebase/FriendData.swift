@@ -11,12 +11,14 @@ import UIKit
 struct FriendData {
 	let name : String!
 	let first_name : String!
-	let id : String!
+	let id : String! // FIR ID, not FB ID
 	let pic : UIImage!
 	let picURL : NSURL!
+	let partnerStatus : Bool!
+	var whoAsked = ""
 	
 	// Initialize from arbitrary data
-	init(name: String, first_name: String, id: String, picString: String) {
+	init(name: String, first_name: String, id: String, picString: String, partnerStatus: Bool) {
 		self.name = name
 		self.first_name = first_name
 		self.id = id
@@ -26,5 +28,7 @@ struct FriendData {
 		
 		let picData = NSData(contentsOfURL: picURL)
 		self.pic = UIImage(data: picData!)
+		
+		self.partnerStatus = partnerStatus
 	}
 }

@@ -42,10 +42,6 @@ class LoginViewController: UIViewController {
 	
 	// MARK: UIViewController Lifecycle
 	@IBAction func facebookLogin (sender: AnyObject){
-		self.splashScreen.hidden = false
-		self.splashScreen.alpha = 1
-		self.logo.alpha = 1
-		
 		let facebookLogin = FBSDKLoginManager()
 		facebookLogin.logOut()
 		
@@ -53,8 +49,12 @@ class LoginViewController: UIViewController {
 			if facebookError != nil { print("Facebook login failed. Error \(facebookError)")
 			} else if facebookResult.isCancelled { print("Facebook login was cancelled.")
 			} else {
-				let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
+				// show splash screen after user successfully logs in
+				self.splashScreen.hidden = false
+				self.splashScreen.alpha = 1
+				self.logo.alpha = 1
 				
+				let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
 				FIRAuth.auth()?.signInWithCredential(credential) { (user, error) in
 					if let error = error {
 						print(error.localizedDescription)
@@ -129,18 +129,32 @@ class LoginViewController: UIViewController {
 		AppState.sharedInstance.setState(user)
 		NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
 		
-		// Add user to firebase database
-		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id"])
+		// Add user to firebase database, if not already in there
+		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name"])
 		graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
 			if ((error) != nil) {
 				print("Error: \(error)")
 			} else {
 				let fbID = result.valueForKey("id") as! String
-				let ref = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)") // fbID is unique
-				let item = ["FIR-ID": AppState.sharedInstance.userID!]
-				ref.setValue(item)
+				AppState.sharedInstance.firstName = result.valueForKey("first_name") as! String
+				let idRef = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)") // fbID is unique. get this so others can find user by their fb id
+				let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(user!.uid)")
+
+				// get partner status
+				partnerStatusRef.observeEventType(.Value, withBlock: { snapshot in
+					let partnerStatus = snapshot.value as! Bool
+					// get user's id
+					idRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+						if snapshot.value as? String != nil {
+							AppState.sharedInstance.partnerStatus = partnerStatus
+						} else { // first time logging in
+							idRef.setValue(user?.uid)
+							partnerStatusRef.setValue(false)
+						}
+						self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
+					})
+				})
 			}
-			self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
 		})
 	}
 }
