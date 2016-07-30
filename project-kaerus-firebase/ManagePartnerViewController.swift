@@ -34,9 +34,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		
 		// Determine if user has a friend or not
 		if AppState.sharedInstance.partnerStatus == true {
-			self.title = AppState.sharedInstance.f_firstName
-			noPartnerScreen.hidden = true
-			setupPartnerScreen()
+			setPartnerScreen()
 		} else { // user doesn't have a friend
 			self.title = "Find Partner"
 			partnerScreen.hidden = true
@@ -45,10 +43,12 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 	}
 	
 	// set up Partner Screen
-	func setupPartnerScreen() {
+	func setPartnerScreen() {
+		noPartnerScreen.hidden = true
+		partnerScreen.hidden = false
+		self.title = AppState.sharedInstance.f_firstName
 		let friendPhotoData = NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!
 		profilePic.image = UIImage(data: friendPhotoData)
-		
 		profilePic.layer.cornerRadius = profilePic.frame.height / 2
 		profilePic.clipsToBounds = true
 		partnerLabel.text = "Your partner is:\n\(AppState.sharedInstance.f_name!)"
@@ -238,8 +238,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		setMyInfoRef.setValue(my_info)
 		
 		// change view
-		partnerScreen.hidden = false
-		noPartnerScreen.hidden = true
+		setPartnerScreen()
 	}
 	
 	@IBAction func didPressRejectButton(sender: AnyObject) {
