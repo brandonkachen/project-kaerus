@@ -271,7 +271,7 @@
 				TargetAttributes = {
 					6989E3CC1D396703003924EC = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = XJAMTQ66LZ;
+						DevelopmentTeam = F3DYF6WPH8;
 					};
 					6989E3E21D396703003924EC = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -563,6 +563,7 @@
 			baseConfigurationReference = 4C6732AC67B779C1B229FB63 /* Pods-project-kaerus-firebase.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "project-kaerus-firebase/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -576,6 +577,7 @@
 			baseConfigurationReference = D4D68677377F84113A90F3D9 /* Pods-project-kaerus-firebase.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "project-kaerus-firebase/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
