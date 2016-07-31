@@ -60,6 +60,7 @@ class LoginViewController: UIViewController {
 						print(error.localizedDescription)
 						return
 					}
+					print("logged in")
 					self.signedIn(user!)
 				}
 			}
@@ -72,7 +73,7 @@ class LoginViewController: UIViewController {
 		// show splash screen
 		splashScreen.alpha = 1
 		logo.alpha = 1
-		
+
 		FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
 			if let _ = user {
 				// user is logged in: load their info, then go to Goals screen
