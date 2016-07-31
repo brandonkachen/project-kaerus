@@ -60,7 +60,6 @@ class LoginViewController: UIViewController {
 						print(error.localizedDescription)
 						return
 					}
-					print("logged in")
 					self.signedIn(user!)
 				}
 			}
@@ -75,7 +74,7 @@ class LoginViewController: UIViewController {
 		logo.alpha = 1
 
 		FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
-			if let _ = user {
+			if user != nil && FBSDKAccessToken.currentAccessToken() != nil {
 				// user is logged in: load their info, then go to Goals screen
 				self.signedIn(user)
 			}
