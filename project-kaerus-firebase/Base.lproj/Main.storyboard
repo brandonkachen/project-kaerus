@@ -61,7 +61,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenBackground.png" translatesAutoresizingMaskIntoConstraints="NO" id="6Hk-zH-rVb">
-                                        <rect key="frame" x="-212" y="-212" width="1024" height="1024"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="gFq-Lq-CCf">
                                         <rect key="frame" x="112" y="113" width="375" height="375"/>
@@ -73,10 +73,12 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="6Hk-zH-rVb" firstAttribute="leading" secondItem="BDe-8D-uJv" secondAttribute="leading" id="1Gz-AU-QH8"/>
                                     <constraint firstItem="gFq-Lq-CCf" firstAttribute="centerX" secondItem="BDe-8D-uJv" secondAttribute="centerX" id="4gD-ei-nkw"/>
+                                    <constraint firstItem="6Hk-zH-rVb" firstAttribute="top" secondItem="BDe-8D-uJv" secondAttribute="top" id="7Zb-b6-f1r"/>
                                     <constraint firstItem="gFq-Lq-CCf" firstAttribute="centerY" secondItem="BDe-8D-uJv" secondAttribute="centerY" id="8Iz-vS-WYa"/>
-                                    <constraint firstItem="gFq-Lq-CCf" firstAttribute="centerX" secondItem="6Hk-zH-rVb" secondAttribute="centerX" id="RVm-yI-wfU"/>
-                                    <constraint firstItem="gFq-Lq-CCf" firstAttribute="centerY" secondItem="6Hk-zH-rVb" secondAttribute="centerY" id="jgl-ZP-Nub"/>
+                                    <constraint firstItem="6Hk-zH-rVb" firstAttribute="centerX" secondItem="gFq-Lq-CCf" secondAttribute="centerX" id="mBv-7J-vmF"/>
+                                    <constraint firstItem="6Hk-zH-rVb" firstAttribute="centerY" secondItem="gFq-Lq-CCf" secondAttribute="centerY" id="zcc-1v-MQ9"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -596,20 +598,13 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="gSV-zh-hGt">
                         <nil key="title"/>
-                        <leftBarButtonItems>
-                            <barButtonItem title="←" id="g3W-Fz-X8O">
-                                <connections>
-                                    <action selector="didPressBackward:" destination="Jrc-ai-7bv" id="S67-qk-ZKx"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="→" id="f1a-dI-XPA">
-                                <connections>
-                                    <action selector="didPressForward:" destination="Jrc-ai-7bv" id="53t-4M-joQ"/>
-                                </connections>
-                            </barButtonItem>
-                        </leftBarButtonItems>
+                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="JJO-ys-k2X">
+                            <connections>
+                                <segue destination="dMN-vT-uzh" kind="presentation" identifier="addItem" id="tbL-CP-xB3"/>
+                            </connections>
+                        </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" id="aWR-LI-OHW">
-                            <rect key="frame" x="201" y="7" width="198" height="30"/>
+                            <rect key="frame" x="218" y="7" width="164" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="Me"/>
@@ -619,11 +614,18 @@
                                 <action selector="didChangeSegmentControl:" destination="Jrc-ai-7bv" eventType="valueChanged" id="F6Z-mZ-CeI"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="JJO-ys-k2X">
-                            <connections>
-                                <segue destination="dMN-vT-uzh" kind="presentation" identifier="addItem" id="tbL-CP-xB3"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="→" id="f1a-dI-XPA">
+                                <connections>
+                                    <action selector="didPressForward:" destination="Jrc-ai-7bv" id="53t-4M-joQ"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="←" id="g3W-Fz-X8O">
+                                <connections>
+                                    <action selector="didPressBackward:" destination="Jrc-ai-7bv" id="S67-qk-ZKx"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="addDeadlineButton" destination="JJO-ys-k2X" id="JgQ-Dc-yxl"/>
