@@ -10,25 +10,32 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PK" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="258" y="280" width="191" height="175"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenBackground.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Jv-Qj-ab1">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Bak-ff-PIF">
+                    <rect key="frame" x="53" y="52" width="375" height="375"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="175" id="Lf0-R9-Fxs"/>
-                        <constraint firstAttribute="width" constant="191" id="dKg-aR-pSX"/>
+                        <constraint firstAttribute="height" constant="375" id="dzL-o7-6Yt"/>
+                        <constraint firstAttribute="width" constant="375" id="t4y-bF-soV"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="128"/>
-                    <color key="textColor" red="0.92941176470588238" green="0.92941176470588238" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.13658961606939607" green="0.35300565815049428" blue="0.52466662176724133" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="kId-c2-rCX" secondAttribute="bottom" constant="25" id="502-aY-QID"/>
-                <constraint firstAttribute="trailing" secondItem="kId-c2-rCX" secondAttribute="trailing" constant="31" id="Uxm-BY-ysF"/>
+                <constraint firstItem="9Jv-Qj-ab1" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Qsp-VI-yvJ"/>
+                <constraint firstAttribute="trailing" secondItem="9Jv-Qj-ab1" secondAttribute="trailing" id="UyD-r1-XNW"/>
+                <constraint firstItem="Bak-ff-PIF" firstAttribute="centerY" secondItem="9Jv-Qj-ab1" secondAttribute="centerY" id="XYj-kH-nGu"/>
+                <constraint firstAttribute="bottom" secondItem="9Jv-Qj-ab1" secondAttribute="bottom" id="XkR-Jd-xzA"/>
+                <constraint firstItem="Bak-ff-PIF" firstAttribute="centerX" secondItem="9Jv-Qj-ab1" secondAttribute="centerX" id="lxZ-7N-G7b"/>
+                <constraint firstItem="9Jv-Qj-ab1" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="ync-ka-CAY"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="548" y="455"/>
         </view>
     </objects>
+    <resources>
+        <image name="LaunchScreenBackground.png" width="1024" height="1024"/>
+        <image name="LaunchScreenIcon.png" width="1024" height="1024"/>
+    </resources>
 </document>

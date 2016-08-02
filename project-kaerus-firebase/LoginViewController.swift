@@ -36,7 +36,6 @@ class LoginViewController: UIViewController {
 	@IBOutlet weak var titleLabel: UILabel!
 
 	@IBOutlet weak var splashScreen: UIView!
-	@IBOutlet weak var logo: UILabel!
 	
 	// MARK: Properties
 	
@@ -51,8 +50,6 @@ class LoginViewController: UIViewController {
 			} else {
 				// show splash screen after user successfully logs in
 				self.splashScreen.hidden = false
-				self.splashScreen.alpha = 1
-				self.logo.alpha = 1
 				
 				let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
 				FIRAuth.auth()?.signInWithCredential(credential) { (user, error) in
@@ -71,7 +68,6 @@ class LoginViewController: UIViewController {
 		
 		// show splash screen
 		splashScreen.alpha = 1
-		logo.alpha = 1
 
 		FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
 			if user != nil && FBSDKAccessToken.currentAccessToken() != nil {
@@ -80,8 +76,6 @@ class LoginViewController: UIViewController {
 			}
 			else {
 				self.splashScreen.hidden = true
-				self.splashScreen.alpha = 0
-				self.logo.alpha = 0
 			}
 		}
 	}
@@ -142,7 +136,7 @@ class LoginViewController: UIViewController {
 
 				// get partner status
 				partnerStatusRef.observeEventType(.Value, withBlock: { snapshot in
-					let partnerStatus = snapshot.value as! Bool
+					let partnerStatus = snapshot.value as? Bool
 					// get user's id
 					idRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
 						if snapshot.value as? String != nil {

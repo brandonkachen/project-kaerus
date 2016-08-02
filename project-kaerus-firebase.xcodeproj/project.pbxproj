@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		690E343E1D3972B000C284D5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 690E343D1D3972B000C284D5 /* GoogleService-Info.plist */; };
+		691C9B0B1D514140003257DA /* LaunchScreenBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B0A1D514140003257DA /* LaunchScreenBackground.png */; };
+		691C9B0E1D5141A8003257DA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B0C1D5141A8003257DA /* LaunchScreen.xib */; };
+		691C9B151D5145B6003257DA /* LaunchScreenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B141D5145B6003257DA /* LaunchScreenIcon.png */; };
 		694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB10A1D3976F400570A6B /* LoginViewController.swift */; };
 		694DB1161D39775B00570A6B /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1131D39775B00570A6B /* AppState.swift */; };
 		694DB1171D39775B00570A6B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1141D39775B00570A6B /* Constants.swift */; };
 		694DB1181D39775B00570A6B /* MeasurementHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1151D39775B00570A6B /* MeasurementHelper.swift */; };
-		694DB11B1D397E3A00570A6B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 694DB1191D397E3900570A6B /* LaunchScreen.xib */; };
 		696287B31D3AED33000F94F2 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696287B11D3AED33000F94F2 /* SettingsTableViewController.swift */; };
 		696287BF1D3C8136000F94F2 /* FindFriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696287BE1D3C8136000F94F2 /* FindFriendsTableViewCell.swift */; };
 		696287C51D3D4763000F94F2 /* FriendData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696287C41D3D4763000F94F2 /* FriendData.swift */; };
@@ -44,11 +46,13 @@
 		186C369AA16C5D6A9562B90A /* Pods-project-kaerus-firebaseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-kaerus-firebaseTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-project-kaerus-firebaseTests/Pods-project-kaerus-firebaseTests.release.xcconfig"; sourceTree = "<group>"; };
 		4C6732AC67B779C1B229FB63 /* Pods-project-kaerus-firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-kaerus-firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-project-kaerus-firebase/Pods-project-kaerus-firebase.debug.xcconfig"; sourceTree = "<group>"; };
 		690E343D1D3972B000C284D5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		691C9B0A1D514140003257DA /* LaunchScreenBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LaunchScreenBackground.png; path = Assets.xcassets/LaunchScreenBackground.png; sourceTree = "<group>"; };
+		691C9B0D1D5141A8003257DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		691C9B141D5145B6003257DA /* LaunchScreenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LaunchScreenIcon.png; path = Assets.xcassets/LaunchScreenIcon.png; sourceTree = "<group>"; };
 		694DB10A1D3976F400570A6B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		694DB1131D39775B00570A6B /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		694DB1141D39775B00570A6B /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		694DB1151D39775B00570A6B /* MeasurementHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasurementHelper.swift; sourceTree = "<group>"; };
-		694DB11A1D397E3A00570A6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		696287B11D3AED33000F94F2 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		696287BE1D3C8136000F94F2 /* FindFriendsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindFriendsTableViewCell.swift; sourceTree = "<group>"; };
 		696287C41D3D4763000F94F2 /* FriendData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendData.swift; sourceTree = "<group>"; };
@@ -114,7 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				6989E3D61D396703003924EC /* Main.storyboard */,
-				694DB1191D397E3900570A6B /* LaunchScreen.xib */,
+				691C9B111D5142CB003257DA /* Launch Screen */,
 			);
 			name = Layouts;
 			sourceTree = "<group>";
@@ -130,6 +134,16 @@
 				6973228F1D4C5983000F512D /* ManagePartnerViewController.swift */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		691C9B111D5142CB003257DA /* Launch Screen */ = {
+			isa = PBXGroup;
+			children = (
+				691C9B0C1D5141A8003257DA /* LaunchScreen.xib */,
+				691C9B141D5145B6003257DA /* LaunchScreenIcon.png */,
+				691C9B0A1D514140003257DA /* LaunchScreenBackground.png */,
+			);
+			name = "Launch Screen";
 			sourceTree = "<group>";
 		};
 		694DB1111D39770300570A6B /* Models */ = {
@@ -304,10 +318,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				694DB11B1D397E3A00570A6B /* LaunchScreen.xib in Resources */,
+				691C9B0E1D5141A8003257DA /* LaunchScreen.xib in Resources */,
 				690E343E1D3972B000C284D5 /* GoogleService-Info.plist in Resources */,
+				691C9B0B1D514140003257DA /* LaunchScreenBackground.png in Resources */,
 				6989E3DA1D396703003924EC /* Assets.xcassets in Resources */,
 				6989E3D81D396703003924EC /* Main.storyboard in Resources */,
+				691C9B151D5145B6003257DA /* LaunchScreenIcon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,10 +470,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		694DB1191D397E3900570A6B /* LaunchScreen.xib */ = {
+		691C9B0C1D5141A8003257DA /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				694DB11A1D397E3A00570A6B /* Base */,
+				691C9B0D1D5141A8003257DA /* Base */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
