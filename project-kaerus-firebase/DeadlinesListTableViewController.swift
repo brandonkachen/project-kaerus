@@ -29,7 +29,7 @@ class DeadlinesTableViewController: UITableViewController {
 	
 	
   // MARK: Properties
-	var items = [Deadline]()
+	var deadlines = [Deadline]()
 	var masterRef, deadlinesRef, dayUserLastSawRef: FIRDatabaseReference!
 	private var _refHandle: FIRDatabaseHandle!
 	var dayUserIsLookingAt = 1 // defaults to 1, but is set by the 'day' variable in User-Deadlines
@@ -114,7 +114,7 @@ class DeadlinesTableViewController: UITableViewController {
 				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
 				newItems.append(deadlineItem)
 			}
-			self.items = newItems
+			self.deadlines = newItems
 			self.tableView.reloadData()
 		})
 	}
@@ -165,7 +165,7 @@ class DeadlinesTableViewController: UITableViewController {
 	// MARK: UITableView Delegate methods
 
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return items.count
+		return deadlines.count
 	}
 
 	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -199,7 +199,7 @@ class DeadlinesTableViewController: UITableViewController {
 	}
 	
 	func configureCell(cell: DeadlinesTableViewCell, indexPath: NSIndexPath) -> UITableViewCell {
-		let deadlineItem = items[indexPath.row]
+		let deadlineItem = deadlines[indexPath.row]
 		cell.deadlineText.text = deadlineItem.text
 		
 		let formatter = NSDateFormatter()
@@ -243,7 +243,7 @@ class DeadlinesTableViewController: UITableViewController {
 			
 			if let selectedItemCell = sender as? DeadlinesTableViewCell {
 				let indexPath = tableView.indexPathForCell(selectedItemCell)!
-				let selectedDeadline = items[indexPath.row]
+				let selectedDeadline = deadlines[indexPath.row]
 				deadlinesViewController.deadline = selectedDeadline
 			}
 		}
@@ -254,7 +254,7 @@ class DeadlinesTableViewController: UITableViewController {
 		if let sourceViewController = sender.sourceViewController as? AddDeadlineViewController, deadline = sourceViewController.deadline {
 			var deadlineRef: FIRDatabaseReference
 			if let selectedIndexPath = tableView.indexPathForSelectedRow {
-				let key = items[selectedIndexPath.row].key
+				let key = deadlines[selectedIndexPath.row].key
 				// Update current item
 				deadlineRef = self.deadlinesRef.child(key)
 			}
@@ -291,7 +291,7 @@ class DeadlinesTableViewController: UITableViewController {
 		let cell = tableView.cellForRowAtIndexPath(indexPath)!
 		
 		// Get the associated grocery item
-		let deadlineItem = self.items[indexPath.row]
+		let deadlineItem = self.deadlines[indexPath.row]
 		
 		let delete_button = UITableViewRowAction(style: .Destructive, title: "delete") { (action, indexPath) in
 			let alert = UIAlertController(title: "Delete Deadline", message: "Are you sure you want to delete this deadline?", preferredStyle: .ActionSheet)

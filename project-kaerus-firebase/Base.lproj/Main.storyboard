@@ -473,35 +473,6 @@
             </objects>
             <point key="canvasLocation" x="1889" y="374"/>
         </scene>
-        <!--Root View Controller-->
-        <scene sceneID="ite-eS-tik">
-            <objects>
-                <tableViewController id="aZt-Cq-b1O" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="kFr-eD-uLl">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="NtW-Dn-uFT">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NtW-Dn-uFT" id="ygO-GY-G9n">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="aZt-Cq-b1O" id="YUJ-IT-AkP"/>
-                            <outlet property="delegate" destination="aZt-Cq-b1O" id="vZ6-QQ-F7N"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="Feg-Wn-bB3"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="uiV-VU-9uo" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1889" y="1099"/>
-        </scene>
         <!--Payments-->
         <scene sceneID="qL4-Mh-2kl">
             <objects>
@@ -511,9 +482,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
-                    <connections>
-                        <segue destination="aZt-Cq-b1O" kind="relationship" relationship="rootViewController" id="Mq6-55-u8O"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N9b-ef-XLF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -545,7 +513,7 @@
         <!--MD-->
         <scene sceneID="9EK-hI-OT4">
             <objects>
-                <tableViewController title="YD" id="Jrc-ai-7bv" userLabel="MD" customClass="DeadlinesTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Deadlines" id="Jrc-ai-7bv" userLabel="MD" customClass="DeadlinesTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" pagingEnabled="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" id="TIz-UN-ZxS">
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -650,8 +618,8 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="71h-Xd-c0a">
-                                <rect key="frame" x="20" y="84" width="560" height="266"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="71h-Xd-c0a">
+                                <rect key="frame" x="20" y="20" width="560" height="266"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your goal" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Iuw-bO-wTt">
                                         <rect key="frame" x="0.0" y="0.0" width="560" height="30"/>
