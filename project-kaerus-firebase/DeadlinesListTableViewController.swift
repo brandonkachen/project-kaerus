@@ -50,7 +50,7 @@ class DeadlinesTableViewController: UITableViewController {
 		
 		// Set up swipe to delete
 		tableView.allowsMultipleSelectionDuringEditing = false
-
+		
 		configureStorage()
 //		fetchConfig()
 		logViewLoaded()
