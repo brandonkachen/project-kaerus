@@ -169,7 +169,7 @@ class DeadlinesTableViewController: UITableViewController {
 	}
 
 	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-		// user is only allowed to edit their own deadlines
+		// user is only allowed to mark "finished" or delete their own deadlines
 		return segmentedControl.selectedSegmentIndex == 0 ? true : false
 	}
 	
@@ -234,13 +234,15 @@ class DeadlinesTableViewController: UITableViewController {
 	}
 	
 	// MARK: Navigation
+
+	override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+		return segmentedControl.selectedSegmentIndex == 0 ? true : false
+	}
 	
 	// called when starting to change from one screen in storyboard to next
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-		if segue.identifier == "editItem" {
-			// Edit item
+		if segue.identifier == "editItem" { // Edit item
 			let deadlinesViewController = segue.destinationViewController as! AddDeadlineViewController
-			
 			if let selectedItemCell = sender as? DeadlinesTableViewCell {
 				let indexPath = tableView.indexPathForCell(selectedItemCell)!
 				let selectedDeadline = deadlines[indexPath.row]
@@ -253,13 +255,10 @@ class DeadlinesTableViewController: UITableViewController {
 	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
 		if let sourceViewController = sender.sourceViewController as? AddDeadlineViewController, deadline = sourceViewController.deadline {
 			var deadlineRef: FIRDatabaseReference
-			if let selectedIndexPath = tableView.indexPathForSelectedRow {
+			if let selectedIndexPath = tableView.indexPathForSelectedRow { // Update current item
 				let key = deadlines[selectedIndexPath.row].key
-				// Update current item
 				deadlineRef = self.deadlinesRef.child(key)
-			}
-			else {
-				// Add a new item to the list
+			} else { // Add a new item to the list
 				deadlineRef = self.deadlinesRef.childByAutoId()
 			}
 			deadlineRef.setValue(deadline.toAnyObject())
@@ -271,8 +270,7 @@ class DeadlinesTableViewController: UITableViewController {
 		if let status = AppState.sharedInstance.partnerStatus where status == true {
 			let getIdRef = FIRDatabase.database().reference().child("Friend-Info/\(AppState.sharedInstance.userID)")
 			getIdRef.observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
-				if let postDict = snapshot.value as? [String : String] {
-					// set AppState stuff
+				if let postDict = snapshot.value as? [String : String] { // set AppState stuff
 					AppState.sharedInstance.f_firstName = postDict["friend_firstName"]
 					self.segmentedControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
 					AppState.sharedInstance.f_firID = postDict["friend_id"]
@@ -281,6 +279,8 @@ class DeadlinesTableViewController: UITableViewController {
 					AppState.sharedInstance.groupchat_id = postDict["groupchat_id"]
 				}
 			})
+		} else { // user doesn't have a friend, so gray out 'partner' segment
+			segmentedControl.setEnabled(false, forSegmentAtIndex: 1)
 		}
 	}
 	
@@ -325,7 +325,7 @@ class DeadlinesTableViewController: UITableViewController {
 		let blue = UIColor(red: 63/255, green: 202/255, blue: 62/255, alpha: 1)
 		let green = UIColor(red: 66/255, green: 155/255, blue: 224/255, alpha: 1)
 		
-		done_button.title = toggledCompletion ? "mark as\ncomplete" : "mark as\nincomplete"
+		done_button.title = toggledCompletion ? "finish" : "un-finish"
 		done_button.backgroundColor = toggledCompletion ? blue : green
 		
 		return [delete_button, done_button]
