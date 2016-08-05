@@ -132,19 +132,32 @@ class LoginViewController: UIViewController {
 				AppState.sharedInstance.firstName = result.valueForKey("first_name") as! String
 				let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(user!.uid)")
 				let firIdRef = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)") // fbID is unique. get this so others can find user by their fb id
+				let oneSignalIdRef = FIRDatabase.database().reference().child("FIR-to-OS/\(user!.uid)")
 
 				// get partner status and oneSignal ID
 				partnerStatusRef.observeEventType(.Value, withBlock: { partnerStatus in
 					let partnerStatus = partnerStatus.value as? Bool
-					// get partner's user id
-					firIdRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
-						if snapshot.value as? String != nil {
-							AppState.sharedInstance.partnerStatus = partnerStatus
-						} else { // first time logging in
-							firIdRef.setValue(user?.uid)
-							partnerStatusRef.setValue(false)
+					OneSignal.IdsAvailable({ (userId, pushToken) in
+						let oneSignalId = userId
+						if (pushToken != nil) {
+							NSLog("pushToken:%@", pushToken)
 						}
-						self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
+						// get partner's user id
+						firIdRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+							if snapshot.value as? String != nil {
+								AppState.sharedInstance.partnerStatus = partnerStatus
+								/**************************************
+
+								oneSignalIdRef.setValue(oneSignalId) // shouldn't be here in the official build!
+
+								****************************************/
+							} else { // first time logging in
+								firIdRef.setValue(user?.uid)
+								partnerStatusRef.setValue(false)
+								oneSignalIdRef.setValue(oneSignalId)
+							}
+							self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
+						})
 					})
 				})
 			}
