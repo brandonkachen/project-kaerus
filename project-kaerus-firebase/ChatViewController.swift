@@ -71,7 +71,7 @@ class ChatViewController: JSQMessagesViewController {
 	}
 	
 	private func observeMessages() {
-		let messagesQuery = messageRef.queryLimitedToLast(25)
+		let messagesQuery = messageRef.queryLimitedToLast(10)
 		messagesQuery.observeEventType(.ChildAdded) { (snapshot: FIRDataSnapshot!) in
 			
 			// get the info from snapshot

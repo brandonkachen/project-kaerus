@@ -513,7 +513,7 @@
         <!--MD-->
         <scene sceneID="9EK-hI-OT4">
             <objects>
-                <tableViewController title="Deadlines" id="Jrc-ai-7bv" userLabel="MD" customClass="DeadlinesTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="deadlineVC" title="Deadlines" id="Jrc-ai-7bv" userLabel="MD" customClass="DeadlinesTableViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" pagingEnabled="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" id="TIz-UN-ZxS">
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
