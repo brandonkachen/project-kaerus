@@ -68,16 +68,15 @@ class LoginViewController: UIViewController {
 		
 		// show splash screen
 		splashScreen.alpha = 1
-
-		FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
-			if user != nil && FBSDKAccessToken.currentAccessToken() != nil {
-				// user is logged in: load their info, then go to Goals screen
-				self.signedIn(user)
-			}
-			else {
-				self.splashScreen.hidden = true
-			}
+		let user = FIRAuth.auth()?.currentUser
+		
+		if user != nil && FBSDKAccessToken.currentAccessToken() != nil {
+			// user is logged in: load their info, then go to Goals screen
+			self.signedIn(user)
+		} else {
+			self.splashScreen.hidden = true
 		}
+
 	}
 
 	// MARK: Actions
@@ -122,7 +121,7 @@ class LoginViewController: UIViewController {
 		MeasurementHelper.sendLoginEvent()
 		AppState.sharedInstance.setState(user)
 		NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
-		
+
 		// Add user to firebase database, if not already in there
 		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name"])
 		graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
@@ -131,18 +130,18 @@ class LoginViewController: UIViewController {
 			} else {
 				let fbID = result.valueForKey("id") as! String
 				AppState.sharedInstance.firstName = result.valueForKey("first_name") as! String
-				let idRef = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)") // fbID is unique. get this so others can find user by their fb id
 				let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(user!.uid)")
+				let firIdRef = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)") // fbID is unique. get this so others can find user by their fb id
 
-				// get partner status
-				partnerStatusRef.observeEventType(.Value, withBlock: { snapshot in
-					let partnerStatus = snapshot.value as? Bool
-					// get user's id
-					idRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+				// get partner status and oneSignal ID
+				partnerStatusRef.observeEventType(.Value, withBlock: { partnerStatus in
+					let partnerStatus = partnerStatus.value as? Bool
+					// get partner's user id
+					firIdRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
 						if snapshot.value as? String != nil {
 							AppState.sharedInstance.partnerStatus = partnerStatus
 						} else { // first time logging in
-							idRef.setValue(user?.uid)
+							firIdRef.setValue(user?.uid)
 							partnerStatusRef.setValue(false)
 						}
 						self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
@@ -152,4 +151,18 @@ class LoginViewController: UIViewController {
 		})
 	}
 }
+
+//				firIdRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+//					if snapshot.value as? String != nil {
+//						partnerStatusRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+//							AppState.sharedInstance.partnerStatus = snapshot.value as! Bool
+//							self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
+//						})
+//					} else { // first time logging in
+//						firIdRef.setValue(user?.uid)
+//						partnerStatusRef.setValue(false)
+//						self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
+//
+//					}
+//				})
 

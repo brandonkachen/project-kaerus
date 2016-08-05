@@ -83,6 +83,7 @@ PODS:
   - JSQMessagesViewController (7.3.3):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
+  - OneSignal (2.0.0)
 
 DEPENDENCIES:
   - Bolts
@@ -97,6 +98,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - FirebaseAuth
   - JSQMessagesViewController
+  - OneSignal
 
 SPEC CHECKSUMS:
   Bolts: 89c0c6dd1b9c975a3452a62d57a6be6739e5f433
@@ -120,7 +122,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
   JSQMessagesViewController: 0ee3f80237268192a3e8337fd0d787f1a1bf5a7a
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  OneSignal: 11122242676e1c5de3ed5106c0ebee511d04fe48
 
-PODFILE CHECKSUM: a4d99f1bc0ec0d38ce853f1881f91ea390323b5e
+PODFILE CHECKSUM: 4343ee30975f3847c22825e3af14efc50f75340d
 
 COCOAPODS: 1.0.1

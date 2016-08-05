@@ -25,4 +25,6 @@ target 'project-kaerus-firebase' do
   pod 'Bolts'
   pod 'FBSDKCoreKit'
   pod 'FBSDKLoginKit'
+
+  pod 'OneSignal'
 end

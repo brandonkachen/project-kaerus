@@ -46,6 +46,7 @@
 		186C369AA16C5D6A9562B90A /* Pods-project-kaerus-firebaseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-kaerus-firebaseTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-project-kaerus-firebaseTests/Pods-project-kaerus-firebaseTests.release.xcconfig"; sourceTree = "<group>"; };
 		4C6732AC67B779C1B229FB63 /* Pods-project-kaerus-firebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-kaerus-firebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-project-kaerus-firebase/Pods-project-kaerus-firebase.debug.xcconfig"; sourceTree = "<group>"; };
 		690E343D1D3972B000C284D5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6919C5CD1D541A4A002FC735 /* project-kaerus-firebase-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "project-kaerus-firebase-Bridging-Header.h"; sourceTree = "<group>"; };
 		691C9B0A1D514140003257DA /* LaunchScreenBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LaunchScreenBackground.png; path = Assets.xcassets/LaunchScreenBackground.png; sourceTree = "<group>"; };
 		691C9B0D1D5141A8003257DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		691C9B141D5145B6003257DA /* LaunchScreenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LaunchScreenIcon.png; path = Assets.xcassets/LaunchScreenIcon.png; sourceTree = "<group>"; };
@@ -162,6 +163,7 @@
 				694DB1131D39775B00570A6B /* AppState.swift */,
 				694DB1141D39775B00570A6B /* Constants.swift */,
 				694DB1151D39775B00570A6B /* MeasurementHelper.swift */,
+				6919C5CD1D541A4A002FC735 /* project-kaerus-firebase-Bridging-Header.h */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -593,6 +595,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.projectkaerus.project-kaerus";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "project-kaerus-firebase/project-kaerus-firebase-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -607,6 +610,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.projectkaerus.project-kaerus";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "project-kaerus-firebase/project-kaerus-firebase-Bridging-Header.h";
 			};
 			name = Release;
 		};

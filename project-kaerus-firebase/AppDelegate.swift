@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Override point for customization after application launch.
 		registerForPushNotifications(application)
 		FIRApp.configure()
+		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00")
 		
 //		connectToFcm()
 		if let _ = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [String: AnyObject] {
@@ -70,11 +71,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// this callback will not be fired till the user taps on the notification launching the application.
 		// TODO: Handle data of notification
 		
-		// Print message ID.
-		print("Message ID: \(userInfo["gcm.message_id"]!)")
-		
-		// Print full message.
-		print("%@", userInfo)
+//		// Print message ID.
+//		print("Message ID: \(userInfo["gcm.message_id"]!)")
+//		
+//		// Print full message.
+//		print("%@", userInfo)
 	}
 	
 	func tokenRefreshNotification(notification: NSNotification) {
