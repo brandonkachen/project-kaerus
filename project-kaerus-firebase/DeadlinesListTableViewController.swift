@@ -122,13 +122,11 @@ class DeadlinesTableViewController: UITableViewController {
 	
 	// MARK:- Navigation bar elements
 	
-	@IBAction func didChangeSegmentControl(sender: AnyObject) {
-		if segmentedControl.selectedSegmentIndex == 0 {
-			// User looking at their own deadlines
+	@IBAction func didChangeSegment(sender: AnyObject) {
+		if segmentedControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
 			addDeadlineButton.enabled = true
 			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
-		} else {
-			// User looking at friend's deadlines
+		} else { // user looking at partner's deadlines
 			addDeadlineButton.enabled = false
 			if let f_id = AppState.sharedInstance.f_firID {
 				userWhoseDeadlinesAreShown = f_id
@@ -275,6 +273,7 @@ class DeadlinesTableViewController: UITableViewController {
 					self.segmentedControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
 					AppState.sharedInstance.f_firID = postDict["friend_id"]
 					AppState.sharedInstance.f_photoURL = NSURL(string: postDict["friend_pic"]!)
+					AppState.sharedInstance.f_photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!)!.circle
 					AppState.sharedInstance.f_name = postDict["friend_name"]
 					AppState.sharedInstance.groupchat_id = postDict["groupchat_id"]
 				}
@@ -286,7 +285,6 @@ class DeadlinesTableViewController: UITableViewController {
 	
 	// swiping horizontally shows "done" button. pressing it will mark item as completed
 	override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-		
 		// Get the cell
 		let cell = tableView.cellForRowAtIndexPath(indexPath)!
 		

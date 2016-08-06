@@ -22,8 +22,9 @@ class AppState: NSObject {
 
 	// user's info
 	var signedIn = false
-	var username: String!
+	var name: String!
 	var photoUrl: NSURL!
+	var photo: UIImage!
 	var userID: String!
 	var email: String!
 	var firstName: String!
@@ -33,6 +34,7 @@ class AppState: NSObject {
 	var f_name: String?
 	var f_firID: String?
 	var f_photoURL: NSURL?
+	var f_photo: UIImage?
 	var f_oneSignalID: String?
 	
 	// partner stuff
@@ -41,8 +43,9 @@ class AppState: NSObject {
 
 	func setState(user: FIRUser?) {
 		self.signedIn = true
-		self.username = user?.displayName //?? user?.email
+		self.name = user?.displayName //?? user?.email
 		self.photoUrl = user?.photoURL
+		self.photo = UIImage(data: NSData(contentsOfURL: self.photoUrl)!)!.circle
 		self.userID = user?.uid
 		self.email = user?.email
 	}

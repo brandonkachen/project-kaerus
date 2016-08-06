@@ -22,7 +22,7 @@ class ChatViewController: JSQMessagesViewController {
 		
 		// set up view controller
 		self.senderId = AppState.sharedInstance.userID
-		self.senderDisplayName = AppState.sharedInstance.username
+		self.senderDisplayName = AppState.sharedInstance.name
 		self.edgesForExtendedLayout = UIRectEdge.None
 		self.setupBubbles()
 //		let userImage = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(13)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
@@ -31,19 +31,8 @@ class ChatViewController: JSQMessagesViewController {
 		// set up Firebase branch where messages will be stored
 		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
 			self.navigationItem.title = AppState.sharedInstance.f_firstName
-			let userPhoto = NSData(contentsOfURL: AppState.sharedInstance.photoUrl!)!
-			let friendPhoto = NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!
-			
-//			let userProfilePic = UIImageView(image: UIImage(data: userPhoto))
-			
-			
-//			userProfilePic.layer.cornerRadius = userProfilePic.frame.size.width / 2
-//			cell.profilePic.clipsToBounds = true
-			
-//			let test = JSQMessagesAvatarImage.avatarWithImage(UIImage(data: userPhoto))
-			
-			avatars[senderId] = UIImage(data: userPhoto)
-			avatars[AppState.sharedInstance.f_firID!] = UIImage(data: friendPhoto)
+			avatars[senderId] = AppState.sharedInstance.photo
+			avatars[AppState.sharedInstance.f_firID!] = AppState.sharedInstance.f_photo
 			
 			messageRef = FIRDatabase.database().reference().child("Messages/\(chat_id)")
 			// get latest messages
@@ -73,7 +62,6 @@ class ChatViewController: JSQMessagesViewController {
 	private func observeMessages() {
 		let messagesQuery = messageRef.queryLimitedToLast(10)
 		messagesQuery.observeEventType(.ChildAdded) { (snapshot: FIRDataSnapshot!) in
-			
 			// get the info from snapshot
 			let id = snapshot.childSnapshotForPath("id").value as! String
 			let displayName = snapshot.childSnapshotForPath("displayName").value as! String

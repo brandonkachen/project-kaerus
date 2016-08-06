@@ -9,12 +9,10 @@
 import UIKit
 
 class PaymentsTableViewCell: UITableViewCell {
+	@IBOutlet weak var timeDue: UILabel!
+	@IBOutlet weak var amount: UILabel!
+	@IBOutlet weak var deadline: UILabel!
 
-	@IBOutlet weak var profilePic: UIImageView!
-	@IBOutlet weak var nameLabel: UILabel!
-	@IBOutlet weak var totalBalance: UILabel!
-	@IBOutlet weak var owedBalance: UILabel!
-	
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

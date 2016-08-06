@@ -144,8 +144,6 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 			
 			cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2
 			cell.profilePic.clipsToBounds = true
-//			cell.profilePic.layer.borderWidth = 3.0
-//			cell.profilePic.layer.borderColor = UIColor.blackColor().CGColor
 			
 			if let status = friend.partnerStatus where status {	// friend already has a partner
 				cell.partnerStatus.text = "already has a partner"
@@ -218,7 +216,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		// set friend info
 		let friend_info = [
 			"friend_id" : AppState.sharedInstance.userID,
-			"friend_name" : AppState.sharedInstance.username,
+			"friend_name" : AppState.sharedInstance.name,
 			"friend_firstName" : AppState.sharedInstance.firstName,
 			"friend_pic" : AppState.sharedInstance.photoUrl!.absoluteString,
 			"groupchat_id" : AppState.sharedInstance.groupchat_id!

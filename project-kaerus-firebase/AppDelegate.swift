@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		FIRApp.configure()
 		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00")
 		
-//		connectToFcm()
+		connectToFcm()
 		if let _ = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [String: AnyObject] {
 			// load stuff related to the app notification
 		}
