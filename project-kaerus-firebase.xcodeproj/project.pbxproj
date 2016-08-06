@@ -11,6 +11,7 @@
 		691C9B0B1D514140003257DA /* LaunchScreenBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B0A1D514140003257DA /* LaunchScreenBackground.png */; };
 		691C9B0E1D5141A8003257DA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B0C1D5141A8003257DA /* LaunchScreen.xib */; };
 		691C9B151D5145B6003257DA /* LaunchScreenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B141D5145B6003257DA /* LaunchScreenIcon.png */; };
+		693B2C6A1D55B3E00083B5D1 /* DeadlinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693B2C691D55B3E00083B5D1 /* DeadlinesViewController.swift */; };
 		694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB10A1D3976F400570A6B /* LoginViewController.swift */; };
 		694DB1161D39775B00570A6B /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1131D39775B00570A6B /* AppState.swift */; };
 		694DB1171D39775B00570A6B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1141D39775B00570A6B /* Constants.swift */; };
@@ -54,6 +55,7 @@
 		691C9B0A1D514140003257DA /* LaunchScreenBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LaunchScreenBackground.png; path = Assets.xcassets/LaunchScreenBackground.png; sourceTree = "<group>"; };
 		691C9B0D1D5141A8003257DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		691C9B141D5145B6003257DA /* LaunchScreenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LaunchScreenIcon.png; path = Assets.xcassets/LaunchScreenIcon.png; sourceTree = "<group>"; };
+		693B2C691D55B3E00083B5D1 /* DeadlinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesViewController.swift; sourceTree = "<group>"; };
 		694DB10A1D3976F400570A6B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		694DB1131D39775B00570A6B /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		694DB1141D39775B00570A6B /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -135,13 +137,14 @@
 		690E34411D3972C600C284D5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				694DB10A1D3976F400570A6B /* LoginViewController.swift */,
-				697322971D4C739E000F512D /* DeadlinesListTableViewController.swift */,
 				697322951D4C7374000F512D /* AddDeadlineViewController.swift */,
 				6989E3D41D396703003924EC /* ChatViewController.swift */,
-				696287B11D3AED33000F94F2 /* SettingsTableViewController.swift */,
+				693B2C691D55B3E00083B5D1 /* DeadlinesViewController.swift */,
+				694DB10A1D3976F400570A6B /* LoginViewController.swift */,
 				6973228F1D4C5983000F512D /* ManagePartnerViewController.swift */,
 				69AA26AB1D5567120029773B /* PaymentsViewController.swift */,
+				696287B11D3AED33000F94F2 /* SettingsTableViewController.swift */,
+				697322971D4C739E000F512D /* DeadlinesListTableViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -468,6 +471,7 @@
 				696287BF1D3C8136000F94F2 /* FindFriendsTableViewCell.swift in Sources */,
 				696287C51D3D4763000F94F2 /* FriendData.swift in Sources */,
 				6989E3D51D396703003924EC /* ChatViewController.swift in Sources */,
+				693B2C6A1D55B3E00083B5D1 /* DeadlinesViewController.swift in Sources */,
 				694DB1161D39775B00570A6B /* AppState.swift in Sources */,
 				69AA26AA1D5566200029773B /* PaymentsTableViewCell.swift in Sources */,
 				6989E3D11D396703003924EC /* AppDelegate.swift in Sources */,

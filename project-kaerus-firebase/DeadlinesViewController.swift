@@ -1,30 +1,26 @@
-/*
-* Copyright (c) 2015 Razeware LLC
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*/
+//
+//  DeadlinesViewController.swift
+//  project-kaerus-firebase
+//
+//  Created by Brandon Chen on 8/5/16.
+//  Copyright © 2016 Brandon Chen. All rights reserved.
+//
 
 import UIKit
 import Firebase
 
-class DeadlinesTableViewController: UITableViewController {
-  // MARK: Properties
+class DeadlinesViewController: UIViewController {
+	@IBOutlet weak var segControl: UISegmentedControl!
+	@IBOutlet weak var editButton: UIBarButtonItem!
+	@IBOutlet weak var backOneDayButton: UIButton!
+	@IBOutlet weak var forwardOneDayButton: UIButton!
+	@IBOutlet weak var dateLabel: UILabel!
+	@IBOutlet weak var amtOwedLabel: UILabel!
+	@IBOutlet weak var deadlineTable: UITableView!
+	
+	
+	// MARK: Properties
+
 	var deadlines = [Deadline]()
 	var masterRef, deadlinesRef, dayUserLastSawRef: FIRDatabaseReference!
 	private var _refHandle: FIRDatabaseHandle!
@@ -32,20 +28,15 @@ class DeadlinesTableViewController: UITableViewController {
 	var userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
 	
 	var storageRef: FIRStorageReference!
-
-	@IBOutlet weak var segmentedControl: UISegmentedControl!
-	@IBOutlet weak var addDeadlineButton: UIBarButtonItem!
-	@IBOutlet weak var backwardOneDay: UIBarButtonItem!
-	@IBOutlet weak var forwardOneDay: UIBarButtonItem!
 	
 	
-  // MARK: UIViewController Lifecycle
-  
+	// MARK: UIViewController Lifecycle
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		// Set up swipe to delete
-		tableView.allowsMultipleSelectionDuringEditing = false
+		deadlineTable.allowsMultipleSelectionDuringEditing = false
 		
 		configureStorage()
 //		fetchConfig()
@@ -55,7 +46,7 @@ class DeadlinesTableViewController: UITableViewController {
 		setFriendData()
 		
 		// might need to wait here, to prevent race condition if we don't get friend info in time
-	
+		
 		setup()
 	}
 	
@@ -78,7 +69,7 @@ class DeadlinesTableViewController: UITableViewController {
 	func setup() {
 		// this will be the ref all other refs base themselves upon
 		masterRef = FIRDatabase.database().reference().child("User-Deadlines/\(userWhoseDeadlinesAreShown)")
-
+		
 		// get the day the user was last on
 		let dayUserWasViewing = AppState.sharedInstance.userID + "_viewing"
 		dayUserLastSawRef = masterRef.child(dayUserWasViewing)
@@ -89,7 +80,7 @@ class DeadlinesTableViewController: UITableViewController {
 			
 			// disable back button if day == 1
 			if self.dayUserIsLookingAt == 1 {
-				self.backwardOneDay.enabled = false
+				self.backOneDayButton.enabled = false
 			}
 			
 			// get the deadlines for the day user was last on
@@ -105,13 +96,13 @@ class DeadlinesTableViewController: UITableViewController {
 			var newItems = [Deadline]()
 			let dayFormatter = NSDateFormatter()
 			dayFormatter.dateStyle = .ShortStyle
-
+			
 			for item in snapshot.children {
 				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
 				newItems.append(deadlineItem)
 			}
 			self.deadlines = newItems
-			self.tableView.reloadData()
+			self.deadlineTable.reloadData()
 		})
 	}
 	
@@ -119,11 +110,11 @@ class DeadlinesTableViewController: UITableViewController {
 	// MARK:- Navigation bar elements
 	
 	@IBAction func didChangeSegment(sender: AnyObject) {
-		if segmentedControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
-			addDeadlineButton.enabled = true
+		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
+//			addDeadlineButton.enabled = true
 			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
 		} else { // user looking at partner's deadlines
-			addDeadlineButton.enabled = false
+//			addDeadlineButton.enabled = false
 			if let f_id = AppState.sharedInstance.f_firID {
 				userWhoseDeadlinesAreShown = f_id
 			} else {
@@ -136,57 +127,57 @@ class DeadlinesTableViewController: UITableViewController {
 	@IBAction func didPressBackward(sender: AnyObject) {
 		dayUserIsLookingAt -= 1
 		if dayUserIsLookingAt == 1 {
-			backwardOneDay.enabled = false
+			backOneDayButton.enabled = false
 		}
 		dayUserLastSawRef.setValue(dayUserIsLookingAt)
-//		dayUserLastSawRef.removeAllObservers()
-//		print("didPressBackward")
+		//		dayUserLastSawRef.removeAllObservers()
+		//		print("didPressBackward")
 		getDeadlinesForDay()
 	}
 	
 	@IBAction func didPressForward(sender: AnyObject) {
 		dayUserIsLookingAt += 1
 		if dayUserIsLookingAt > 1 {
-			backwardOneDay.enabled = true
+			backOneDayButton.enabled = true
 		}
 		dayUserLastSawRef.setValue(dayUserIsLookingAt)
-//		dayUserLastSawRef.removeAllObservers()
-//		print("didPressForward")
+		//		dayUserLastSawRef.removeAllObservers()
+		//		print("didPressForward")
 		getDeadlinesForDay()
 	}
 	
 	
 	// MARK: UITableView Delegate methods
-
-	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	
+	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return deadlines.count
 	}
-
-	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+	
+	func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
 		// user is only allowed to mark "finished" or delete their own deadlines
-		return segmentedControl.selectedSegmentIndex == 0 ? true : false
+		return segControl.selectedSegmentIndex == 0 ? true : false
 	}
 	
 	// change header height
-	override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+	func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 		return 40.0
 	}
 	
 	// header title
-	override func tableView( tableView : UITableView,  titleForHeaderInSection section: Int) -> String {
+	func tableView( tableView : UITableView,  titleForHeaderInSection section: Int) -> String {
 		let day = "DAY " + String(dayUserIsLookingAt)
 		return day
 	}
 	
-	override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 		return UITableViewAutomaticDimension
 	}
 	
-	override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+	func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 		return UITableViewAutomaticDimension
 	}
 	
-	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cellIdentifier = "DeadlinesTableViewCell"
 		let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! DeadlinesTableViewCell
 		return configureCell(cell, indexPath: indexPath)
@@ -214,7 +205,7 @@ class DeadlinesTableViewController: UITableViewController {
 		
 		return cell
 	}
-
+	
 	func toggleCellCheckbox(cell: UITableViewCell, isCompleted: Bool) {
 		if !isCompleted {
 			cell.accessoryType = UITableViewCellAccessoryType.None
@@ -227,10 +218,11 @@ class DeadlinesTableViewController: UITableViewController {
 		}
 	}
 	
+	
 	// MARK: Navigation
-
+	
 	override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
-		return segmentedControl.selectedSegmentIndex == 0 ? true : false
+		return segControl.selectedSegmentIndex == 0 ? true : false
 	}
 	
 	// called when starting to change from one screen in storyboard to next
@@ -238,7 +230,7 @@ class DeadlinesTableViewController: UITableViewController {
 		if segue.identifier == "editItem" { // Edit item
 			let deadlinesViewController = segue.destinationViewController as! AddDeadlineViewController
 			if let selectedItemCell = sender as? DeadlinesTableViewCell {
-				let indexPath = tableView.indexPathForCell(selectedItemCell)!
+				let indexPath = deadlineTable.indexPathForCell(selectedItemCell)!
 				let selectedDeadline = deadlines[indexPath.row]
 				deadlinesViewController.deadline = selectedDeadline
 			}
@@ -249,7 +241,7 @@ class DeadlinesTableViewController: UITableViewController {
 	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
 		if let sourceViewController = sender.sourceViewController as? AddDeadlineViewController, deadline = sourceViewController.deadline {
 			var deadlineRef: FIRDatabaseReference
-			if let selectedIndexPath = tableView.indexPathForSelectedRow { // Update current item
+			if let selectedIndexPath = deadlineTable.indexPathForSelectedRow { // Update current item
 				let key = deadlines[selectedIndexPath.row].key
 				deadlineRef = self.deadlinesRef.child(key)
 			} else { // Add a new item to the list
@@ -259,14 +251,15 @@ class DeadlinesTableViewController: UITableViewController {
 		}
 	}
 	
-	// MARK:- get user's friend data, like name, pic, etc. 
+	
+	// MARK:- get user's friend data, like name, pic, etc.
 	func setFriendData() {
 		if let status = AppState.sharedInstance.partnerStatus where status == true {
 			let getIdRef = FIRDatabase.database().reference().child("Friend-Info/\(AppState.sharedInstance.userID)")
 			getIdRef.observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
 				if let postDict = snapshot.value as? [String : String] { // set AppState stuff
 					AppState.sharedInstance.f_firstName = postDict["friend_firstName"]
-					self.segmentedControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
+					self.segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
 					AppState.sharedInstance.f_firID = postDict["friend_id"]
 					AppState.sharedInstance.f_photoURL = NSURL(string: postDict["friend_pic"]!)
 					AppState.sharedInstance.f_photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!)!.circle
@@ -275,12 +268,12 @@ class DeadlinesTableViewController: UITableViewController {
 				}
 			})
 		} else { // user doesn't have a friend, so gray out 'partner' segment
-			segmentedControl.setEnabled(false, forSegmentAtIndex: 1)
+			segControl.setEnabled(false, forSegmentAtIndex: 1)
 		}
 	}
 	
 	// swiping horizontally shows "done" button. pressing it will mark item as completed
-	override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+	func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
 		// Get the cell
 		let cell = tableView.cellForRowAtIndexPath(indexPath)!
 		
@@ -310,10 +303,10 @@ class DeadlinesTableViewController: UITableViewController {
 		let done_button = UITableViewRowAction(style: .Normal, title: "complete") { (action, indexPath) in
 			// Determine whether the cell is checked and modify it's view properties
 			self.toggleCellCheckbox(cell, isCompleted: toggledCompletion)
-
+			
 			// Call updateChildValues on the grocery item's reference with just the new completed status
 			deadlineItem.ref?.updateChildValues([
-			  "complete": toggledCompletion ])
+				"complete": toggledCompletion ])
 		}
 		
 		let blue = UIColor(red: 63/255, green: 202/255, blue: 62/255, alpha: 1)
