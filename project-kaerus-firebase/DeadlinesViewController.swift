@@ -26,6 +26,8 @@ class DeadlinesViewController: UIViewController {
 	private var _refHandle: FIRDatabaseHandle!
 	var dayUserIsLookingAt = 1 // defaults to 1, but is set by the 'day' variable in User-Deadlines
 	var userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
+	var dayStart: NSDate!
+	var dayEnd: NSDate!
 	
 	var storageRef: FIRStorageReference!
 	
@@ -91,6 +93,25 @@ class DeadlinesViewController: UIViewController {
 	
 	// load table with deadlines for the day user is looking at
 	func getDeadlinesForDay() {
+		// get date data to show
+		let dateRef = self.masterRef.child("Dates/\(self.dayUserIsLookingAt)")
+		dateRef.observeEventType(.Value, withBlock: { snapshot in
+			if let postDict = snapshot.value as? [String : AnyObject] {
+				let start = postDict["dayStart"] as! String
+				let end = postDict["dayEnd"] as! String
+				
+				let formatter = NSDateFormatter()
+				formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
+				self.dayStart = formatter.dateFromString(start)
+				self.dayEnd = formatter.dateFromString(end)
+				
+				formatter.dateFormat = "MMM d"
+				self.dateLabel.text = formatter.stringFromDate(self.dayStart) + " – " + formatter.stringFromDate(self.dayEnd)
+			} else { // not set
+			
+			}
+		})
+		
 		// return a reference that queries by the "timeDue" property
 		_refHandle = self.deadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value, withBlock: { snapshot in
 			var newItems = [Deadline]()
@@ -130,8 +151,6 @@ class DeadlinesViewController: UIViewController {
 			backOneDayButton.enabled = false
 		}
 		dayUserLastSawRef.setValue(dayUserIsLookingAt)
-		//		dayUserLastSawRef.removeAllObservers()
-		//		print("didPressBackward")
 		getDeadlinesForDay()
 	}
 	
@@ -141,8 +160,6 @@ class DeadlinesViewController: UIViewController {
 			backOneDayButton.enabled = true
 		}
 		dayUserLastSawRef.setValue(dayUserIsLookingAt)
-		//		dayUserLastSawRef.removeAllObservers()
-		//		print("didPressForward")
 		getDeadlinesForDay()
 	}
 	
@@ -274,28 +291,8 @@ class DeadlinesViewController: UIViewController {
 	
 	// swiping horizontally shows "done" button. pressing it will mark item as completed
 	func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-		// Get the cell
 		let cell = tableView.cellForRowAtIndexPath(indexPath)!
-		
-		// Get the associated grocery item
 		let deadlineItem = self.deadlines[indexPath.row]
-		
-		let delete_button = UITableViewRowAction(style: .Destructive, title: "delete") { (action, indexPath) in
-			let alert = UIAlertController(title: "Delete Deadline", message: "Are you sure you want to delete this deadline?", preferredStyle: .ActionSheet)
-			let DeleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: { (action: UIAlertAction!) in
-				deadlineItem.ref?.removeValue()
-			})
-			let CancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-			
-			alert.addAction(DeleteAction)
-			alert.addAction(CancelAction)
-			
-			// Support display in iPad
-			alert.popoverPresentationController?.sourceView = self.view
-			alert.popoverPresentationController?.sourceRect = CGRectMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0, 1.0, 1.0)
-			
-			self.presentViewController(alert, animated: true, completion: nil)
-		}
 		
 		// Get the new completion status
 		let toggledCompletion = !deadlineItem.complete
@@ -315,6 +312,6 @@ class DeadlinesViewController: UIViewController {
 		done_button.title = toggledCompletion ? "finish" : "un-finish"
 		done_button.backgroundColor = toggledCompletion ? blue : green
 		
-		return [delete_button, done_button]
+		return [done_button]
 	}
 }
