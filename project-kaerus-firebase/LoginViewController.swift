@@ -155,6 +155,7 @@ class LoginViewController: UIViewController {
 								firIdRef.setValue(user?.uid)
 								partnerStatusRef.setValue(false)
 								oneSignalIdRef.setValue(oneSignalId)
+								AppState.sharedInstance.firstLogin = true
 							}
 							self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
 						})

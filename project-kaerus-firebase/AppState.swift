@@ -40,6 +40,8 @@ class AppState: NSObject {
 	// partner stuff
 	var partnerStatus: Bool!
 	var groupchat_id: String?
+	
+	var firstLogin = false
 
 	func setState(user: FIRUser?) {
 		self.signedIn = true

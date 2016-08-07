@@ -11,7 +11,7 @@ import Firebase
 
 class DeadlinesViewController: UIViewController {
 	@IBOutlet weak var segControl: UISegmentedControl!
-	@IBOutlet weak var editButton: UIBarButtonItem!
+	@IBOutlet weak var addButton: UIBarButtonItem!
 	@IBOutlet weak var backOneDayButton: UIButton!
 	@IBOutlet weak var forwardOneDayButton: UIButton!
 	@IBOutlet weak var dateLabel: UILabel!
@@ -22,12 +22,13 @@ class DeadlinesViewController: UIViewController {
 	// MARK: Properties
 
 	var deadlines = [Deadline]()
-	var masterRef, deadlinesRef, dayUserLastSawRef: FIRDatabaseReference!
+	var masterRef, deadlinesRef, dayUserLastSawRef, dateRef: FIRDatabaseReference!
 	private var _refHandle: FIRDatabaseHandle!
 	var dayUserIsLookingAt = 1 // defaults to 1, but is set by the 'day' variable in User-Deadlines
 	var userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
 	var dayStart: NSDate!
 	var dayEnd: NSDate!
+	var missedDeadlinesCount = 0
 	
 	var storageRef: FIRStorageReference!
 	
@@ -94,22 +95,60 @@ class DeadlinesViewController: UIViewController {
 	// load table with deadlines for the day user is looking at
 	func getDeadlinesForDay() {
 		// get date data to show
-		let dateRef = self.masterRef.child("Dates/\(self.dayUserIsLookingAt)")
-		dateRef.observeEventType(.Value, withBlock: { snapshot in
-			if let postDict = snapshot.value as? [String : AnyObject] {
-				let start = postDict["dayStart"] as! String
-				let end = postDict["dayEnd"] as! String
-				
+		self.dateRef = self.masterRef.child("Dates/\(self.dayUserIsLookingAt)")
+		if !AppState.sharedInstance.firstLogin { // user just started, set defaults
+			let startOfToday = NSCalendar.currentCalendar().startOfDayForDate(NSDate())
+			let components = NSDateComponents()
+			components.day = 1
+			components.minute = -1
+			let endOfToday = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startOfToday, options: NSCalendarOptions())!
+			
+			self.dayStart = startOfToday
+			self.dayEnd = endOfToday
+			
+			let formatter = NSDateFormatter()
+			formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
+			let dayStart = formatter.stringFromDate(startOfToday)
+			let dayEnd = formatter.stringFromDate(endOfToday)
+			dateRef.child("dayStart").setValue(dayStart)
+			dateRef.child("dayEnd").setValue(dayEnd)
+			dateRef.child("owedBalance").setValue(0.00)
+			
+			formatter.dateFormat = "M/d"
+			self.dateLabel.text = formatter.stringFromDate(startOfToday)
+			self.amtOwedLabel.text = "owed: $0.00"
+		} else { // user is returning, should see everything as they last left it
+			dateRef.observeEventType(.Value, withBlock: { snapshot in
+				if let postDict = snapshot.value as? [String : AnyObject] {
+					let start = postDict["dayStart"] as! String
+					let end = postDict["dayEnd"] as! String
+					
+					let formatter = NSDateFormatter()
+					formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
+					self.dayStart = formatter.dateFromString(start)
+					self.dayEnd = formatter.dateFromString(end)
+					formatter.dateFormat = "M/d"
+					// get the number of days from today to timeDue date. positive for future, negative for past
+					let components = NSCalendar.currentCalendar().components([.Day], fromDate: self.dayStart, toDate: self.dayEnd, options: [])
+					
+					self.dateLabel.text = components.day < 1 ? formatter.stringFromDate(self.dayStart) : formatter.stringFromDate(self.dayStart) + " – " + formatter.stringFromDate(self.dayEnd)
+				}
+			})
+		}
+		
+		self.deadlinesRef.queryOrderedByChild("complete").queryEqualToValue(false).observeEventType(.Value, withBlock: { snapshot in
+			var missedCount = 0
+			for item in snapshot.children {
 				let formatter = NSDateFormatter()
 				formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
-				self.dayStart = formatter.dateFromString(start)
-				self.dayEnd = formatter.dateFromString(end)
-				
-				formatter.dateFormat = "MMM d"
-				self.dateLabel.text = formatter.stringFromDate(self.dayStart) + " – " + formatter.stringFromDate(self.dayEnd)
-			} else { // not set
-			
+				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
+				let timeDue = formatter.dateFromString(deadlineItem.timeDue!)!
+
+				if timeDue.timeIntervalSinceNow < 0 {
+					missedCount += 1
+				}
 			}
+			self.missedDeadlinesCount = missedCount
 		})
 		
 		// return a reference that queries by the "timeDue" property
@@ -123,6 +162,15 @@ class DeadlinesViewController: UIViewController {
 				newItems.append(deadlineItem)
 			}
 			self.deadlines = newItems
+			self.amtOwedLabel.text! = "owed: $"
+			if self.missedDeadlinesCount > 0 { // if deadline count <= 5, every missed deadline costs $(2.5/deadline count). otherwise, missed deadlines are charged at a flat rate of $0.50 each.
+				var amt = Double(self.missedDeadlinesCount)
+				amt *= self.deadlines.count >= 5 ? 0.5 : (2.5/Double(self.deadlines.count))
+				amt = Double(round(100*amt)/100)
+				self.amtOwedLabel.text! += String(format: "%.2f", amt)
+			} else {
+				self.amtOwedLabel.text! += "0"
+			}
 			self.deadlineTable.reloadData()
 		})
 	}
@@ -132,10 +180,10 @@ class DeadlinesViewController: UIViewController {
 	
 	@IBAction func didChangeSegment(sender: AnyObject) {
 		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
-//			addDeadlineButton.enabled = true
+			addButton.enabled = true
 			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
 		} else { // user looking at partner's deadlines
-//			addDeadlineButton.enabled = false
+			addButton.enabled = false
 			if let f_id = AppState.sharedInstance.f_firID {
 				userWhoseDeadlinesAreShown = f_id
 			} else {
@@ -173,17 +221,6 @@ class DeadlinesViewController: UIViewController {
 	func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
 		// user is only allowed to mark "finished" or delete their own deadlines
 		return segControl.selectedSegmentIndex == 0 ? true : false
-	}
-	
-	// change header height
-	func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 40.0
-	}
-	
-	// header title
-	func tableView( tableView : UITableView,  titleForHeaderInSection section: Int) -> String {
-		let day = "DAY " + String(dayUserIsLookingAt)
-		return day
 	}
 	
 	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -291,8 +328,28 @@ class DeadlinesViewController: UIViewController {
 	
 	// swiping horizontally shows "done" button. pressing it will mark item as completed
 	func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+		// Get the cell
 		let cell = tableView.cellForRowAtIndexPath(indexPath)!
+		
+		// Get the associated grocery item
 		let deadlineItem = self.deadlines[indexPath.row]
+		
+		let delete_button = UITableViewRowAction(style: .Destructive, title: "delete") { (action, indexPath) in
+			let alert = UIAlertController(title: "Delete Deadline", message: "Are you sure you want to delete this deadline?", preferredStyle: .ActionSheet)
+			let DeleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: { (action: UIAlertAction!) in
+				deadlineItem.ref?.removeValue()
+			})
+			let CancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+			
+			alert.addAction(DeleteAction)
+			alert.addAction(CancelAction)
+			
+			// Support display in iPad
+			alert.popoverPresentationController?.sourceView = self.view
+			alert.popoverPresentationController?.sourceRect = CGRectMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0, 1.0, 1.0)
+			
+			self.presentViewController(alert, animated: true, completion: nil)
+		}
 		
 		// Get the new completion status
 		let toggledCompletion = !deadlineItem.complete
@@ -301,9 +358,13 @@ class DeadlinesViewController: UIViewController {
 			// Determine whether the cell is checked and modify it's view properties
 			self.toggleCellCheckbox(cell, isCompleted: toggledCompletion)
 			
-			// Call updateChildValues on the grocery item's reference with just the new completed status
+			// Call updateChildValues on the deadline's reference with just the new completed status
 			deadlineItem.ref?.updateChildValues([
 				"complete": toggledCompletion ])
+//			if !deadlineItem.complete {
+//				self.missedDeadlinesCount += 1
+//				self.dateRef.child("missed").setValue(self.missedDeadlinesCount)
+//			}
 		}
 		
 		let blue = UIColor(red: 63/255, green: 202/255, blue: 62/255, alpha: 1)
@@ -312,6 +373,6 @@ class DeadlinesViewController: UIViewController {
 		done_button.title = toggledCompletion ? "finish" : "un-finish"
 		done_button.backgroundColor = toggledCompletion ? blue : green
 		
-		return [done_button]
+		return [delete_button, done_button]
 	}
 }
