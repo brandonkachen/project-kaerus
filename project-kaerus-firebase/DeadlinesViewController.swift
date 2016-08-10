@@ -39,6 +39,7 @@ class DeadlinesViewController: UIViewController {
 //		fetchConfig()
 		logViewLoaded()
 		
+		// get today's deadlines on initial load
 		self.formatter.dateFormat = "yyyy-MM-dd Z"
 		self.dayUserIsLookingAt = formatter.stringFromDate(NSDate())
 		
@@ -80,21 +81,21 @@ class DeadlinesViewController: UIViewController {
 	func setup() {
 		// this will be the ref all other refs base themselves upon
 		masterRef = FIRDatabase.database().reference().child("User-Deadlines/\(userWhoseDeadlinesAreShown)")
-		setupDate()
+//		setupDate()
 		self.getDeadlinesForDay()
 	}
 	
 	// set up all the date information
-	func setupDate() {
-		// get the day the user was last looking at
-		let dayUserWasViewing = AppState.sharedInstance.userID + "_viewing"
-		dayUserLastSawRef = masterRef.child(dayUserWasViewing)
-		dayUserLastSawRef.observeEventType(.Value, withBlock: { snapshot in
-			if let day = snapshot.value as? String {
-				self.dayUserIsLookingAt = day
-			}
-		})
-	}
+//	func setupDate() {
+//		// get the day the user was last looking at
+//		let dayUserWasViewing = AppState.sharedInstance.userID + "_viewing"
+//		dayUserLastSawRef = masterRef.child(dayUserWasViewing)
+//		dayUserLastSawRef.observeEventType(.Value, withBlock: { snapshot in
+//			if let day = snapshot.value as? String {
+//				self.dayUserIsLookingAt = day
+//			}
+//		})
+//	}
 	
 	// load table with deadlines for the day user is looking at
 	func getDeadlinesForDay() {
@@ -194,10 +195,10 @@ class DeadlinesViewController: UIViewController {
 // MARK: JTAppleCalendar Delegate methods
 extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate  {
 	func configureCalendar(calendar: JTAppleCalendarView) -> (startDate: NSDate, endDate: NSDate, numberOfRows: Int, calendar: NSCalendar) {
-		let firstDate = NSDate()
+		let firstDate = AppState.sharedInstance.startDate
 		let components = NSDateComponents()
 		components.year = 1
-		let secondDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: firstDate, options: NSCalendarOptions())!
+		let secondDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: NSDate(), options: NSCalendarOptions())!
 		let numberOfRows = 2
 		let aCalendar = NSCalendar.currentCalendar() // Properly configure your calendar to your time zone here
 		
@@ -211,7 +212,7 @@ extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalenda
 	func calendar(calendar: JTAppleCalendarView, didSelectDate date: NSDate, cell: JTAppleDayCellView?, cellState: CellState) {
 		let strDay = self.formatter.stringFromDate(date)
 		self.dayUserIsLookingAt = strDay
-		dayUserLastSawRef.setValue(strDay)
+//		dayUserLastSawRef.setValue(strDay)
 		setup()
 		(cell as? CellView)?.cellSelectionChanged(cellState)
 	}

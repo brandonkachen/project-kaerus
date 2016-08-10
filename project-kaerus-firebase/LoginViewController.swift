@@ -29,6 +29,7 @@ class LoginViewController: UIViewController {
 
 	// MARK: Constants
 	let LoggedIn = "LoggedIn"
+	let group = dispatch_group_create()
 
 	// MARK: Outlets
 //	@IBOutlet weak var textFieldLoginEmail: UITextField!
@@ -122,91 +123,106 @@ class LoginViewController: UIViewController {
 		AppState.sharedInstance.setState(user)
 		NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
 
+		dispatch_group_enter(group)
 		// Add user to firebase database, if not already in there
 		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name, picture.width(200).height(200)"])
-		graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
+		graphRequest.startWithCompletionHandler(){ (connection, result, error) -> Void in
 			if ((error) != nil) {
 				print("Error: \(error)")
 			} else {
-				// firstName not included in FIRUser object, and the default picture is too low quality
+				// fbID needed for FB-to-FIR conversion
+				let fbID = result.valueForKey("id") as! String
+				
+				// firstName not included in FIRUser object
 				AppState.sharedInstance.firstName = result.valueForKey("first_name") as! String
+				
+				// default picture is too low quality
 				let picName = result.valueForKey("picture")?.objectForKey("data")?.objectForKey("url") as! String
 				AppState.sharedInstance.photoUrl = NSURL(string: picName)!
 				AppState.sharedInstance.photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.photoUrl)!)!.circle
 				
-				let fbID = result.valueForKey("id") as! String
-				let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(user!.uid)")
-				let firIdRef = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)") // fbID is unique. get this so others can find user by their fb id
-				let oneSignalIdRef = FIRDatabase.database().reference().child("FIR-to-OS/\(user!.uid)")
-
-				// get partner status and oneSignal ID
-				partnerStatusRef.observeEventType(.Value, withBlock: { partnerStatus in
-					let partnerStatus = partnerStatus.value as? Bool
-					OneSignal.IdsAvailable({ (userId, pushToken) in
-						let oneSignalId = userId
-						if (pushToken != nil) {
-							NSLog("pushToken:%@", pushToken)
-						}
-						// get partner's user id
-						firIdRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
-							let formatter = NSDateFormatter()
-							formatter.dateFormat = "yyyy-MM-dd Z"
-							if snapshot.value as? String != nil {
-								AppState.sharedInstance.partnerStatus = partnerStatus
-//								AppState.sharedInstance.startDate =
-								/**************************************
-
-								oneSignalIdRef.setValue(oneSignalId) // shouldn't be here in the official build!
-
-								****************************************/
-							} else { // first time logging in
-								firIdRef.setValue(user?.uid)
-								partnerStatusRef.setValue(false)
-								oneSignalIdRef.setValue(oneSignalId)
-								
-							
-								FIRDatabase.database().reference().child("User-Deadlines/\(AppState.sharedInstance.userID)/Start-Date").setValue(formatter.stringFromDate(NSDate()))
-//								AppState.sharedInstance.startDate = NSDate()
-//								self.firebaseSetup()
-							}
-							self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
-						})
-					})
-				})
+				// fbID is unique. get this so others can find user by their fb id (when user is looking for a partner)
+				let fbToFirRef = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)")
+				fbToFirRef.setValue(user?.uid)
+				
+				/* if firebase counts modifying a value to the same value as using bandwidth, use this
+				firstTimeLoginRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+					if snapshot.value as? String == nil{
+						firstTimeLoginRef.setValue(user?.uid)
+					}
+				})*/
 			}
+			dispatch_group_leave(self.group)
+		}
+
+		partnerSetup()
+		oneSignalIdSetup()
+		startDateSetup()
+		
+		dispatch_group_notify(group, dispatch_get_main_queue()) {
+			self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
+		}
+	}
+	
+	// get partner status
+	func partnerSetup() {
+		dispatch_group_enter(group)
+		let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(AppState.sharedInstance.userID)")
+		partnerStatusRef.observeSingleEventOfType(.Value, withBlock: { partnerStatus in
+			if let status = partnerStatus.value as? Bool {
+				AppState.sharedInstance.partnerStatus = status
+			} else {
+				partnerStatusRef.setValue(false)
+				AppState.sharedInstance.partnerStatus = false
+			}
+			dispatch_group_leave(self.group)
 		})
 	}
 	
-	/*
-	func firebaseSetup() {
-		let dateRef = FIRDatabase.database().reference().child("User-Deadlines/\(AppState.sharedInstance.userID)/Latest-Date")
-		let startOfToday = NSCalendar.currentCalendar().startOfDayForDate(NSDate())
-		let components = NSDateComponents()
-		components.day = 1
-		components.minute = -1
-		let endOfToday = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startOfToday, options: NSCalendarOptions())!
+	// get oneSignal Id
+	func oneSignalIdSetup() {
+		dispatch_group_enter(group)
+		let oneSignalIdRef = FIRDatabase.database().reference().child("FIR-to-OS/\(AppState.sharedInstance.userID)")
+		OneSignal.IdsAvailable(){ (userId, pushToken) in
+			if (pushToken != nil) {
+				NSLog("pushToken:%@", pushToken)
+			}
+			oneSignalIdRef.setValue(userId)
+			dispatch_group_leave(self.group)
+		}
 		
-		let formatter = NSDateFormatter()
-		formatter.dateFormat = "M/d"
-		let dayStart = formatter.stringFromDate(startOfToday)
-		let dayEnd = formatter.stringFromDate(endOfToday)
-		dateRef.child("dayStart").setValue(dayStart)
-		dateRef.child("dayEnd").setValue(dayEnd)
+		/* if firebaes counts setting a value to the same value it was previously as using bandwidth, use this
+		oneSignalIdRef.observeSingleEventOfType(.Value, withBlock: { id in
+			if id.value as? String == nil {
+				OneSignal.IdsAvailable(){ (userId, pushToken) in
+					if (pushToken != nil) {
+						NSLog("pushToken:%@", pushToken)
+					}
+					oneSignalIdRef.setValue(userId)
+					dispatch_group_leave(group)
+				}
+			} else {
+				dispatch_group_leave(group)
+			}
+		})*/
 	}
-	*/
-}
+	
+	// get startDate
+	func startDateSetup() {
+		let formatter = NSDateFormatter()
+		formatter.dateFormat = "yyyy-MM-dd Z"
 
-//				firIdRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
-//					if snapshot.value as? String != nil {
-//						partnerStatusRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
-//							AppState.sharedInstance.partnerStatus = snapshot.value as! Bool
-//							self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
-//						})
-//					} else { // first time logging in
-//						firIdRef.setValue(user?.uid)
-//						partnerStatusRef.setValue(false)
-//						self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
-//
-//					}
-//				})
+		dispatch_group_enter(group)
+		let startDateRef = FIRDatabase.database().reference().child("User-Deadlines/\(AppState.sharedInstance.userID)/Start-Date")
+		startDateRef.observeSingleEventOfType(.Value, withBlock: { startDate in
+			if let date = startDate.value as? String {
+				AppState.sharedInstance.startDate = formatter.dateFromString(date)
+			} else {
+				startDateRef.setValue(formatter.stringFromDate(NSDate()))
+				AppState.sharedInstance.startDate = NSDate()
+			}
+			dispatch_group_leave(self.group)
+		})
+	}
+}
 
