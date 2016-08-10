@@ -164,20 +164,6 @@ class LoginViewController: UIViewController {
 		}
 	}
 	
-	// get partner status
-	func partnerSetup() {
-		dispatch_group_enter(group)
-		let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(AppState.sharedInstance.userID)")
-		partnerStatusRef.observeSingleEventOfType(.Value, withBlock: { partnerStatus in
-			if let status = partnerStatus.value as? Bool {
-				AppState.sharedInstance.partnerStatus = status
-			} else {
-				partnerStatusRef.setValue(false)
-				AppState.sharedInstance.partnerStatus = false
-			}
-			dispatch_group_leave(self.group)
-		})
-	}
 	
 	// get oneSignal Id
 	func oneSignalIdSetup() {
@@ -223,6 +209,40 @@ class LoginViewController: UIViewController {
 			}
 			dispatch_group_leave(self.group)
 		})
+	}
+	
+	// get partner status
+	func partnerSetup() {
+		dispatch_group_enter(group)
+		let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(AppState.sharedInstance.userID)")
+		partnerStatusRef.observeSingleEventOfType(.Value, withBlock: { partnerStatus in
+			if let status = partnerStatus.value as? Bool where status == true {
+				let getIdRef = FIRDatabase.database().reference().child("Friend-Info/\(AppState.sharedInstance.userID)")
+				getIdRef.observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
+					if let postDict = snapshot.value as? [String : String] {
+						// set AppState stuff
+						AppState.sharedInstance.partnerStatus = status
+						AppState.sharedInstance.f_firstName = postDict["friend_firstName"]
+						AppState.sharedInstance.f_firID = postDict["friend_id"]
+						AppState.sharedInstance.f_photoURL = NSURL(string: postDict["friend_pic"]!)
+						AppState.sharedInstance.f_photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!)!.circle
+						AppState.sharedInstance.f_name = postDict["friend_name"]
+						AppState.sharedInstance.groupchat_id = postDict["groupchat_id"]
+					}
+					dispatch_group_leave(self.group)
+				})
+			} else {
+				partnerStatusRef.setValue(false)
+				AppState.sharedInstance.partnerStatus = false
+				dispatch_group_leave(self.group)
+			}
+		})
+	}
+	
+	func setPartnerData() {
+		if let status = AppState.sharedInstance.partnerStatus where status == true {
+			
+		}
 	}
 }
 

@@ -43,8 +43,9 @@ class DeadlinesViewController: UIViewController {
 		self.formatter.dateFormat = "yyyy-MM-dd Z"
 		self.dayUserIsLookingAt = formatter.stringFromDate(NSDate())
 		
-		// get snapshot of current user's friend data like name, id, etc. if available
-		setFriendData()
+		AppState.sharedInstance.f_firstName != nil ?
+			self.segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1) :
+			segControl.setEnabled(false, forSegmentAtIndex: 1)
 		
 		// might need to wait here, to prevent race condition if we don't get friend info in time
 		setup()
@@ -55,7 +56,8 @@ class DeadlinesViewController: UIViewController {
 		self.calendarView.selectDates([NSDate()])
 		self.calendarView.scrollToDate(NSDate())
 		self.calendarView.cellInset = CGPoint(x: 0, y: 0)
-		self.calendarView.direction = .Vertical
+
+//		self.calendarView.direction = .Vertical
 
 		self.fullCalendarView.layer.addBorder(.Bottom, color: UIColor.whiteColor(), thickness: 1.0)
 		self.fullCalendarView.layer.shadowOffset = CGSizeMake(1, 1)
@@ -79,23 +81,10 @@ class DeadlinesViewController: UIViewController {
 	// MARK:- Set up deadlines
 	// set up the whole view
 	func setup() {
-		// this will be the ref all other refs base themselves upon
+		// this will be the ref upon which all other refs base themselves
 		masterRef = FIRDatabase.database().reference().child("User-Deadlines/\(userWhoseDeadlinesAreShown)")
-//		setupDate()
 		self.getDeadlinesForDay()
 	}
-	
-	// set up all the date information
-//	func setupDate() {
-//		// get the day the user was last looking at
-//		let dayUserWasViewing = AppState.sharedInstance.userID + "_viewing"
-//		dayUserLastSawRef = masterRef.child(dayUserWasViewing)
-//		dayUserLastSawRef.observeEventType(.Value, withBlock: { snapshot in
-//			if let day = snapshot.value as? String {
-//				self.dayUserIsLookingAt = day
-//			}
-//		})
-//	}
 	
 	// load table with deadlines for the day user is looking at
 	func getDeadlinesForDay() {
@@ -158,25 +147,6 @@ class DeadlinesViewController: UIViewController {
 		})
 	}
 	
-	func setFriendData() {
-		if let status = AppState.sharedInstance.partnerStatus where status == true {
-			let getIdRef = FIRDatabase.database().reference().child("Friend-Info/\(AppState.sharedInstance.userID)")
-			getIdRef.observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
-				if let postDict = snapshot.value as? [String : String] { // set AppState stuff
-					AppState.sharedInstance.f_firstName = postDict["friend_firstName"]
-					self.segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
-					AppState.sharedInstance.f_firID = postDict["friend_id"]
-					AppState.sharedInstance.f_photoURL = NSURL(string: postDict["friend_pic"]!)
-					AppState.sharedInstance.f_photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!)!.circle
-					AppState.sharedInstance.f_name = postDict["friend_name"]
-					AppState.sharedInstance.groupchat_id = postDict["groupchat_id"]
-				}
-			})
-		} else { // user doesn't have a friend, so gray out 'partner' segment
-			segControl.setEnabled(false, forSegmentAtIndex: 1)
-		}
-	}
-	
 	
 	// MARK: calendar setup
 	func setupViewsOfCalendar(startDate: NSDate, endDate: NSDate) {
@@ -212,7 +182,6 @@ extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalenda
 	func calendar(calendar: JTAppleCalendarView, didSelectDate date: NSDate, cell: JTAppleDayCellView?, cellState: CellState) {
 		let strDay = self.formatter.stringFromDate(date)
 		self.dayUserIsLookingAt = strDay
-//		dayUserLastSawRef.setValue(strDay)
 		setup()
 		(cell as? CellView)?.cellSelectionChanged(cellState)
 	}
