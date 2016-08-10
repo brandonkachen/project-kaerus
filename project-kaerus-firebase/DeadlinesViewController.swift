@@ -1,43 +1,37 @@
 //
-//  DeadlinesViewController.swift
-//  project-kaerus-firebase
+//  CalendarViewController.swift
+//  
 //
-//  Created by Brandon Chen on 8/5/16.
-//  Copyright © 2016 Brandon Chen. All rights reserved.
+//  Created by Brandon Chen on 8/7/16.
+//
 //
 
-import UIKit
+import JTAppleCalendar
 import Firebase
 
 class DeadlinesViewController: UIViewController {
+	// calendar view stuff
+	@IBOutlet weak var calendarView: JTAppleCalendarView!
+	@IBOutlet weak var fullCalendarView: UIView!
+	@IBOutlet weak var monthLabel: UILabel!
+	let calendar: NSCalendar! = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+	let formatter = NSDateFormatter()
+	
+	// deadline table stuff
 	@IBOutlet weak var segControl: UISegmentedControl!
 	@IBOutlet weak var addButton: UIBarButtonItem!
-	@IBOutlet weak var backOneDayButton: UIButton!
-	@IBOutlet weak var forwardOneDayButton: UIButton!
-	@IBOutlet weak var dateLabel: UILabel!
-	@IBOutlet weak var amtOwedLabel: UILabel!
 	@IBOutlet weak var deadlineTable: UITableView!
-	
-	
-	// MARK: Properties
-
 	var deadlines = [Deadline]()
-	var masterRef, deadlinesRef, dayUserLastSawRef, dateRef: FIRDatabaseReference!
+	var masterRef, deadlinesRef, dayUserLastSawRef, amtOwedEachDayRef: FIRDatabaseReference!
 	private var _refHandle: FIRDatabaseHandle!
-	var dayUserIsLookingAt = 1 // defaults to 1, but is set by the 'day' variable in User-Deadlines
 	var userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
-	var dayStart: NSDate!
-	var dayEnd: NSDate!
-	var missedDeadlinesCount = 0
+	var dayUserIsLookingAt: String! // set by the 'day' variable in User-Deadlines
+	@IBOutlet weak var amtOwedLabel: UILabel!
 	
 	var storageRef: FIRStorageReference!
-	
-	
-	// MARK: UIViewController Lifecycle
-	
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
 		// Set up swipe to delete
 		deadlineTable.allowsMultipleSelectionDuringEditing = false
 		
@@ -45,12 +39,27 @@ class DeadlinesViewController: UIViewController {
 //		fetchConfig()
 		logViewLoaded()
 		
+		self.formatter.dateFormat = "yyyy-MM-dd Z"
+		self.dayUserIsLookingAt = formatter.stringFromDate(NSDate())
+		
 		// get snapshot of current user's friend data like name, id, etc. if available
 		setFriendData()
 		
 		// might need to wait here, to prevent race condition if we don't get friend info in time
-		
 		setup()
+		
+		self.calendarView.dataSource = self
+		self.calendarView.delegate = self
+		self.calendarView.registerCellViewXib(fileName: "CellView")
+		self.calendarView.selectDates([NSDate()])
+		self.calendarView.scrollToDate(NSDate())
+		self.calendarView.cellInset = CGPoint(x: 0, y: 0)
+		self.calendarView.direction = .Vertical
+
+		self.fullCalendarView.layer.addBorder(.Bottom, color: UIColor.whiteColor(), thickness: 1.0)
+		self.fullCalendarView.layer.shadowOffset = CGSizeMake(1, 1)
+		self.fullCalendarView.layer.shadowColor = UIColor.lightGrayColor().CGColor
+		self.fullCalendarView.layer.shadowOpacity = 0.5
 	}
 	
 	func logViewLoaded() {
@@ -66,154 +75,158 @@ class DeadlinesViewController: UIViewController {
 	}
 	
 	
-	// MARK:- Set up tableview, deadlines
-	
+	// MARK:- Set up deadlines
 	// set up the whole view
 	func setup() {
 		// this will be the ref all other refs base themselves upon
 		masterRef = FIRDatabase.database().reference().child("User-Deadlines/\(userWhoseDeadlinesAreShown)")
-		
-		// get the day the user was last on
+		setupDate()
+		self.getDeadlinesForDay()
+	}
+	
+	// set up all the date information
+	func setupDate() {
+		// get the day the user was last looking at
 		let dayUserWasViewing = AppState.sharedInstance.userID + "_viewing"
 		dayUserLastSawRef = masterRef.child(dayUserWasViewing)
 		dayUserLastSawRef.observeEventType(.Value, withBlock: { snapshot in
-			if let day = snapshot.value as? Int {
+			if let day = snapshot.value as? String {
 				self.dayUserIsLookingAt = day
 			}
-			
-			// disable back button if day == 1
-			if self.dayUserIsLookingAt == 1 {
-				self.backOneDayButton.enabled = false
-			}
-			
-			// get the deadlines for the day user was last on
-			self.deadlinesRef = self.masterRef.child("Deadlines/\(self.dayUserIsLookingAt)")
-			self.getDeadlinesForDay()
 		})
 	}
 	
 	// load table with deadlines for the day user is looking at
 	func getDeadlinesForDay() {
-		// get date data to show
-		self.dateRef = self.masterRef.child("Dates/\(self.dayUserIsLookingAt)")
-		if !AppState.sharedInstance.firstLogin { // user just started, set defaults
-			let startOfToday = NSCalendar.currentCalendar().startOfDayForDate(NSDate())
-			let components = NSDateComponents()
-			components.day = 1
-			components.minute = -1
-			let endOfToday = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startOfToday, options: NSCalendarOptions())!
-			
-			self.dayStart = startOfToday
-			self.dayEnd = endOfToday
-			
-			let formatter = NSDateFormatter()
-			formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
-			let dayStart = formatter.stringFromDate(startOfToday)
-			let dayEnd = formatter.stringFromDate(endOfToday)
-			dateRef.child("dayStart").setValue(dayStart)
-			dateRef.child("dayEnd").setValue(dayEnd)
-			dateRef.child("owedBalance").setValue(0.00)
-			
-			formatter.dateFormat = "M/d"
-			self.dateLabel.text = formatter.stringFromDate(startOfToday)
-			self.amtOwedLabel.text = "owed: $0.00"
-		} else { // user is returning, should see everything as they last left it
-			dateRef.observeEventType(.Value, withBlock: { snapshot in
-				if let postDict = snapshot.value as? [String : AnyObject] {
-					let start = postDict["dayStart"] as! String
-					let end = postDict["dayEnd"] as! String
-					
-					let formatter = NSDateFormatter()
-					formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
-					self.dayStart = formatter.dateFromString(start)
-					self.dayEnd = formatter.dateFromString(end)
-					formatter.dateFormat = "M/d"
-					// get the number of days from today to timeDue date. positive for future, negative for past
-					let components = NSCalendar.currentCalendar().components([.Day], fromDate: self.dayStart, toDate: self.dayEnd, options: [])
-					
-					self.dateLabel.text = components.day < 1 ? formatter.stringFromDate(self.dayStart) : formatter.stringFromDate(self.dayStart) + " – " + formatter.stringFromDate(self.dayEnd)
-				}
-			})
+		getDeadlines() { (result) -> () in
+			self.determineOwedBalance(result)
 		}
-		
-		self.deadlinesRef.queryOrderedByChild("complete").queryEqualToValue(false).observeEventType(.Value, withBlock: { snapshot in
-			var missedCount = 0
-			for item in snapshot.children {
-				let formatter = NSDateFormatter()
-				formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
-				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
-				let timeDue = formatter.dateFromString(deadlineItem.timeDue!)!
-
-				if timeDue.timeIntervalSinceNow < 0 {
-					missedCount += 1
-				}
-			}
-			self.missedDeadlinesCount = missedCount
-		})
-		
+	}
+	
+	// get the deadlines
+	func getDeadlines(completion: (result: Int)->()) {
+		self.deadlinesRef = self.masterRef.child("Deadlines/\(self.dayUserIsLookingAt)")
+		self.amtOwedEachDayRef = self.masterRef.child("Owed/\(self.dayUserIsLookingAt)")
 		// return a reference that queries by the "timeDue" property
 		_refHandle = self.deadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value, withBlock: { snapshot in
 			var newItems = [Deadline]()
-			let dayFormatter = NSDateFormatter()
-			dayFormatter.dateStyle = .ShortStyle
-			
 			for item in snapshot.children {
 				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
 				newItems.append(deadlineItem)
 			}
 			self.deadlines = newItems
-			self.amtOwedLabel.text! = "owed: $"
-			if self.missedDeadlinesCount > 0 { // if deadline count <= 5, every missed deadline costs $(2.5/deadline count). otherwise, missed deadlines are charged at a flat rate of $0.50 each.
-				var amt = Double(self.missedDeadlinesCount)
-				amt *= self.deadlines.count >= 5 ? 0.5 : (2.5/Double(self.deadlines.count))
-				amt = Double(round(100*amt)/100)
-				self.amtOwedLabel.text! += String(format: "%.2f", amt)
-			} else {
-				self.amtOwedLabel.text! += "0"
-			}
 			self.deadlineTable.reloadData()
+			completion(result: self.deadlines.count)
 		})
 	}
 	
-	
-	// MARK:- Navigation bar elements
-	
-	@IBAction func didChangeSegment(sender: AnyObject) {
-		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
-			addButton.enabled = true
-			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
-		} else { // user looking at partner's deadlines
-			addButton.enabled = false
-			if let f_id = AppState.sharedInstance.f_firID {
-				userWhoseDeadlinesAreShown = f_id
+	// determine how much the user owes for this particular day
+	func determineOwedBalance(totalCount: Int) {
+		getMissedDeadlineCount() { (missedCount) -> () in
+			self.amtOwedLabel.text! = "owed: $"
+			let strAmt: String
+			if missedCount > 0 { // if deadline count <= 5, every missed deadline costs $(2.50/deadline count). otherwise, missed deadlines are charged at a flat rate of $0.50 each.
+				var amt = Double(missedCount)
+				amt *= totalCount >= 5 ? 0.5 : (2.5/Double(totalCount))
+				amt = Double(round(100*amt)/100)
+				strAmt = String(format: "%.2f", amt)
+				self.amtOwedEachDayRef.setValue(strAmt)
 			} else {
-				return
+				strAmt = "0"
+				self.amtOwedEachDayRef.removeValue()
 			}
+			self.amtOwedLabel.text! += strAmt
 		}
+	}
+	
+	// get count of missed deadlines
+	func getMissedDeadlineCount(completion: (result: Int)->()) {
+		self.deadlinesRef.queryOrderedByChild("complete").queryEqualToValue(false).observeEventType(.Value, withBlock: { snapshot in
+			var missedCount = 0
+			for item in snapshot.children {
+				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
+				let formatter = NSDateFormatter()
+				formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
+				let timeDue = formatter.dateFromString(deadlineItem.timeDue!)!
+				
+				if timeDue.timeIntervalSinceNow < 0 {
+					missedCount += 1
+				}
+			}
+			completion(result: missedCount)
+		})
+	}
+	
+	func setFriendData() {
+		if let status = AppState.sharedInstance.partnerStatus where status == true {
+			let getIdRef = FIRDatabase.database().reference().child("Friend-Info/\(AppState.sharedInstance.userID)")
+			getIdRef.observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
+				if let postDict = snapshot.value as? [String : String] { // set AppState stuff
+					AppState.sharedInstance.f_firstName = postDict["friend_firstName"]
+					self.segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
+					AppState.sharedInstance.f_firID = postDict["friend_id"]
+					AppState.sharedInstance.f_photoURL = NSURL(string: postDict["friend_pic"]!)
+					AppState.sharedInstance.f_photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!)!.circle
+					AppState.sharedInstance.f_name = postDict["friend_name"]
+					AppState.sharedInstance.groupchat_id = postDict["groupchat_id"]
+				}
+			})
+		} else { // user doesn't have a friend, so gray out 'partner' segment
+			segControl.setEnabled(false, forSegmentAtIndex: 1)
+		}
+	}
+	
+	
+	// MARK: calendar setup
+	func setupViewsOfCalendar(startDate: NSDate, endDate: NSDate) {
+		let month = calendar.component(NSCalendarUnit.Month, fromDate: startDate)
+		let monthName = NSDateFormatter().monthSymbols[(month-1) % 12] // 0 indexed array
+		let year = NSCalendar.currentCalendar().component(NSCalendarUnit.Year, fromDate: startDate)
+		monthLabel.text = monthName + " " + String(year)
+	}
+	
+	override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+}
+
+// MARK: JTAppleCalendar Delegate methods
+extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate  {
+	func configureCalendar(calendar: JTAppleCalendarView) -> (startDate: NSDate, endDate: NSDate, numberOfRows: Int, calendar: NSCalendar) {
+		let firstDate = NSDate()
+		let components = NSDateComponents()
+		components.year = 1
+		let secondDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: firstDate, options: NSCalendarOptions())!
+		let numberOfRows = 2
+		let aCalendar = NSCalendar.currentCalendar() // Properly configure your calendar to your time zone here
+		
+		return (startDate: firstDate, endDate: secondDate, numberOfRows: numberOfRows, calendar: aCalendar)
+	}
+	
+	func calendar(calendar: JTAppleCalendarView, isAboutToDisplayCell cell: JTAppleDayCellView, date: NSDate, cellState: CellState) {
+		(cell as! CellView).setupCellBeforeDisplay(cellState, date: date)
+	}
+	
+	func calendar(calendar: JTAppleCalendarView, didSelectDate date: NSDate, cell: JTAppleDayCellView?, cellState: CellState) {
+		let strDay = self.formatter.stringFromDate(date)
+		self.dayUserIsLookingAt = strDay
+		dayUserLastSawRef.setValue(strDay)
 		setup()
+		(cell as? CellView)?.cellSelectionChanged(cellState)
 	}
 	
-	@IBAction func didPressBackward(sender: AnyObject) {
-		dayUserIsLookingAt -= 1
-		if dayUserIsLookingAt == 1 {
-			backOneDayButton.enabled = false
-		}
-		dayUserLastSawRef.setValue(dayUserIsLookingAt)
-		getDeadlinesForDay()
+	func calendar(calendar: JTAppleCalendarView, didDeselectDate date: NSDate, cell: JTAppleDayCellView?, cellState: CellState) {
+		(cell as? CellView)?.cellSelectionChanged(cellState)
 	}
 	
-	@IBAction func didPressForward(sender: AnyObject) {
-		dayUserIsLookingAt += 1
-		if dayUserIsLookingAt > 1 {
-			backOneDayButton.enabled = true
-		}
-		dayUserLastSawRef.setValue(dayUserIsLookingAt)
-		getDeadlinesForDay()
+	func calendar(calendar: JTAppleCalendarView, didScrollToDateSegmentStartingWithdate startDate: NSDate, endingWithDate endDate: NSDate) {
+		setupViewsOfCalendar(startDate, endDate: endDate)
 	}
-	
-	
-	// MARK: UITableView Delegate methods
-	
+}
+
+// MARK: UITableView Delegate methods
+extension DeadlinesViewController {
 	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return deadlines.count
 	}
@@ -241,11 +254,13 @@ class DeadlinesViewController: UIViewController {
 		let deadlineItem = deadlines[indexPath.row]
 		cell.deadlineText.text = deadlineItem.text
 		
-		let formatter = NSDateFormatter()
-		formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
-		let timeDue = formatter.dateFromString(deadlineItem.timeDue!)
-		formatter.dateFormat = "M/dd – h:mm a"
-		let timeDueText = formatter.stringFromDate(timeDue!)
+		let cellTimeFormatter = NSDateFormatter()
+		cellTimeFormatter.dateFormat = "yyyy-MM-dd HH:mmZ"
+		let timeDue = cellTimeFormatter.dateFromString(deadlineItem.timeDue!)
+		
+		// configure the date to show
+		cellTimeFormatter.dateFormat = "h:mm a"
+		let timeDueText = cellTimeFormatter.stringFromDate(timeDue!)
 		
 		cell.timeDueText.text = timeDueText
 		
@@ -256,6 +271,11 @@ class DeadlinesViewController: UIViewController {
 		if !deadlineItem.complete && timeDue!.timeIntervalSinceNow < 0 {
 			cell.timeDueText.textColor = UIColor.redColor()
 		}
+		
+//		cell.layer.addBorder(.Bottom, color: UIColor.whiteColor(), thickness: 0.0)
+//		cell.layer.shadowOffset = CGSizeMake(1, 1)
+//		cell.layer.shadowColor = UIColor.lightGrayColor().CGColor
+//		cell.layer.shadowOpacity = 0.5
 		
 		return cell
 	}
@@ -269,60 +289,6 @@ class DeadlinesViewController: UIViewController {
 			cell.accessoryType = UITableViewCellAccessoryType.Checkmark
 			cell.textLabel?.textColor = UIColor.grayColor()
 			cell.detailTextLabel?.textColor = UIColor.grayColor()
-		}
-	}
-	
-	
-	// MARK: Navigation
-	
-	override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
-		return segControl.selectedSegmentIndex == 0 ? true : false
-	}
-	
-	// called when starting to change from one screen in storyboard to next
-	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-		if segue.identifier == "editItem" { // Edit item
-			let deadlinesViewController = segue.destinationViewController as! AddDeadlineViewController
-			if let selectedItemCell = sender as? DeadlinesTableViewCell {
-				let indexPath = deadlineTable.indexPathForCell(selectedItemCell)!
-				let selectedDeadline = deadlines[indexPath.row]
-				deadlinesViewController.deadline = selectedDeadline
-			}
-		}
-	}
-	
-	// saving when adding a new item or finished editing an old one
-	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
-		if let sourceViewController = sender.sourceViewController as? AddDeadlineViewController, deadline = sourceViewController.deadline {
-			var deadlineRef: FIRDatabaseReference
-			if let selectedIndexPath = deadlineTable.indexPathForSelectedRow { // Update current item
-				let key = deadlines[selectedIndexPath.row].key
-				deadlineRef = self.deadlinesRef.child(key)
-			} else { // Add a new item to the list
-				deadlineRef = self.deadlinesRef.childByAutoId()
-			}
-			deadlineRef.setValue(deadline.toAnyObject())
-		}
-	}
-	
-	
-	// MARK:- get user's friend data, like name, pic, etc.
-	func setFriendData() {
-		if let status = AppState.sharedInstance.partnerStatus where status == true {
-			let getIdRef = FIRDatabase.database().reference().child("Friend-Info/\(AppState.sharedInstance.userID)")
-			getIdRef.observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
-				if let postDict = snapshot.value as? [String : String] { // set AppState stuff
-					AppState.sharedInstance.f_firstName = postDict["friend_firstName"]
-					self.segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
-					AppState.sharedInstance.f_firID = postDict["friend_id"]
-					AppState.sharedInstance.f_photoURL = NSURL(string: postDict["friend_pic"]!)
-					AppState.sharedInstance.f_photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!)!.circle
-					AppState.sharedInstance.f_name = postDict["friend_name"]
-					AppState.sharedInstance.groupchat_id = postDict["groupchat_id"]
-				}
-			})
-		} else { // user doesn't have a friend, so gray out 'partner' segment
-			segControl.setEnabled(false, forSegmentAtIndex: 1)
 		}
 	}
 	
@@ -361,10 +327,6 @@ class DeadlinesViewController: UIViewController {
 			// Call updateChildValues on the deadline's reference with just the new completed status
 			deadlineItem.ref?.updateChildValues([
 				"complete": toggledCompletion ])
-//			if !deadlineItem.complete {
-//				self.missedDeadlinesCount += 1
-//				self.dateRef.child("missed").setValue(self.missedDeadlinesCount)
-//			}
 		}
 		
 		let blue = UIColor(red: 63/255, green: 202/255, blue: 62/255, alpha: 1)
@@ -375,4 +337,61 @@ class DeadlinesViewController: UIViewController {
 		
 		return [delete_button, done_button]
 	}
+}
+
+// MARK: Navigation
+extension DeadlinesViewController {
+	override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+		return segControl.selectedSegmentIndex == 0 ? true : false
+	}
+	
+	@IBAction func didChangeSegment(sender: AnyObject) {
+		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
+			addButton.enabled = true
+			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
+		} else { // user looking at partner's deadlines
+			addButton.enabled = false
+			if let f_id = AppState.sharedInstance.f_firID {
+				userWhoseDeadlinesAreShown = f_id
+			} else {
+				return
+			}
+		}
+		setup()
+	}
+	
+	// called when starting to change from one screen in storyboard to next
+	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+		if segue.identifier == "editItem" { // Edit item
+			let deadlinesViewController = segue.destinationViewController as! AddDeadlineViewController
+			if let selectedItemCell = sender as? DeadlinesTableViewCell {
+				let indexPath = deadlineTable.indexPathForCell(selectedItemCell)!
+				let selectedDeadline = deadlines[indexPath.row]
+				deadlinesViewController.deadline = selectedDeadline
+			}
+		}
+	}
+	
+	// saving when adding a new item or finished editing an old one
+	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
+		if let sourceViewController = sender.sourceViewController as? AddDeadlineViewController, deadline = sourceViewController.deadline {
+			var deadlineRef: FIRDatabaseReference
+			if let selectedIndexPath = deadlineTable.indexPathForSelectedRow { // Update current item
+				let key = deadlines[selectedIndexPath.row].key
+				deadlineRef = self.deadlinesRef.child(key)
+			} else { // Add a new item to the list
+				deadlineRef = self.deadlinesRef.childByAutoId()
+			}
+			deadlineRef.setValue(deadline.toAnyObject())
+		}
+	}
+}
+
+func delayRunOnMainThread(delay:Double, closure:()->()) {
+	dispatch_after(
+		dispatch_time(
+			DISPATCH_TIME_NOW,
+			Int64(delay * Double(NSEC_PER_SEC))
+		),
+		dispatch_get_main_queue(), closure)
 }

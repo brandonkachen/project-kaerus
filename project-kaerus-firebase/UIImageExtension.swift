@@ -6,7 +6,6 @@
 //  Copyright © 2016 Brandon Chen. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 extension UIImage {

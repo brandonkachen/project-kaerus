@@ -41,13 +41,9 @@ class AppState: NSObject {
 	var partnerStatus: Bool!
 	var groupchat_id: String?
 	
-	var firstLogin = false
-
 	func setState(user: FIRUser?) {
 		self.signedIn = true
 		self.name = user?.displayName //?? user?.email
-		self.photoUrl = user?.photoURL
-		self.photo = UIImage(data: NSData(contentsOfURL: self.photoUrl)!)!.circle
 		self.userID = user?.uid
 		self.email = user?.email
 	}

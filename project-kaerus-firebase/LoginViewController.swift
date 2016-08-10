@@ -123,13 +123,18 @@ class LoginViewController: UIViewController {
 		NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
 
 		// Add user to firebase database, if not already in there
-		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name"])
+		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name, picture.width(200).height(200)"])
 		graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
 			if ((error) != nil) {
 				print("Error: \(error)")
 			} else {
-				let fbID = result.valueForKey("id") as! String
+				// firstName not included in FIRUser object, and the default picture is too low quality
 				AppState.sharedInstance.firstName = result.valueForKey("first_name") as! String
+				let picName = result.valueForKey("picture")?.objectForKey("data")?.objectForKey("url") as! String
+				AppState.sharedInstance.photoUrl = NSURL(string: picName)!
+				AppState.sharedInstance.photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.photoUrl)!)!.circle
+				
+				let fbID = result.valueForKey("id") as! String
 				let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(user!.uid)")
 				let firIdRef = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)") // fbID is unique. get this so others can find user by their fb id
 				let oneSignalIdRef = FIRDatabase.database().reference().child("FIR-to-OS/\(user!.uid)")
@@ -144,8 +149,11 @@ class LoginViewController: UIViewController {
 						}
 						// get partner's user id
 						firIdRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+							let formatter = NSDateFormatter()
+							formatter.dateFormat = "yyyy-MM-dd Z"
 							if snapshot.value as? String != nil {
 								AppState.sharedInstance.partnerStatus = partnerStatus
+//								AppState.sharedInstance.startDate =
 								/**************************************
 
 								oneSignalIdRef.setValue(oneSignalId) // shouldn't be here in the official build!
@@ -155,7 +163,11 @@ class LoginViewController: UIViewController {
 								firIdRef.setValue(user?.uid)
 								partnerStatusRef.setValue(false)
 								oneSignalIdRef.setValue(oneSignalId)
-								AppState.sharedInstance.firstLogin = true
+								
+							
+								FIRDatabase.database().reference().child("User-Deadlines/\(AppState.sharedInstance.userID)/Start-Date").setValue(formatter.stringFromDate(NSDate()))
+//								AppState.sharedInstance.startDate = NSDate()
+//								self.firebaseSetup()
 							}
 							self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
 						})
@@ -164,6 +176,24 @@ class LoginViewController: UIViewController {
 			}
 		})
 	}
+	
+	/*
+	func firebaseSetup() {
+		let dateRef = FIRDatabase.database().reference().child("User-Deadlines/\(AppState.sharedInstance.userID)/Latest-Date")
+		let startOfToday = NSCalendar.currentCalendar().startOfDayForDate(NSDate())
+		let components = NSDateComponents()
+		components.day = 1
+		components.minute = -1
+		let endOfToday = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startOfToday, options: NSCalendarOptions())!
+		
+		let formatter = NSDateFormatter()
+		formatter.dateFormat = "M/d"
+		let dayStart = formatter.stringFromDate(startOfToday)
+		let dayEnd = formatter.stringFromDate(endOfToday)
+		dateRef.child("dayStart").setValue(dayStart)
+		dateRef.child("dayEnd").setValue(dayEnd)
+	}
+	*/
 }
 
 //				firIdRef.observeSingleEventOfType(.Value, withBlock: { snapshot in

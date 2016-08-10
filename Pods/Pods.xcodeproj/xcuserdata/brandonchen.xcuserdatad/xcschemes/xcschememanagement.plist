@@ -29,6 +29,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>JTAppleCalendar.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-project-kaerus-firebase.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -48,6 +53,11 @@
 			<true/>
 		</dict>
 		<key>1ED4DFAAD25E1999D0244868457A351E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2E2ED75B03CF4A2D0719664A48C0B27E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,7 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6AE39EFAF0E966C1BCBE4DDD8D354C5</key>
+		<key>B23BA2A418348786CB92AEADCC058D20</key>
 		<dict>
 			<key>primary</key>
 			<true/>

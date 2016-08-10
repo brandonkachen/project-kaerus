@@ -11,7 +11,7 @@
 		691C9B0B1D514140003257DA /* LaunchScreenBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B0A1D514140003257DA /* LaunchScreenBackground.png */; };
 		691C9B0E1D5141A8003257DA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B0C1D5141A8003257DA /* LaunchScreen.xib */; };
 		691C9B151D5145B6003257DA /* LaunchScreenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 691C9B141D5145B6003257DA /* LaunchScreenIcon.png */; };
-		693B2C6A1D55B3E00083B5D1 /* DeadlinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693B2C691D55B3E00083B5D1 /* DeadlinesViewController.swift */; };
+		693684581D5AF1D70077F88C /* PaymentHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693684571D5AF1D70077F88C /* PaymentHistoryTableViewCell.swift */; };
 		694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB10A1D3976F400570A6B /* LoginViewController.swift */; };
 		694DB1161D39775B00570A6B /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1131D39775B00570A6B /* AppState.swift */; };
 		694DB1171D39775B00570A6B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1141D39775B00570A6B /* Constants.swift */; };
@@ -19,9 +19,9 @@
 		696287B31D3AED33000F94F2 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696287B11D3AED33000F94F2 /* SettingsTableViewController.swift */; };
 		696287BF1D3C8136000F94F2 /* FindFriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696287BE1D3C8136000F94F2 /* FindFriendsTableViewCell.swift */; };
 		696287C51D3D4763000F94F2 /* FriendData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696287C41D3D4763000F94F2 /* FriendData.swift */; };
-		697322901D4C5983000F512D /* ManagePartnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973228F1D4C5983000F512D /* ManagePartnerViewController.swift */; };
+		69629B731D585EF200AD0C67 /* CALayerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69629B721D585EF200AD0C67 /* CALayerExtension.swift */; };
+		69629B751D599BD800AD0C67 /* ManagePartnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69629B741D599BD800AD0C67 /* ManagePartnerViewController.swift */; };
 		697322961D4C7374000F512D /* AddDeadlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697322951D4C7374000F512D /* AddDeadlineViewController.swift */; };
-		697322981D4C739E000F512D /* DeadlinesListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697322971D4C739E000F512D /* DeadlinesListTableViewController.swift */; };
 		6973229B1D4C7408000F512D /* Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697322991D4C7408000F512D /* Deadline.swift */; };
 		6973229C1D4C7408000F512D /* DeadlinesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973229A1D4C7408000F512D /* DeadlinesTableViewCell.swift */; };
 		6989E3D11D396703003924EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6989E3D01D396703003924EC /* AppDelegate.swift */; };
@@ -30,9 +30,12 @@
 		6989E3DA1D396703003924EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6989E3D91D396703003924EC /* Assets.xcassets */; };
 		6989E3E81D396703003924EC /* project_kaerus_firebaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6989E3E71D396703003924EC /* project_kaerus_firebaseTests.swift */; };
 		69AA26A31D546FFC0029773B /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AA26A21D546FFC0029773B /* UIImageExtension.swift */; };
-		69AA26A61D55660F0029773B /* PaymentsUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AA26A51D55660F0029773B /* PaymentsUserInfo.swift */; };
-		69AA26AA1D5566200029773B /* PaymentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AA26A91D5566200029773B /* PaymentsTableViewCell.swift */; };
 		69AA26AC1D5567120029773B /* PaymentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AA26AB1D5567120029773B /* PaymentsViewController.swift */; };
+		69B3C1021D582EA8007F5FE6 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C1011D582EA8007F5FE6 /* CellView.swift */; };
+		69B3C1061D583130007F5FE6 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C1051D583130007F5FE6 /* CalendarView.swift */; };
+		69B3C1091D583508007F5FE6 /* CellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69B3C1071D583508007F5FE6 /* CellView.xib */; };
+		69B3C10B1D5849F4007F5FE6 /* AnimationClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */; };
+		69B3C10D1D585C43007F5FE6 /* DeadlinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */; };
 		AD96B8849CE61CF128853A0A /* Pods_project_kaerus_firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */; };
 		FF214860D4F7733C24CC41C0 /* Pods_project_kaerus_firebaseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */; };
 /* End PBXBuildFile section */
@@ -55,7 +58,7 @@
 		691C9B0A1D514140003257DA /* LaunchScreenBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LaunchScreenBackground.png; path = Assets.xcassets/LaunchScreenBackground.png; sourceTree = "<group>"; };
 		691C9B0D1D5141A8003257DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		691C9B141D5145B6003257DA /* LaunchScreenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LaunchScreenIcon.png; path = Assets.xcassets/LaunchScreenIcon.png; sourceTree = "<group>"; };
-		693B2C691D55B3E00083B5D1 /* DeadlinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesViewController.swift; sourceTree = "<group>"; };
+		693684571D5AF1D70077F88C /* PaymentHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		694DB10A1D3976F400570A6B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		694DB1131D39775B00570A6B /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		694DB1141D39775B00570A6B /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -63,9 +66,9 @@
 		696287B11D3AED33000F94F2 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		696287BE1D3C8136000F94F2 /* FindFriendsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindFriendsTableViewCell.swift; sourceTree = "<group>"; };
 		696287C41D3D4763000F94F2 /* FriendData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendData.swift; sourceTree = "<group>"; };
-		6973228F1D4C5983000F512D /* ManagePartnerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagePartnerViewController.swift; sourceTree = "<group>"; };
+		69629B721D585EF200AD0C67 /* CALayerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CALayerExtension.swift; sourceTree = "<group>"; };
+		69629B741D599BD800AD0C67 /* ManagePartnerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagePartnerViewController.swift; sourceTree = "<group>"; };
 		697322951D4C7374000F512D /* AddDeadlineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddDeadlineViewController.swift; sourceTree = "<group>"; };
-		697322971D4C739E000F512D /* DeadlinesListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesListTableViewController.swift; sourceTree = "<group>"; };
 		697322991D4C7408000F512D /* Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deadline.swift; sourceTree = "<group>"; };
 		6973229A1D4C7408000F512D /* DeadlinesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesTableViewCell.swift; sourceTree = "<group>"; };
 		6989E3CD1D396703003924EC /* project-kaerus-firebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "project-kaerus-firebase.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,9 +81,12 @@
 		6989E3E71D396703003924EC /* project_kaerus_firebaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = project_kaerus_firebaseTests.swift; sourceTree = "<group>"; };
 		6989E3E91D396703003924EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69AA26A21D546FFC0029773B /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
-		69AA26A51D55660F0029773B /* PaymentsUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsUserInfo.swift; sourceTree = "<group>"; };
-		69AA26A91D5566200029773B /* PaymentsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsTableViewCell.swift; sourceTree = "<group>"; };
 		69AA26AB1D5567120029773B /* PaymentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsViewController.swift; sourceTree = "<group>"; };
+		69B3C1011D582EA8007F5FE6 /* CellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
+		69B3C1051D583130007F5FE6 /* CalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		69B3C1081D583508007F5FE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "project-kaerus-firebase/Base.lproj/CellView.xib"; sourceTree = "<group>"; };
+		69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClass.swift; sourceTree = "<group>"; };
+		69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesViewController.swift; sourceTree = "<group>"; };
 		872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D68677377F84113A90F3D9 /* Pods-project-kaerus-firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-kaerus-firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-project-kaerus-firebase/Pods-project-kaerus-firebase.release.xcconfig"; sourceTree = "<group>"; };
@@ -128,6 +134,7 @@
 		690E34401D3972BF00C284D5 /* Layouts */ = {
 			isa = PBXGroup;
 			children = (
+				69B3C1071D583508007F5FE6 /* CellView.xib */,
 				6989E3D61D396703003924EC /* Main.storyboard */,
 				691C9B111D5142CB003257DA /* Launch Screen */,
 			);
@@ -137,14 +144,13 @@
 		690E34411D3972C600C284D5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */,
 				697322951D4C7374000F512D /* AddDeadlineViewController.swift */,
 				6989E3D41D396703003924EC /* ChatViewController.swift */,
-				693B2C691D55B3E00083B5D1 /* DeadlinesViewController.swift */,
 				694DB10A1D3976F400570A6B /* LoginViewController.swift */,
-				6973228F1D4C5983000F512D /* ManagePartnerViewController.swift */,
+				69629B741D599BD800AD0C67 /* ManagePartnerViewController.swift */,
 				69AA26AB1D5567120029773B /* PaymentsViewController.swift */,
 				696287B11D3AED33000F94F2 /* SettingsTableViewController.swift */,
-				697322971D4C739E000F512D /* DeadlinesListTableViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -164,7 +170,6 @@
 			children = (
 				696287C41D3D4763000F94F2 /* FriendData.swift */,
 				697322991D4C7408000F512D /* Deadline.swift */,
-				69AA26A51D55660F0029773B /* PaymentsUserInfo.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -186,7 +191,9 @@
 			children = (
 				696287BE1D3C8136000F94F2 /* FindFriendsTableViewCell.swift */,
 				6973229A1D4C7408000F512D /* DeadlinesTableViewCell.swift */,
-				69AA26A91D5566200029773B /* PaymentsTableViewCell.swift */,
+				69B3C1011D582EA8007F5FE6 /* CellView.swift */,
+				69B3C1051D583130007F5FE6 /* CalendarView.swift */,
+				693684571D5AF1D70077F88C /* PaymentHistoryTableViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -214,6 +221,7 @@
 		6989E3CF1D396703003924EC /* project-kaerus-firebase */ = {
 			isa = PBXGroup;
 			children = (
+				69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */,
 				696287BD1D3C80C8000F94F2 /* Cells */,
 				694DB1111D39770300570A6B /* Models */,
 				690E34411D3972C600C284D5 /* Controllers */,
@@ -238,6 +246,7 @@
 		69AA26A41D5470380029773B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				69629B721D585EF200AD0C67 /* CALayerExtension.swift */,
 				69AA26A21D546FFC0029773B /* UIImageExtension.swift */,
 			);
 			name = Extensions;
@@ -354,6 +363,7 @@
 				691C9B0E1D5141A8003257DA /* LaunchScreen.xib in Resources */,
 				690E343E1D3972B000C284D5 /* GoogleService-Info.plist in Resources */,
 				691C9B0B1D514140003257DA /* LaunchScreenBackground.png in Resources */,
+				69B3C1091D583508007F5FE6 /* CellView.xib in Resources */,
 				6989E3DA1D396703003924EC /* Assets.xcassets in Resources */,
 				6989E3D81D396703003924EC /* Main.storyboard in Resources */,
 				691C9B151D5145B6003257DA /* LaunchScreenIcon.png in Resources */,
@@ -467,24 +477,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				697322901D4C5983000F512D /* ManagePartnerViewController.swift in Sources */,
 				696287BF1D3C8136000F94F2 /* FindFriendsTableViewCell.swift in Sources */,
 				696287C51D3D4763000F94F2 /* FriendData.swift in Sources */,
 				6989E3D51D396703003924EC /* ChatViewController.swift in Sources */,
-				693B2C6A1D55B3E00083B5D1 /* DeadlinesViewController.swift in Sources */,
 				694DB1161D39775B00570A6B /* AppState.swift in Sources */,
-				69AA26AA1D5566200029773B /* PaymentsTableViewCell.swift in Sources */,
+				69B3C1061D583130007F5FE6 /* CalendarView.swift in Sources */,
+				69629B731D585EF200AD0C67 /* CALayerExtension.swift in Sources */,
 				6989E3D11D396703003924EC /* AppDelegate.swift in Sources */,
 				6973229C1D4C7408000F512D /* DeadlinesTableViewCell.swift in Sources */,
 				697322961D4C7374000F512D /* AddDeadlineViewController.swift in Sources */,
 				69AA26A31D546FFC0029773B /* UIImageExtension.swift in Sources */,
-				697322981D4C739E000F512D /* DeadlinesListTableViewController.swift in Sources */,
 				694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */,
 				694DB1181D39775B00570A6B /* MeasurementHelper.swift in Sources */,
 				694DB1171D39775B00570A6B /* Constants.swift in Sources */,
-				69AA26A61D55660F0029773B /* PaymentsUserInfo.swift in Sources */,
+				69B3C1021D582EA8007F5FE6 /* CellView.swift in Sources */,
+				69B3C10B1D5849F4007F5FE6 /* AnimationClass.swift in Sources */,
+				693684581D5AF1D70077F88C /* PaymentHistoryTableViewCell.swift in Sources */,
 				69AA26AC1D5567120029773B /* PaymentsViewController.swift in Sources */,
+				69629B751D599BD800AD0C67 /* ManagePartnerViewController.swift in Sources */,
 				696287B31D3AED33000F94F2 /* SettingsTableViewController.swift in Sources */,
+				69B3C10D1D585C43007F5FE6 /* DeadlinesViewController.swift in Sources */,
 				6973229B1D4C7408000F512D /* Deadline.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -522,6 +534,15 @@
 				6989E3D71D396703003924EC /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		69B3C1071D583508007F5FE6 /* CellView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				69B3C1081D583508007F5FE6 /* Base */,
+			);
+			name = CellView.xib;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -10,43 +10,34 @@ import UIKit
 import Firebase
 
 class PaymentsViewController: UIViewController {
-	@IBOutlet weak var segmentedControl: UISegmentedControl!
-	@IBOutlet weak var profilePic: UIImageView!
-	@IBOutlet weak var name: UILabel!
-	@IBOutlet weak var balance: UILabel!
-	@IBOutlet weak var owedBalance: UILabel!
-	@IBOutlet weak var payButton: UIButton!
-	@IBOutlet weak var missedDeadlinesTable: UITableView!
-
+	@IBOutlet weak var userProfilePic: UIImageView!
+	@IBOutlet weak var username: UILabel!
+	@IBOutlet weak var userBalance: UILabel!
+	@IBOutlet weak var friendProfilePic: UIImageView!
+	@IBOutlet weak var friendName: UILabel!
+	@IBOutlet weak var friendBalance: UILabel!
+	@IBOutlet weak var paymentsTable: UITableView!
 	
 	// MARK: Properties
-	var missedDeadlines = [Deadline]()
+	var payments = [(String, Double)]()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		name.text = AppState.sharedInstance.name
-		profilePic.image = AppState.sharedInstance.photo
-		
-		if let status = AppState.sharedInstance.partnerStatus where status == true { // user has a partner
-			segmentedControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
-		} else { // no friend, gray out 'partner' segment
-			segmentedControl.setEnabled(false, forSegmentAtIndex: 1)
-		}
-		loadMissedDeadlines(AppState.sharedInstance.userID)
-    }
+		loadPaymentHistory()
 
-	@IBAction func didChangeSegment(sender: AnyObject) {
-		if segmentedControl.selectedSegmentIndex == 0 { // user looking at their deadlines
-			name.text = AppState.sharedInstance.name
-			profilePic.image = AppState.sharedInstance.photo
-			
-		} else { // user looking at partner's deadlines
-			name.text = AppState.sharedInstance.f_name
-			profilePic.image = AppState.sharedInstance.f_photo!
+		username.text = AppState.sharedInstance.firstName
+		userProfilePic.image = AppState.sharedInstance.photo
+		userBalance.text = "$0"
+		
+		// load partner data
+		if let status = AppState.sharedInstance.partnerStatus where status == true {
+			friendProfilePic.image = AppState.sharedInstance.f_photo
+			friendName.text = AppState.sharedInstance.f_firstName
+			friendBalance.text = "$0"
 		}
-	}
+    }
 	
-	func loadMissedDeadlines(id: String) {
+	func loadPaymentHistory() {
 		
 	}
 	
@@ -55,13 +46,12 @@ class PaymentsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 	
-//	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//		return deadlines.count
-//	}
+	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 1
+	}
 	
 	func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-		// user is only allowed to mark "finished" or delete their own deadlines
-		return segmentedControl.selectedSegmentIndex == 0 ? true : false
+		return false
 	}
 	
 	// change header height
@@ -70,23 +60,20 @@ class PaymentsViewController: UIViewController {
 	}
 	
 	// header title
-//	func tableView( tableView : UITableView,  titleForHeaderInSection section: Int) -> String {
-//		let day = "DAY " + String(dayUserIsLookingAt)
-//		return day
-//	}
-	
-	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		return UITableViewAutomaticDimension
+	func tableView( tableView : UITableView,  titleForHeaderInSection section: Int) -> String {
+		let day = "DAY 1"
+		return day
 	}
 	
-	func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		return UITableViewAutomaticDimension
+	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+		let cellIdentifier = "PaymentHistoryTableViewCell"
+		let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! PaymentHistoryTableViewCell
+		return configureCell(cell, indexPath: indexPath)
 	}
 	
-//	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//		let cellIdentifier = "DeadlinesTableViewCell"
-//		let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! DeadlinesTableViewCell
-//		return //configureCell(cell, indexPath: indexPath)
-//	}
-//	
+	func configureCell(cell: PaymentHistoryTableViewCell, indexPath: NSIndexPath) -> UITableViewCell {
+//		let paymentItem = payments[indexPath.row]
+		
+		return cell
+	}
 }
