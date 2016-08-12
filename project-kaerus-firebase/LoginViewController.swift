@@ -142,8 +142,7 @@ class LoginViewController: UIViewController {
 				AppState.sharedInstance.photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.photoUrl)!)!.circle
 				
 				// fbID is unique. get this so others can find user by their fb id (when user is looking for a partner)
-				let fbToFirRef = FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)")
-				fbToFirRef.setValue(user?.uid)
+				FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)").setValue(user?.uid)
 				
 				/* if firebase counts modifying a value to the same value as using bandwidth, use this
 				firstTimeLoginRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
@@ -228,8 +227,15 @@ class LoginViewController: UIViewController {
 						AppState.sharedInstance.f_photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!)!.circle
 						AppState.sharedInstance.f_name = postDict["friend_name"]
 						AppState.sharedInstance.groupchat_id = postDict["groupchat_id"]
+						let ref = FIRDatabase.database().reference().child("FIR-to-OS/\(AppState.sharedInstance.f_firID!)")
+						
+						ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+							AppState.sharedInstance.f_oneSignalID = snapshot.value as? String
+							dispatch_group_leave(self.group)
+						})
+					} else {
+						dispatch_group_leave(self.group)
 					}
-					dispatch_group_leave(self.group)
 				})
 			} else {
 				partnerStatusRef.setValue(false)
@@ -237,12 +243,6 @@ class LoginViewController: UIViewController {
 				dispatch_group_leave(self.group)
 			}
 		})
-	}
-	
-	func setPartnerData() {
-		if let status = AppState.sharedInstance.partnerStatus where status == true {
-			
-		}
 	}
 }
 

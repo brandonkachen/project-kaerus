@@ -204,6 +204,13 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		AppState.sharedInstance.f_firID = friend.id
 		AppState.sharedInstance.f_photoURL = friend.picURL
 		
+		OneSignal.IdsAvailable(){ (userId, pushToken) in
+			if (pushToken != nil) {
+				NSLog("pushToken:%@", pushToken)
+			}
+			AppState.sharedInstance.f_oneSignalID = userId
+		}
+		
 		// set group_id. to get group id: 1) sort both ids in alphabetical order. 2) put a “.” sign between the two
 		let sortedIds = [AppState.sharedInstance.userID, AppState.sharedInstance.f_firID!].sort()
 		AppState.sharedInstance.groupchat_id = sortedIds[0] + "+" + sortedIds[1]
@@ -237,6 +244,8 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		
 		// change view
 		setPartnerScreen()
+		
+		
 	}
 	
 	@IBAction func didPressRejectButton(sender: AnyObject) {

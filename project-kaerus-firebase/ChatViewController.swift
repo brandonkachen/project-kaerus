@@ -95,6 +95,9 @@ class ChatViewController: JSQMessagesViewController {
 		// finishing touches
 		JSQSystemSoundPlayer.jsq_playMessageSentSound()
 		finishSendingMessage()
+		
+		// send a notification to partner
+		OneSignal.postNotification(["contents": ["en": AppState.sharedInstance.firstName + ": " + text], "include_player_ids": [AppState.sharedInstance.f_oneSignalID!]])
 //		isTyping = false
 	}
 	
