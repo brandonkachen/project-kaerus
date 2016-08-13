@@ -19,7 +19,6 @@ class ChatViewController: JSQMessagesViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
 		// set up view controller
 		self.senderId = AppState.sharedInstance.userID
 		self.senderDisplayName = AppState.sharedInstance.name
@@ -97,7 +96,11 @@ class ChatViewController: JSQMessagesViewController {
 		finishSendingMessage()
 		
 		// send a notification to partner
-		OneSignal.postNotification(["contents": ["en": AppState.sharedInstance.firstName + ": " + text], "include_player_ids": [AppState.sharedInstance.f_oneSignalID!]])
+		OneSignal.postNotification([
+				"contents": ["en": AppState.sharedInstance.firstName + ": " + text],
+				"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
+				"content_available": ["true"]
+			])
 //		isTyping = false
 	}
 	

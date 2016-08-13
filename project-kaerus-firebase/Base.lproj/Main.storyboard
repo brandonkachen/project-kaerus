@@ -110,7 +110,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="GrH-Zl-PUg">
             <objects>
-                <tabBarController id="SzM-MK-Kq3" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="tabBarControl" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SzM-MK-Kq3" sceneMemberID="viewController">
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="mgY-B8-Dqi">
@@ -842,7 +842,7 @@
         <!--ChatChat-->
         <scene sceneID="For-IT-Eng">
             <objects>
-                <viewController title="ChatChat" id="5cy-Fl-0KE" customClass="ChatViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chatViewController" title="ChatChat" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5cy-Fl-0KE" customClass="ChatViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fYc-01-zaS"/>
                         <viewControllerLayoutGuide type="bottom" id="qtd-3Q-hZE"/>
@@ -1002,24 +1002,10 @@
             </objects>
             <point key="canvasLocation" x="2646" y="1861"/>
         </scene>
-        <!--Payments-->
-        <scene sceneID="qL4-Mh-2kl">
-            <objects>
-                <navigationController id="GMw-Oq-mgb" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Payments" id="1dO-Tf-JmH"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7bx-0w-MQy">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="N9b-ef-XLF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3245" y="439"/>
-        </scene>
         <!--Messages-->
         <scene sceneID="NNj-0C-fAA">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="i8p-Bc-gsN" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="chatNavControl" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="i8p-Bc-gsN" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Messages" id="tMa-f1-OmX"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="knB-SN-9X7">
@@ -1031,6 +1017,10 @@
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="6Js-AO-KDW">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="5cy-Fl-0KE" kind="relationship" relationship="rootViewController" id="hTU-T8-y9l"/>
                     </connections>

@@ -42,6 +42,9 @@ class AppState: NSObject {
 	var partnerStatus: Bool!
 	var groupchat_id: String?
 	
+	// notification stuff
+	var notificationReceived: Bool!
+	
 	func setState(user: FIRUser?) {
 		self.signedIn = true
 		self.name = user?.displayName //?? user?.email

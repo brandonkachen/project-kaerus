@@ -244,8 +244,6 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		
 		// change view
 		setPartnerScreen()
-		
-		
 	}
 	
 	@IBAction func didPressRejectButton(sender: AnyObject) {

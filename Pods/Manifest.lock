@@ -85,7 +85,7 @@ PODS:
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - JTAppleCalendar (4.1.4)
-  - OneSignal (2.0.1)
+  - OneSignal (2.0.8)
 
 DEPENDENCIES:
   - Bolts
@@ -126,7 +126,7 @@ SPEC CHECKSUMS:
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JTAppleCalendar: 3041603a19b9cb2acb4715f98675dfff4b69ef94
-  OneSignal: d305504e928d652124ed7854546df988c8087e58
+  OneSignal: fe784ea44b5e117a9077d4c21f480b24d79d60d6
 
 PODFILE CHECKSUM: 71d4f6c472119493c0bd81a179808e32943b8345
 
