@@ -20,20 +20,23 @@ class DeadlinesViewController: UIViewController {
 	// deadline table stuff
 	@IBOutlet weak var segControl: UISegmentedControl!
 	@IBOutlet weak var addButton: UIBarButtonItem!
-	@IBOutlet weak var deadlineTable: UITableView!
+	@IBOutlet weak var userDeadlineTable: UITableView!
+	@IBOutlet weak var userOwesLabel: UILabel!
+	@IBOutlet weak var partnerDeadlineTable: UITableView!
+	@IBOutlet weak var partnerOwesLabel: UILabel!
+
 	var deadlines = [Deadline]()
 	var masterRef, deadlinesRef, dayUserLastSawRef, amtOwedEachDayRef: FIRDatabaseReference!
 	private var _refHandle: FIRDatabaseHandle!
-	var userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
 	var dayUserIsLookingAt: String! // set by the 'day' variable in User-Deadlines
-	@IBOutlet weak var amtOwedLabel: UILabel!
 	
 	var storageRef: FIRStorageReference!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Set up swipe to delete
-		deadlineTable.allowsMultipleSelectionDuringEditing = false
+		userDeadlineTable.allowsMultipleSelectionDuringEditing = false
+		partnerDeadlineTable.allowsMultipleSelectionDuringEditing = false
 		
 		configureStorage()
 //		fetchConfig()
@@ -48,7 +51,8 @@ class DeadlinesViewController: UIViewController {
 			segControl.setEnabled(false, forSegmentAtIndex: 1)
 		
 		// might need to wait here, to prevent race condition if we don't get friend info in time
-		setup()
+		setup(AppState.sharedInstance.userID)
+		setup(AppState.sharedInstance.f_firID!)
 		
 		self.calendarView.dataSource = self
 		self.calendarView.delegate = self
@@ -56,9 +60,7 @@ class DeadlinesViewController: UIViewController {
 		self.calendarView.selectDates([NSDate()])
 		self.calendarView.scrollToDate(NSDate())
 		self.calendarView.cellInset = CGPoint(x: 0, y: 0)
-
-//		self.calendarView.direction = .Vertical
-
+		
 		self.fullCalendarView.layer.addBorder(.Bottom, color: UIColor.whiteColor(), thickness: 1.0)
 		self.fullCalendarView.layer.shadowOffset = CGSizeMake(1, 1)
 		self.fullCalendarView.layer.shadowColor = UIColor.lightGrayColor().CGColor
@@ -80,9 +82,9 @@ class DeadlinesViewController: UIViewController {
 	
 	// MARK:- Set up deadlines
 	// set up the whole view
-	func setup() {
+	func setup(userID: String!) {
 		// this will be the ref upon which all other refs base themselves
-		masterRef = FIRDatabase.database().reference().child("User-Deadlines/\(userWhoseDeadlinesAreShown)")
+		masterRef = FIRDatabase.database().reference().child("User-Deadlines/\(userID)")
 		self.getDeadlinesForDay()
 	}
 	
@@ -105,7 +107,7 @@ class DeadlinesViewController: UIViewController {
 				newItems.append(deadlineItem)
 			}
 			self.deadlines = newItems
-			self.deadlineTable.reloadData()
+			self.userDeadlineTable.reloadData()
 			completion(result: self.deadlines.count)
 		})
 	}
@@ -113,7 +115,7 @@ class DeadlinesViewController: UIViewController {
 	// determine how much the user owes for this particular day
 	func determineOwedBalance(totalCount: Int) {
 		getMissedDeadlineCount() { (missedCount) -> () in
-			self.amtOwedLabel.text! = "owed: $"
+			self.userOwesLabel.text! = "owed: $"
 			let strAmt: String
 			if missedCount > 0 { // if deadline count <= 5, every missed deadline costs $(2.50/deadline count). otherwise, missed deadlines are charged at a flat rate of $0.50 each.
 				var amt = Double(missedCount)
@@ -125,7 +127,7 @@ class DeadlinesViewController: UIViewController {
 				strAmt = "0"
 				self.amtOwedEachDayRef.removeValue()
 			}
-			self.amtOwedLabel.text! += strAmt
+			self.userOwesLabel.text! += strAmt
 		}
 	}
 	
@@ -167,9 +169,9 @@ extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalenda
 	func configureCalendar(calendar: JTAppleCalendarView) -> (startDate: NSDate, endDate: NSDate, numberOfRows: Int, calendar: NSCalendar) {
 		let firstDate = AppState.sharedInstance.startDate
 		let components = NSDateComponents()
-		components.year = 1
+		components.month = 1
 		let secondDate = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: NSDate(), options: NSCalendarOptions())!
-		let numberOfRows = 2
+		let numberOfRows = 1
 		let aCalendar = NSCalendar.currentCalendar() // Properly configure your calendar to your time zone here
 		
 		return (startDate: firstDate, endDate: secondDate, numberOfRows: numberOfRows, calendar: aCalendar)
@@ -182,7 +184,8 @@ extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalenda
 	func calendar(calendar: JTAppleCalendarView, didSelectDate date: NSDate, cell: JTAppleDayCellView?, cellState: CellState) {
 		let strDay = self.formatter.stringFromDate(date)
 		self.dayUserIsLookingAt = strDay
-		setup()
+		setup(AppState.sharedInstance.userID)
+		setup(AppState.sharedInstance.f_firID!)
 		(cell as? CellView)?.cellSelectionChanged(cellState)
 	}
 	
@@ -315,27 +318,27 @@ extension DeadlinesViewController {
 		return segControl.selectedSegmentIndex == 0 ? true : false
 	}
 	
-	@IBAction func didChangeSegment(sender: AnyObject) {
-		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
-			addButton.enabled = true
-			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
-		} else { // user looking at partner's deadlines
-			addButton.enabled = false
-			if let f_id = AppState.sharedInstance.f_firID {
-				userWhoseDeadlinesAreShown = f_id
-			} else {
-				return
-			}
-		}
-		setup()
-	}
+//	@IBAction func didChangeSegment(sender: AnyObject) {
+//		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
+//			addButton.enabled = true
+//			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
+//		} else { // user looking at partner's deadlines
+//			addButton.enabled = false
+//			if let f_id = AppState.sharedInstance.f_firID {
+//				userWhoseDeadlinesAreShown = f_id
+//			} else {
+//				return
+//			}
+//		}
+//		setup()
+//	}
 	
 	// called when starting to change from one screen in storyboard to next
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
 		if segue.identifier == "editItem" { // Edit item
 			let deadlinesViewController = segue.destinationViewController as! AddDeadlineViewController
 			if let selectedItemCell = sender as? DeadlinesTableViewCell {
-				let indexPath = deadlineTable.indexPathForCell(selectedItemCell)!
+				let indexPath = userDeadlineTable.indexPathForCell(selectedItemCell)!
 				let selectedDeadline = deadlines[indexPath.row]
 				deadlinesViewController.deadline = selectedDeadline
 			}
@@ -346,7 +349,7 @@ extension DeadlinesViewController {
 	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
 		if let sourceViewController = sender.sourceViewController as? AddDeadlineViewController, deadline = sourceViewController.deadline {
 			var deadlineRef: FIRDatabaseReference
-			if let selectedIndexPath = deadlineTable.indexPathForSelectedRow { // Update current item
+			if let selectedIndexPath = userDeadlineTable.indexPathForSelectedRow { // Update current item
 				let key = deadlines[selectedIndexPath.row].key
 				deadlineRef = self.deadlinesRef.child(key)
 			} else { // Add a new item to the list
