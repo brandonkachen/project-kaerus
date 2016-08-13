@@ -15,145 +15,76 @@ import FBSDKLoginKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+	
 	var window: UIWindow?
-	var notificationReceived = false
-
+	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
 		// Override point for customization after application launch.
-		registerForPushNotifications(application)
+		OneSignal.registerForPushNotifications()
 		FIRApp.configure()
 		
-		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00", handleNotificationReceived: { (notification) in
-			// gets called when user is in app
-			
-			}, handleNotificationAction: { (result) in
-				// gets called when user taps on app
-				print("new message opened")
-//				let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-//				let tabBarVC = storyBoard.instantiateViewControllerWithIdentifier("tabBarControl")
-//				self.window?.rootViewController = tabBarVC
-//				let tabBarController = self.window!.rootViewController as? UITabBarController
-//				
-//				if tabBarController != nil && tabBarController?.selectedIndex != 1 {
-//					tabBarController!.selectedIndex = 1
-//				}
-//
-//				// This block gets called when the user reacts to a notification received
-//				let payload = result.notification.payload
-//				var fullMessage = payload.title
-//				
-//				// Try to fetch the action selected
-//				if let additionalData = payload.additionalData, actionSelected = additionalData["actionSelected"] as? String {
-//					fullMessage =  fullMessage + "\nPressed ButtonId:\(actionSelected)"
-//				}
-//				print(fullMessage)
-			}, settings: [kOSSettingsKeyAutoPrompt : false, kOSSettingsKeyInAppAlerts : false])
+		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00",
+		                                handleNotificationReceived: nil, //{ (notification) in  self.notifRcv },
+			handleNotificationAction: { (result) in self.notifAct(result) },
+			settings: [kOSSettingsKeyAutoPrompt : false, kOSSettingsKeyInAppAlerts : false])
 		
-		connectToFcm()
-		if let _ = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [String: AnyObject] {
-			// load stuff related to the app notification
-		}
 		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 	}
 	
-	func registerForPushNotifications(application: UIApplication) {
-//		if #available(iOS 8.0, *) {
-			let settings: UIUserNotificationSettings =
-				UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
-			application.registerUserNotificationSettings(settings)
-//			application.registerForRemoteNotifications()
-//		} else {
-//			// Fallback
-//			let types: UIRemoteNotificationType = [.Alert, .Badge, .Sound]
-//			application.registerForRemoteNotificationTypes(types)
+	// called when user is in app
+	func notifRcv() {
+		
+	}
+	
+	// called when user taps on app
+	func notifAct(result: OSNotificationResult!) {
+		print("new message opened")
+//		let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+//		let tabBarVC = storyBoard.instantiateViewControllerWithIdentifier("tabBarControl")
+//		self.window?.rootViewController = tabBarVC
+//		let tabBarController = self.window!.rootViewController as? UITabBarController
+//
+//		if tabBarController != nil && tabBarController?.selectedIndex != 1 {
+//			tabBarController!.selectedIndex = 1
 //		}
+//
+//		// This block gets called when the user reacts to a notification received
+//		let payload = result.notification.payload
+//		var fullMessage = payload.title
+//
+//		// Try to fetch the action selected
+//		if let additionalData = payload.additionalData, actionSelected = additionalData["actionSelected"] as? String {
+//			fullMessage =  fullMessage + "\nPressed ButtonId:\(actionSelected)"
+//		}
+//		print(fullMessage)
 	}
-	
-	func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
-		if notificationSettings.types != .None {
-			application.registerForRemoteNotifications()
-		}
-	}
-	
-//	func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-//		FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Unknown)
-////		let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
-////		var tokenString = ""
-////			
-////		for i in 0..<deviceToken.length {
-////			tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
-////		}
-////		print("Device Token:", tokenString)
-//	}
  
 	func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
 		print("Failed to register:", error)
 	}
 	
-//	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject],
-//	                 fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-//		// If you are receiving a notification message while your app is in the background,
-//		// this callback will not be fired till the user taps on the notification launching the application.
-//		// TODO: Handle data of notification
-//		
-////		// Print message ID.
-////		print("Message ID: \(userInfo["gcm.message_id"]!)")
-////		
-////		// Print full message.
-////		print("%@", userInfo)
-//	}
-	
-	func tokenRefreshNotification(notification: NSNotification) {
-		let refreshedToken = FIRInstanceID.instanceID().token()!
-		print("InstanceID token: \(refreshedToken)")
-		
-		// Connect to FCM since connection may have failed when attempted before having a token.
-		connectToFcm()
-	}
-
-	func connectToFcm() {
-		FIRMessaging.messaging().connectWithCompletion { (error) in
-			if (error != nil) {
-				print("Unable to connect with FCM. \(error)")
-			} else {
-				print("Connected to FCM.")
-			}
-		}
-	}
-	
 	func applicationDidBecomeActive(application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 		FBSDKAppEvents.activateApp()
-		
-//		if notificationReceived {
-//			let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-//			let chatVC = storyBoard.instantiateViewControllerWithIdentifier("chatNavControl")// as! ChatViewController
-//			self.window?.rootViewController = chatVC
-//		}
-
-//		connectToFcm()
 	}
 	
 	func applicationDidEnterBackground(application: UIApplication) {
-		FIRMessaging.messaging().disconnect()
-//		print("Disconnected from FCM.")
 	}
-
+	
 	func applicationWillResignActive(application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
 		// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 	}
-
+	
 	func applicationWillEnterForeground(application: UIApplication) {
 		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 	}
-
-
+	
+	
 	func applicationWillTerminate(application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
-
+	
 	func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
 		return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
 	}
