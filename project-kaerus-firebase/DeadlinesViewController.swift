@@ -382,26 +382,9 @@ extension DeadlinesViewController {
 	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
 		if let sourceViewController = sender.sourceViewController as? EditDeadlinesViewController {
 			deadlinesRef.removeValue()
-			
-			let currentDateFormatter = NSDateFormatter()
-			currentDateFormatter.dateFormat = "MMMM d"
-			var message = "\(currentDateFormatter.stringFromDate(NSDate()))\(NSDate().daySuffix()):\n"
-			
-			var i = 1
 			for deadline in sourceViewController.deadlines {
 				deadlinesRef.childByAutoId().setValue(deadline.toAnyObject())
-				
-				// set up message
-				let userReadableTimeFormatter = NSDateFormatter()
-				userReadableTimeFormatter.dateFormat = "yyyy-MM-dd HH:mmZ"
-				let timeDue = userReadableTimeFormatter.dateFromString(deadline.timeDue!)
-				userReadableTimeFormatter.dateFormat = "h:mm a"
-				let timeDueText = userReadableTimeFormatter.stringFromDate(timeDue!)
-				message += String(i) + ") " + deadline.text + "\ndue: " + timeDueText + "\n"
-				i += 1
 			}
-			
-			message = String(message.characters.dropLast()) // get rid of the last '\n\n' added by the loop
 			
 			if let chatId = AppState.sharedInstance.groupchat_id {
 				let messageRef = FIRDatabase.database().reference().child("Messages/\(chatId)")
@@ -414,17 +397,19 @@ extension DeadlinesViewController {
 				// add sender's ID so if users send messages at the exact same time (however unlikely), they won't erase one another
 				let timestamp = dateFormatter.stringFromDate(NSDate()) + "<" + AppState.sharedInstance.userID + ">"
 				
+				let message = AppState.sharedInstance.firstName + " has set their schedule for \(sourceViewController.dateLabel.text!)"
+				
 				// create the new entry
 				let messageItem = [
-					"id" : AppState.sharedInstance.userID,
-					"displayName" : AppState.sharedInstance.firstName,
+					"id" : "Project Kaerus",
+					"displayName" : "Project Kaerus",
 					"text" : message
 				]
 				messageRef.child(timestamp).setValue(messageItem)
 				
 				// send a notification to partner
 				OneSignal.postNotification([
-					"contents": ["en": AppState.sharedInstance.firstName + "'s schedule has been set!"],
+					"contents": ["en": message],
 					"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
 					"content_available": ["true"]
 					])

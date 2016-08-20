@@ -651,7 +651,7 @@
                                     <constraint firstItem="hiw-uJ-DvB" firstAttribute="centerY" secondItem="BV6-AZ-VJz" secondAttribute="centerY" id="WbP-YN-Bg1"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="T3t-M3-q0T">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="T3t-M3-q0T">
                                 <rect key="frame" x="0.0" y="104" width="600" height="496"/>
                                 <color key="backgroundColor" red="0.956463854" green="0.956463854" blue="0.956463854" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>

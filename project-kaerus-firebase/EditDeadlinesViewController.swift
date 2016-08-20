@@ -21,7 +21,7 @@ class EditDeadlinesViewController: UIViewController {
 		let formatter = NSDateFormatter()
 		formatter.dateFormat = "yyyy-MM-dd Z"
 		let d = formatter.dateFromString(date)!
-		formatter.dateFormat = "MMM d"
+		formatter.dateFormat = "MMMM d"
 		let sd = formatter.stringFromDate(d)
 		dateLabel.text = sd
 	}
