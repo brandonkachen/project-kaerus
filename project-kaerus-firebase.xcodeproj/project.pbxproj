@@ -24,6 +24,7 @@
 		697322961D4C7374000F512D /* AddDeadlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697322951D4C7374000F512D /* AddDeadlineViewController.swift */; };
 		6973229B1D4C7408000F512D /* Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697322991D4C7408000F512D /* Deadline.swift */; };
 		6973229C1D4C7408000F512D /* DeadlinesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973229A1D4C7408000F512D /* DeadlinesTableViewCell.swift */; };
+		697F5A091D5FB7870062450F /* EditDeadlinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697F5A081D5FB7870062450F /* EditDeadlinesViewController.swift */; };
 		6989E3D11D396703003924EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6989E3D01D396703003924EC /* AppDelegate.swift */; };
 		6989E3D51D396703003924EC /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6989E3D41D396703003924EC /* ChatViewController.swift */; };
 		6989E3D81D396703003924EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6989E3D61D396703003924EC /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 		69B3C1091D583508007F5FE6 /* CellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69B3C1071D583508007F5FE6 /* CellView.xib */; };
 		69B3C10B1D5849F4007F5FE6 /* AnimationClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */; };
 		69B3C10D1D585C43007F5FE6 /* DeadlinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */; };
+		69C135A01D68124800C251A6 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C1359F1D68124800C251A6 /* NSDateExtension.swift */; };
 		AD96B8849CE61CF128853A0A /* Pods_project_kaerus_firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */; };
 		FF214860D4F7733C24CC41C0 /* Pods_project_kaerus_firebaseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */; };
 /* End PBXBuildFile section */
@@ -71,6 +73,7 @@
 		697322951D4C7374000F512D /* AddDeadlineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddDeadlineViewController.swift; sourceTree = "<group>"; };
 		697322991D4C7408000F512D /* Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deadline.swift; sourceTree = "<group>"; };
 		6973229A1D4C7408000F512D /* DeadlinesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesTableViewCell.swift; sourceTree = "<group>"; };
+		697F5A081D5FB7870062450F /* EditDeadlinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDeadlinesViewController.swift; sourceTree = "<group>"; };
 		6989E3CD1D396703003924EC /* project-kaerus-firebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "project-kaerus-firebase.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6989E3D01D396703003924EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6989E3D41D396703003924EC /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -87,6 +90,7 @@
 		69B3C1081D583508007F5FE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "project-kaerus-firebase/Base.lproj/CellView.xib"; sourceTree = "<group>"; };
 		69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClass.swift; sourceTree = "<group>"; };
 		69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesViewController.swift; sourceTree = "<group>"; };
+		69C1359F1D68124800C251A6 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D68677377F84113A90F3D9 /* Pods-project-kaerus-firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-kaerus-firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-project-kaerus-firebase/Pods-project-kaerus-firebase.release.xcconfig"; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */,
+				697F5A081D5FB7870062450F /* EditDeadlinesViewController.swift */,
 				697322951D4C7374000F512D /* AddDeadlineViewController.swift */,
 				6989E3D41D396703003924EC /* ChatViewController.swift */,
 				694DB10A1D3976F400570A6B /* LoginViewController.swift */,
@@ -248,6 +253,7 @@
 			children = (
 				69629B721D585EF200AD0C67 /* CALayerExtension.swift */,
 				69AA26A21D546FFC0029773B /* UIImageExtension.swift */,
+				69C1359F1D68124800C251A6 /* NSDateExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -481,7 +487,9 @@
 				696287C51D3D4763000F94F2 /* FriendData.swift in Sources */,
 				6989E3D51D396703003924EC /* ChatViewController.swift in Sources */,
 				694DB1161D39775B00570A6B /* AppState.swift in Sources */,
+				69C135A01D68124800C251A6 /* NSDateExtension.swift in Sources */,
 				69B3C1061D583130007F5FE6 /* CalendarView.swift in Sources */,
+				697F5A091D5FB7870062450F /* EditDeadlinesViewController.swift in Sources */,
 				69629B731D585EF200AD0C67 /* CALayerExtension.swift in Sources */,
 				6989E3D11D396703003924EC /* AppDelegate.swift in Sources */,
 				6973229C1D4C7408000F512D /* DeadlinesTableViewCell.swift in Sources */,

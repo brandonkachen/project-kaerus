@@ -154,7 +154,7 @@ class ChatViewController: JSQMessagesViewController {
 		if let avatar = avatars[message.senderId] {
 			return JSQMessagesAvatarImage.avatarWithImage(avatar) //JSQMessagesAvatarImage(placeholder: avatar)
 		}
-		// TODO: show system avatar
+		// show system avatar
 		return nil
 	}
 	
