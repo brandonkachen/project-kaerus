@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Override point for customization after application launch.
 		OneSignal.registerForPushNotifications()
 		FIRApp.configure()
+		FIRDatabase.database().persistenceEnabled = true
 		
 		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00",
 		                                handleNotificationReceived: nil, //{ (notification) in  self.notifRcv },
@@ -31,12 +32,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 	}
 	
-	// called when user is in app
+	// called when user is in app and receives a notification
 	func notifRcv() {
 		
 	}
 	
-	// called when user taps on app
+	// called when user opens app upon receiving a notification
 	func notifAct(result: OSNotificationResult!) {
 		print("new message opened")
 //		let storyBoard = UIStoryboard(name: "Main", bundle: nil)

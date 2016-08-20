@@ -373,6 +373,7 @@ extension DeadlinesViewController {
 	// saving when adding a new item or finished editing an old one
 	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
 		if let sourceViewController = sender.sourceViewController as? EditDeadlinesViewController {
+			// set Firebase to updated items
 			deadlinesRef.removeValue()
 			for deadline in sourceViewController.deadlines {
 				deadlinesRef.childByAutoId().setValue(deadline.toAnyObject())
@@ -389,20 +390,20 @@ extension DeadlinesViewController {
 				// add sender's ID so if users send messages at the exact same time (however unlikely), they won't erase one another
 				let timestamp = dateFormatter.stringFromDate(NSDate()) + "<" + AppState.sharedInstance.userID + ">"
 				
-				let status = sourceViewController.deadlines.count == 0 ? "set" : "updated"
-				let message = AppState.sharedInstance.firstName + " has " + status + " their schedule (\(sourceViewController.dateLabel.text!))"
+				let status = sourceViewController.deadlines.count == 0 ? "set" : "edited"
+				let message = status + " my schedule for \(sourceViewController.dateLabel.text!)"
 				
 				// create the new entry
 				let messageItem = [
-					"id" : "PK",
-					"displayName" : "PK",
-					"text" : message
+					"id" : AppState.sharedInstance.userID,
+					"displayName" : AppState.sharedInstance.firstName,
+					"text" : message + " – " + sourceViewController.explanation // TODO: remove - when status == "set"
 				]
 				messageRef.child(timestamp).setValue(messageItem)
 				
 				// send a notification to partner
 				OneSignal.postNotification([
-					"contents": ["en": message],
+					"contents": ["en": AppState.sharedInstance.firstName + ": " + message],
 					"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
 					"content_available": ["true"]
 					])

@@ -12,10 +12,13 @@ import FirebaseDatabase
 class EditDeadlinesViewController: UIViewController {
 	@IBOutlet weak var dateLabel: UILabel!
 	@IBOutlet weak var editDeadlineTable: UITableView!
+	@IBOutlet weak var dateView: UIView!
 
 	var deadlines = [Deadline]()
 	var date : String!
-	
+	var explanation = ""
+	weak var enableSaveButton : UIAlertAction?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 		let formatter = NSDateFormatter()
@@ -24,6 +27,10 @@ class EditDeadlinesViewController: UIViewController {
 		formatter.dateFormat = "MMMM d"
 		let sd = formatter.stringFromDate(d) + d.daySuffix()
 		dateLabel.text = sd
+		
+		dateView.layer.shadowOffset = CGSizeMake(1, 1)
+		dateView.layer.shadowColor = UIColor.lightGrayColor().CGColor
+		dateView.layer.shadowOpacity = 0.5
 	}
 
     override func didReceiveMemoryWarning() {
@@ -55,6 +62,39 @@ class EditDeadlinesViewController: UIViewController {
 			deadlines.sortInPlace(){ $0.timeDue < $1.timeDue }
 			editDeadlineTable.reloadData()
 		}
+	}
+	
+	
+	@IBAction func didPressDoneButton(sender: AnyObject) {
+		let messageStr = "Why are you changing your schedule?"
+		
+		let alert = UIAlertController(title: nil, message: messageStr, preferredStyle: UIAlertControllerStyle.Alert)
+		
+		alert.addTextFieldWithConfigurationHandler({(textField: UITextField) in
+			textField.placeholder = "because..."
+			textField.addTarget(self, action: #selector(self.textChanged(_:)), forControlEvents: .EditingChanged)
+		})
+		
+		let backButton = UIAlertAction(title: "Back", style: UIAlertActionStyle.Cancel, handler: { (_) -> Void in
+			self.resignFirstResponder()
+		})
+		
+		let saveButton = UIAlertAction(title: "Save", style: UIAlertActionStyle.Default, handler: { (_) -> Void in
+			let textfield = alert.textFields!.first!
+			self.explanation = textfield.text!
+			self.performSegueWithIdentifier("backToDeadlinesList", sender: self)
+		})
+		
+		alert.addAction(backButton)
+		alert.addAction(saveButton)
+		
+		self.enableSaveButton = saveButton
+		saveButton.enabled = false
+		self.presentViewController(alert, animated: true, completion: nil)
+	}
+	
+	func textChanged(sender:UITextField) {
+		self.enableSaveButton?.enabled = (sender.text! != "")
 	}
 }
 

@@ -624,7 +624,7 @@
         <!--Edit Deadlines-->
         <scene sceneID="zhR-4x-9e1">
             <objects>
-                <viewController modalTransitionStyle="crossDissolve" id="Qmj-pY-4zO" customClass="EditDeadlinesViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="crossDissolve" id="Qmj-pY-4zO" customClass="EditDeadlinesViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ogb-ic-bXv"/>
                         <viewControllerLayoutGuide type="bottom" id="rNF-1D-PsQ"/>
@@ -633,29 +633,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BV6-AZ-VJz">
-                                <rect key="frame" x="0.0" y="64" width="600" height="41"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hiw-uJ-DvB">
-                                        <rect key="frame" x="282" y="10" width="36" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="41" id="8qw-H4-WA6"/>
-                                    <constraint firstItem="hiw-uJ-DvB" firstAttribute="centerX" secondItem="BV6-AZ-VJz" secondAttribute="centerX" id="GPQ-hR-DFV"/>
-                                    <constraint firstItem="hiw-uJ-DvB" firstAttribute="centerY" secondItem="BV6-AZ-VJz" secondAttribute="centerY" id="WbP-YN-Bg1"/>
-                                </constraints>
-                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="T3t-M3-q0T">
                                 <rect key="frame" x="0.0" y="104" width="600" height="496"/>
                                 <color key="backgroundColor" red="0.956463854" green="0.956463854" blue="0.956463854" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="THN-SX-cTj">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="10"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationLevel="1" indentationWidth="10" reuseIdentifier="EditDeadlinesTableViewCell" textLabel="cay-gW-awB" detailTextLabel="pfv-lJ-fsS" style="IBUITableViewCellStyleSubtitle" id="WqW-dO-Bbf" customClass="DeadlinesTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="38" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WqW-dO-Bbf" id="Ake-hg-I15">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -697,8 +684,25 @@
                                     <outlet property="delegate" destination="Qmj-pY-4zO" id="KEz-yJ-SQz"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BV6-AZ-VJz">
+                                <rect key="frame" x="0.0" y="64" width="600" height="41"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hiw-uJ-DvB">
+                                        <rect key="frame" x="282" y="10" width="36" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="41" id="8qw-H4-WA6"/>
+                                    <constraint firstItem="hiw-uJ-DvB" firstAttribute="centerX" secondItem="BV6-AZ-VJz" secondAttribute="centerX" id="GPQ-hR-DFV"/>
+                                    <constraint firstItem="hiw-uJ-DvB" firstAttribute="centerY" secondItem="BV6-AZ-VJz" secondAttribute="centerY" id="WbP-YN-Bg1"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.96971821579999995" green="0.96971821579999995" blue="0.96971821579999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="BV6-AZ-VJz" firstAttribute="leading" secondItem="T3t-M3-q0T" secondAttribute="leading" id="Af4-9l-rVE"/>
                             <constraint firstItem="BV6-AZ-VJz" firstAttribute="top" secondItem="Ogb-ic-bXv" secondAttribute="bottom" id="Xc1-lF-KXe"/>
@@ -712,7 +716,7 @@
                     <navigationItem key="navigationItem" title="Edit Deadlines" id="qi4-ir-GB4">
                         <barButtonItem key="leftBarButtonItem" title="Done" id="j7S-7T-iaF">
                             <connections>
-                                <segue destination="xam-4B-sXf" kind="unwind" unwindAction="unwindToDeadlinesList:" id="jxK-Zf-tP9"/>
+                                <action selector="didPressDoneButton:" destination="Qmj-pY-4zO" id="N22-dU-bRH"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="uNp-Zp-hVE">
@@ -724,7 +728,9 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="dateLabel" destination="hiw-uJ-DvB" id="Ewz-Qe-dUn"/>
+                        <outlet property="dateView" destination="BV6-AZ-VJz" id="krt-RX-jy8"/>
                         <outlet property="editDeadlineTable" destination="T3t-M3-q0T" id="bYi-iK-xmO"/>
+                        <segue destination="xam-4B-sXf" kind="unwind" identifier="backToDeadlinesList" unwindAction="unwindToDeadlinesList:" id="6cL-fc-ySj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zf3-ld-ETD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -747,9 +753,13 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="xxB-gb-VKb">
                                 <rect key="frame" x="0.0" y="141" width="600" height="346"/>
                                 <color key="backgroundColor" red="0.96971821579999995" green="0.96971821579999995" blue="0.96971821579999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="ebe-xR-Apq">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="10"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationLevel="1" indentationWidth="10" reuseIdentifier="DeadlinesTableViewCell" textLabel="kcB-MH-NmD" detailTextLabel="KZS-lP-RbM" style="IBUITableViewCellStyleSubtitle" id="36D-Nm-lfw" customClass="DeadlinesTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="38" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="36D-Nm-lfw" id="ZfE-Rr-XCv">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
