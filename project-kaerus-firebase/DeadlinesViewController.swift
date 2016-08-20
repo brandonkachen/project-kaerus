@@ -20,11 +20,12 @@ class DeadlinesViewController: UIViewController {
 	// deadline table stuff
 	@IBOutlet weak var segControl: UISegmentedControl!
 	@IBOutlet weak var deadlineTable: UITableView!
-	@IBOutlet weak var amtOwedLabel: UILabel!
 	@IBOutlet weak var editButton: UIBarButtonItem!
 	@IBOutlet weak var paymentCard: UIView!
 	@IBOutlet weak var blurView: UIView!
 	@IBOutlet weak var paymentCardLabel: UILabel!
+	@IBOutlet weak var amtOwedLabel: UILabel!
+	@IBOutlet weak var amtOwedView: UIView!
 	
 	var deadlines = [Deadline]()
 	var masterRef, deadlinesRef, dayUserLastSawRef, amtOwedEachDayRef, lastDatePaid: FIRDatabaseReference!
@@ -37,8 +38,6 @@ class DeadlinesViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Set up swipe to delete
-		deadlineTable.allowsMultipleSelectionDuringEditing = false
 		
 		configureStorage()
 //		fetchConfig()
@@ -66,8 +65,14 @@ class DeadlinesViewController: UIViewController {
 		paymentCard.layer.shadowColor = UIColor.lightGrayColor().CGColor
 		paymentCard.layer.shadowOpacity = 0.3
 		
+		amtOwedView.layer.shadowOffset = CGSizeMake(1, 1)
+		amtOwedView.layer.shadowColor = UIColor.lightGrayColor().CGColor
+		amtOwedView.layer.shadowOpacity = 0.5
+		
 		blurView.backgroundColor = UIColor.blackColor()
 		blurView.alpha = 0.8
+		
+//		self.navigationController!.navigationBar.setBackgroundImage(imageLayerForGradientBackground(), forBarMetrics: .Default)
 		
 		// blur version
 //		let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
@@ -89,6 +94,17 @@ class DeadlinesViewController: UIViewController {
 		storageRef = FIRStorage.storage().referenceForURL("gs://project-kaerus.appspot.com")
 	}
 	
+	private func imageLayerForGradientBackground() -> UIImage {
+		var updatedFrame = self.navigationController!.navigationBar.bounds
+		// take into account the status bar
+		updatedFrame.size.height += 20
+		let layer = CAGradientLayer.gradientLayerForBounds(updatedFrame)
+		UIGraphicsBeginImageContext(layer.bounds.size)
+		layer.renderInContext(UIGraphicsGetCurrentContext()!)
+		let image = UIGraphicsGetImageFromCurrentImageContext()
+		UIGraphicsEndImageContext()
+		return image
+	}
 	
 	// MARK:- Set up deadlines
 	// set up the whole view
@@ -180,10 +196,9 @@ class DeadlinesViewController: UIViewController {
 				strAmt = String(format: "%.2f", amt)
 				self.amtOwedEachDayRef.setValue(strAmt)
 				self.amtOwedLabel.text! = "owed: $\(strAmt)"
-				self.amtOwedLabel.hidden = false
 			} else {
 				self.amtOwedEachDayRef.removeValue()
-				self.amtOwedLabel.hidden = true
+				self.amtOwedLabel.text = "nothing owed!"
 			}
 		}
 	}
@@ -298,12 +313,6 @@ extension DeadlinesViewController {
 		if !deadlineItem.complete && timeDue!.timeIntervalSinceNow < 0 {
 			cell.timeDueText.textColor = UIColor.redColor()
 		}
-		
-//		cell.layer.addBorder(.Bottom, color: UIColor.whiteColor(), thickness: 0.0)
-//		cell.layer.shadowOffset = CGSizeMake(1, 1)
-//		cell.layer.shadowColor = UIColor.lightGrayColor().CGColor
-//		cell.layer.shadowOpacity = 0.5
-		
 		return cell
 	}
 	
@@ -319,33 +328,16 @@ extension DeadlinesViewController {
 		}
 	}
 	
-	// swiping horizontally shows "done" button. pressing it will mark item as completed
-	func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-		// Get the cell
+	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		// get cell, its ref, and its status
 		let cell = tableView.cellForRowAtIndexPath(indexPath)!
-		
-		// Get the associated grocery item
 		let deadlineItem = self.deadlines[indexPath.row]
-		
-		// Get the new completion status
 		let toggledCompletion = !deadlineItem.complete
 		
-		let done_button = UITableViewRowAction(style: .Normal, title: "complete") { (action, indexPath) in
-			// Determine whether the cell is checked and modify it's view properties
-			self.toggleCellCheckbox(cell, isCompleted: toggledCompletion)
-			
-			// Call updateChildValues on the deadline's reference with just the new completed status
-			deadlineItem.ref?.updateChildValues([
-				"complete": toggledCompletion ])
-		}
-		
-		let blue = UIColor(red: 63/255, green: 202/255, blue: 62/255, alpha: 1)
-		let green = UIColor(red: 66/255, green: 155/255, blue: 224/255, alpha: 1)
-		
-		done_button.title = toggledCompletion ? "complete" : "incomplete"
-		done_button.backgroundColor = toggledCompletion ? blue : green
-		
-		return [done_button]
+		// update item
+		self.toggleCellCheckbox(cell, isCompleted: toggledCompletion)
+		deadlineItem.ref?.updateChildValues([
+			"complete": toggledCompletion ])
 	}
 }
 
@@ -359,7 +351,7 @@ extension DeadlinesViewController {
 		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
 			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
 			// show edit button
-			self.editButton.tintColor = self.navigationController?.navigationBar.tintColor//navigationItem.leftBarButtonItem?.tintColor!
+			self.editButton.tintColor = self.navigationController?.navigationBar.tintColor
 			self.editButton.enabled = true
 		} else { // user looking at partner's deadlines
 			userWhoseDeadlinesAreShown = AppState.sharedInstance.f_firID!
@@ -397,12 +389,13 @@ extension DeadlinesViewController {
 				// add sender's ID so if users send messages at the exact same time (however unlikely), they won't erase one another
 				let timestamp = dateFormatter.stringFromDate(NSDate()) + "<" + AppState.sharedInstance.userID + ">"
 				
-				let message = AppState.sharedInstance.firstName + " has set their schedule for \(sourceViewController.dateLabel.text!)"
+				let status = sourceViewController.deadlines.count == 0 ? "set" : "updated"
+				let message = AppState.sharedInstance.firstName + " has " + status + " their schedule (\(sourceViewController.dateLabel.text!))"
 				
 				// create the new entry
 				let messageItem = [
-					"id" : "Project Kaerus",
-					"displayName" : "Project Kaerus",
+					"id" : "PK",
+					"displayName" : "PK",
 					"text" : message
 				]
 				messageRef.child(timestamp).setValue(messageItem)

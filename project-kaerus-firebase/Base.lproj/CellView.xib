@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="16A284a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="16A294a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -13,8 +13,8 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EbV-Fp-hR6" customClass="AnimationView" customModule="project_kaerus_firebase" customModuleProvider="target">
-                    <rect key="frame" x="25" y="7" width="130" height="130"/>
-                    <color key="backgroundColor" red="0.98431372549999996" green="0.051579218561781055" blue="0.21051783330443977" alpha="0.68683464972527475" colorSpace="calibratedRGB"/>
+                    <rect key="frame" x="11" y="-7" width="158" height="158"/>
+                    <color key="backgroundColor" red="0.99905115369999997" green="0.19914931059999999" blue="0.37694743279999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="8bC-to-itB"/>
                         <constraint firstAttribute="width" constant="20" id="kcQ-Q3-xC1"/>
@@ -44,8 +44,8 @@
                 <constraint firstItem="BlA-LX-Gd3" firstAttribute="centerY" secondItem="S0w-C3-aBs" secondAttribute="centerY" constant="8.25" id="2dD-uy-Efx"/>
                 <constraint firstItem="BlA-LX-Gd3" firstAttribute="centerX" secondItem="S0w-C3-aBs" secondAttribute="centerX" constant="0.5" id="66O-qf-ED0"/>
                 <constraint firstItem="EbV-Fp-hR6" firstAttribute="centerX" secondItem="S0w-C3-aBs" secondAttribute="centerX" id="F2n-Nl-12g"/>
-                <constraint firstItem="EbV-Fp-hR6" firstAttribute="height" secondItem="S0w-C3-aBs" secondAttribute="height" multiplier="0.9" id="H3q-bV-NcR"/>
-                <constraint firstItem="EbV-Fp-hR6" firstAttribute="width" secondItem="S0w-C3-aBs" secondAttribute="height" multiplier="0.9" id="WBq-0C-fme"/>
+                <constraint firstItem="EbV-Fp-hR6" firstAttribute="height" secondItem="S0w-C3-aBs" secondAttribute="height" multiplier="1.1" id="H3q-bV-NcR"/>
+                <constraint firstItem="EbV-Fp-hR6" firstAttribute="width" secondItem="S0w-C3-aBs" secondAttribute="height" multiplier="1.1" id="WBq-0C-fme"/>
                 <constraint firstItem="EbV-Fp-hR6" firstAttribute="centerY" secondItem="S0w-C3-aBs" secondAttribute="centerY" id="Xd4-Jh-UKm"/>
                 <constraint firstItem="A7s-8j-sxm" firstAttribute="centerY" secondItem="S0w-C3-aBs" secondAttribute="centerY" constant="-0.5" id="iKC-Wd-Ag7"/>
                 <constraint firstItem="A7s-8j-sxm" firstAttribute="centerX" secondItem="S0w-C3-aBs" secondAttribute="centerX" id="iet-GD-Hki"/>

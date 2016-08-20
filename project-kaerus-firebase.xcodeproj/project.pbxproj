@@ -38,6 +38,7 @@
 		69B3C10B1D5849F4007F5FE6 /* AnimationClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */; };
 		69B3C10D1D585C43007F5FE6 /* DeadlinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */; };
 		69C135A01D68124800C251A6 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C1359F1D68124800C251A6 /* NSDateExtension.swift */; };
+		69C135A21D6836DF00C251A6 /* CAGradientLayerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C135A11D6836DF00C251A6 /* CAGradientLayerExtension.swift */; };
 		AD96B8849CE61CF128853A0A /* Pods_project_kaerus_firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */; };
 		FF214860D4F7733C24CC41C0 /* Pods_project_kaerus_firebaseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */; };
 /* End PBXBuildFile section */
@@ -91,6 +92,7 @@
 		69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClass.swift; sourceTree = "<group>"; };
 		69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesViewController.swift; sourceTree = "<group>"; };
 		69C1359F1D68124800C251A6 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
+		69C135A11D6836DF00C251A6 /* CAGradientLayerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CAGradientLayerExtension.swift; sourceTree = "<group>"; };
 		872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D68677377F84113A90F3D9 /* Pods-project-kaerus-firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-project-kaerus-firebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-project-kaerus-firebase/Pods-project-kaerus-firebase.release.xcconfig"; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				69629B721D585EF200AD0C67 /* CALayerExtension.swift */,
+				69C135A11D6836DF00C251A6 /* CAGradientLayerExtension.swift */,
 				69AA26A21D546FFC0029773B /* UIImageExtension.swift */,
 				69C1359F1D68124800C251A6 /* NSDateExtension.swift */,
 			);
@@ -496,6 +499,7 @@
 				697322961D4C7374000F512D /* AddDeadlineViewController.swift in Sources */,
 				69AA26A31D546FFC0029773B /* UIImageExtension.swift in Sources */,
 				694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */,
+				69C135A21D6836DF00C251A6 /* CAGradientLayerExtension.swift in Sources */,
 				694DB1181D39775B00570A6B /* MeasurementHelper.swift in Sources */,
 				694DB1171D39775B00570A6B /* Constants.swift in Sources */,
 				69B3C1021D582EA8007F5FE6 /* CellView.swift in Sources */,

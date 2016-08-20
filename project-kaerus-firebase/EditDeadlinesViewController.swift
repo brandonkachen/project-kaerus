@@ -22,7 +22,7 @@ class EditDeadlinesViewController: UIViewController {
 		formatter.dateFormat = "yyyy-MM-dd Z"
 		let d = formatter.dateFromString(date)!
 		formatter.dateFormat = "MMMM d"
-		let sd = formatter.stringFromDate(d)
+		let sd = formatter.stringFromDate(d) + d.daySuffix()
 		dateLabel.text = sd
 	}
 
@@ -89,11 +89,9 @@ extension EditDeadlinesViewController {
 		let cellTimeFormatter = NSDateFormatter()
 		cellTimeFormatter.dateFormat = "yyyy-MM-dd HH:mmZ"
 		let timeDue = cellTimeFormatter.dateFromString(deadlineItem.timeDue!)
-		
 		// configure the date to show
 		cellTimeFormatter.dateFormat = "h:mm a"
 		let timeDueText = cellTimeFormatter.stringFromDate(timeDue!)
-		
 		cell.timeDueText.text = timeDueText
 		
 		// Determine whether the cell is checked
@@ -103,7 +101,6 @@ extension EditDeadlinesViewController {
 		if !deadlineItem.complete && timeDue!.timeIntervalSinceNow < 0 {
 			cell.timeDueText.textColor = UIColor.redColor()
 		}
-		
 		return cell
 	}
 	
@@ -119,27 +116,12 @@ extension EditDeadlinesViewController {
 		}
 	}
 	
-	// swiping horizontally shows "done" button. pressing it will mark item as completed
+	// swiping horizontally shows "delete" button. pressing it will remove item
 	func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-		
 		let delete_button = UITableViewRowAction(style: .Destructive, title: "delete") { (action, indexPath) in
-			let alert = UIAlertController(title: "Delete Deadline", message: "Are you sure you want to delete this deadline?", preferredStyle: .ActionSheet)
-			let DeleteAction = UIAlertAction(title: "Delete", style: .Destructive, handler: { (action: UIAlertAction!) in
-				self.deadlines.removeAtIndex(indexPath.row)
-				self.editDeadlineTable.reloadData()
-			})
-			let CancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-			
-			alert.addAction(DeleteAction)
-			alert.addAction(CancelAction)
-			
-			// Support display in iPad
-			alert.popoverPresentationController?.sourceView = self.view
-			alert.popoverPresentationController?.sourceRect = CGRectMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0, 1.0, 1.0)
-			
-			self.presentViewController(alert, animated: true, completion: nil)
+			self.deadlines.removeAtIndex(indexPath.row)
+			self.editDeadlineTable.reloadData()
 		}
-		
 		return [delete_button]
 	}
 }

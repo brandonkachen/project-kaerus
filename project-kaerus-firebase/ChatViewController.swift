@@ -13,25 +13,28 @@ import JSQMessagesViewController
 class ChatViewController: JSQMessagesViewController {
 	var outgoingBubbleImageView, incomingBubbleImageView: JSQMessagesBubbleImage!
 	var messages = [JSQMessage]()
-	var avatars = Dictionary<String, UIImage>()
+	var avatars = Dictionary<String, JSQMessagesAvatarImage>()
 	var messageRef, userIsTypingRef: FIRDatabaseReference!
 //	private var localTyping = false
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
+		// set input bar
+		self.inputToolbar.contentView.leftBarButtonItem = nil
+		
 		// set up view controller
 		self.senderId = AppState.sharedInstance.userID
 		self.senderDisplayName = AppState.sharedInstance.name
 		self.edgesForExtendedLayout = UIRectEdge.None
 		self.setupBubbles()
-//		let userImage = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(13)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
-//		avatars["SYSTEM"] = //UIImage(userImage)
 
 		// set up Firebase branch where messages will be stored
 		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
 			self.navigationItem.title = AppState.sharedInstance.f_firstName
-			avatars[senderId] = AppState.sharedInstance.photo
-			avatars[AppState.sharedInstance.f_firID!] = AppState.sharedInstance.f_photo
+			avatars[senderId] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.photo)
+			avatars[AppState.sharedInstance.f_firID!] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.f_photo)
+			avatars["PK"] = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(13)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
 			
 			messageRef = FIRDatabase.database().reference().child("Messages/\(chat_id)")
 			// get latest messages
@@ -151,11 +154,7 @@ class ChatViewController: JSQMessagesViewController {
 	
 	override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
 		let message = messages[indexPath.item]
-		if let avatar = avatars[message.senderId] {
-			return JSQMessagesAvatarImage.avatarWithImage(avatar) //JSQMessagesAvatarImage(placeholder: avatar)
-		}
-		// show system avatar
-		return nil
+		return avatars[message.senderId]
 	}
 	
 	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
