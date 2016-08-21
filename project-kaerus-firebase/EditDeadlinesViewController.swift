@@ -18,6 +18,8 @@ class EditDeadlinesViewController: UIViewController {
 	var date : String!
 	var explanation = ""
 	weak var enableSaveButton : UIAlertAction?
+	var hasBeenEdited = false // used to tell if the user has edited any deadlines
+	var explanationEnabled: Bool! // used to tell if the user has set any deadlines before
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,38 +61,41 @@ class EditDeadlinesViewController: UIViewController {
 			} else { // Add a new item to the list
 				deadlines.append(deadline)
 			}
+			hasBeenEdited = true
 			deadlines.sortInPlace(){ $0.timeDue < $1.timeDue }
 			editDeadlineTable.reloadData()
 		}
 	}
 	
-	
 	@IBAction func didPressDoneButton(sender: AnyObject) {
-		let messageStr = "Why are you changing your schedule?"
-		
-		let alert = UIAlertController(title: nil, message: messageStr, preferredStyle: UIAlertControllerStyle.Alert)
-		
-		alert.addTextFieldWithConfigurationHandler({(textField: UITextField) in
-			textField.placeholder = "because..."
-			textField.addTarget(self, action: #selector(self.textChanged(_:)), forControlEvents: .EditingChanged)
-		})
-		
-		let backButton = UIAlertAction(title: "Back", style: UIAlertActionStyle.Cancel, handler: { (_) -> Void in
-			self.resignFirstResponder()
-		})
-		
-		let saveButton = UIAlertAction(title: "Save", style: UIAlertActionStyle.Default, handler: { (_) -> Void in
-			let textfield = alert.textFields!.first!
-			self.explanation = textfield.text!
+		if explanationEnabled && hasBeenEdited {
+			let messageStr = "Please explain why you're changing your schedule"
+			let alert = UIAlertController(title: nil, message: messageStr, preferredStyle: UIAlertControllerStyle.Alert)
+			
+			alert.addTextFieldWithConfigurationHandler({(textField: UITextField) in
+				textField.placeholder = "because..."
+				textField.addTarget(self, action: #selector(self.textChanged(_:)), forControlEvents: .EditingChanged)
+			})
+			
+			let backButton = UIAlertAction(title: "Back", style: UIAlertActionStyle.Cancel, handler: { (_) -> Void in
+				self.resignFirstResponder()
+			})
+			
+			let saveButton = UIAlertAction(title: "Save", style: UIAlertActionStyle.Default, handler: { (_) -> Void in
+				let textfield = alert.textFields!.first!
+				self.explanation = textfield.text!
+				self.performSegueWithIdentifier("backToDeadlinesList", sender: self)
+			})
+			
+			alert.addAction(backButton)
+			alert.addAction(saveButton)
+			
+			self.enableSaveButton = saveButton
+			saveButton.enabled = false
+			self.presentViewController(alert, animated: true, completion: nil)
+		} else {
 			self.performSegueWithIdentifier("backToDeadlinesList", sender: self)
-		})
-		
-		alert.addAction(backButton)
-		alert.addAction(saveButton)
-		
-		self.enableSaveButton = saveButton
-		saveButton.enabled = false
-		self.presentViewController(alert, animated: true, completion: nil)
+		}
 	}
 	
 	func textChanged(sender:UITextField) {
@@ -159,6 +164,7 @@ extension EditDeadlinesViewController {
 	// swiping horizontally shows "delete" button. pressing it will remove item
 	func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
 		let delete_button = UITableViewRowAction(style: .Destructive, title: "delete") { (action, indexPath) in
+			self.hasBeenEdited = true
 			self.deadlines.removeAtIndex(indexPath.row)
 			self.editDeadlineTable.reloadData()
 		}

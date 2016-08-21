@@ -123,6 +123,18 @@ class LoginViewController: UIViewController {
 		AppState.sharedInstance.setState(user)
 		NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
 
+		getFBInfo(user)
+		partnerSetup()
+		oneSignalIdSetup()
+		startDateSetup()
+		lastPaidDaySetup()
+		
+		dispatch_group_notify(group, dispatch_get_main_queue()) {
+			self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
+		}
+	}
+	
+	func getFBInfo(user: FIRUser?) {
 		dispatch_group_enter(group)
 		// Add user to firebase database, if not already in there
 		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name, picture.width(200).height(200)"])
@@ -146,20 +158,12 @@ class LoginViewController: UIViewController {
 				
 				/* if firebase counts modifying a value to the same value as using bandwidth, use this
 				firstTimeLoginRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
-					if snapshot.value as? String == nil{
-						firstTimeLoginRef.setValue(user?.uid)
-					}
+				if snapshot.value as? String == nil{
+				firstTimeLoginRef.setValue(user?.uid)
+				}
 				})*/
 			}
 			dispatch_group_leave(self.group)
-		}
-
-		partnerSetup()
-		oneSignalIdSetup()
-		startDateSetup()
-		
-		dispatch_group_notify(group, dispatch_get_main_queue()) {
-			self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
 		}
 	}
 	
@@ -176,7 +180,7 @@ class LoginViewController: UIViewController {
 			dispatch_group_leave(self.group)
 		}
 		
-		/* if firebaes counts setting a value to the same value it was previously as using bandwidth, use this
+		/* if firebase counts setting a value to the same value it was previously as using bandwidth, use this
 		oneSignalIdRef.observeSingleEventOfType(.Value, withBlock: { id in
 			if id.value as? String == nil {
 				OneSignal.IdsAvailable(){ (userId, pushToken) in
@@ -205,6 +209,24 @@ class LoginViewController: UIViewController {
 			} else {
 				startDateRef.setValue(formatter.stringFromDate(NSDate()))
 				AppState.sharedInstance.startDate = NSDate()
+			}
+			dispatch_group_leave(self.group)
+		})
+	}
+	
+	func lastPaidDaySetup() {
+		let formatter = NSDateFormatter()
+		formatter.dateFormat = "yyyy-MM-dd Z"
+		
+		dispatch_group_enter(group)
+		let lastPaidDayRef = FIRDatabase.database().reference().child("User-Deadlines/\(AppState.sharedInstance.userID)/Last-Date-Paid")
+		lastPaidDayRef.observeSingleEventOfType(.Value, withBlock: { lastPaidDate in
+			if let date = lastPaidDate.value as? String {
+				AppState.sharedInstance.lastPaidDate = formatter.dateFromString(date)
+			} else {
+				let yesterday = NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: NSCalendarOptions.MatchStrictly)!
+				lastPaidDayRef.setValue(formatter.stringFromDate(yesterday))
+				AppState.sharedInstance.lastPaidDate = yesterday
 			}
 			dispatch_group_leave(self.group)
 		})

@@ -29,6 +29,7 @@ class AppState: NSObject {
 	var email: String!
 	var firstName: String!
 	var startDate: NSDate!
+	var lastPaidDate: NSDate!
 	
 	// friend's info
 	var f_firstName: String?

@@ -184,6 +184,16 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 			sender.setTitle("Cancel", forState: .Normal)
 			(sender as! UIButton).backgroundColor = UIColor.lightGrayColor()
 			friendData[sender.tag!].whoAsked = AppState.sharedInstance.userID
+			
+			FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value, withBlock: { snapshot in
+				let id = snapshot.value as! String
+				// send a notification to potential partner
+				OneSignal.postNotification([
+					"contents": ["en": AppState.sharedInstance.firstName + " would like to be your partner"],
+					"include_player_ids": [id],
+					"content_available": ["true"]
+					])
+			})
 		} else { // user pressed "cancel" button
 			setFriendInfoRef.removeValue()
 			setMyInfoRef.removeValue()
@@ -204,12 +214,14 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		AppState.sharedInstance.f_firID = friend.id
 		AppState.sharedInstance.f_photoURL = friend.picURL
 		
-		OneSignal.IdsAvailable(){ (userId, pushToken) in
-			if (pushToken != nil) {
-				NSLog("pushToken:%@", pushToken)
-			}
-			AppState.sharedInstance.f_oneSignalID = userId
-		}
+		FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value, withBlock: { snapshot in
+			AppState.sharedInstance.f_oneSignalID = snapshot.value as? String
+			OneSignal.postNotification([
+				"contents": ["en": AppState.sharedInstance.firstName + " has accepted your partner request"],
+				"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
+				"content_available": ["true"]
+				])
+		})
 		
 		// set group_id. to get group id: 1) sort both ids in alphabetical order. 2) put a “.” sign between the two
 		let sortedIds = [AppState.sharedInstance.userID, AppState.sharedInstance.f_firID!].sort()

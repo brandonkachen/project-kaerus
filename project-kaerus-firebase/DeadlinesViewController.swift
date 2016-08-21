@@ -21,11 +21,12 @@ class DeadlinesViewController: UIViewController {
 	@IBOutlet weak var segControl: UISegmentedControl!
 	@IBOutlet weak var deadlineTable: UITableView!
 	@IBOutlet weak var editButton: UIBarButtonItem!
-	@IBOutlet weak var paymentCard: UIView!
-	@IBOutlet weak var blurView: UIView!
-	@IBOutlet weak var paymentCardLabel: UILabel!
+//	@IBOutlet weak var paymentCard: UIView!
+//	@IBOutlet weak var blurView: UIView!
+//	@IBOutlet weak var paymentCardLabel: UILabel!
 	@IBOutlet weak var amtOwedLabel: UILabel!
 	@IBOutlet weak var amtOwedView: UIView!
+	@IBOutlet weak var payButton: UIBarButtonItem!
 	
 	var deadlines = [Deadline]()
 	var masterRef, deadlinesRef, dayUserLastSawRef, amtOwedEachDayRef, lastDatePaid: FIRDatabaseReference!
@@ -33,6 +34,7 @@ class DeadlinesViewController: UIViewController {
 	var userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
 	var dayUserIsLookingAt: String! // set by the 'day' variable in User-Deadlines
 	var lastDateUserPaid: NSDate!
+	var total: Double = 0
 	
 	var storageRef: FIRStorageReference!
 
@@ -56,30 +58,10 @@ class DeadlinesViewController: UIViewController {
 		calendarView.registerCellViewXib(fileName: "CellView")
 		calendarView.selectDates([NSDate()])
 		calendarView.scrollToDate(NSDate())
-
-		fullCalendarView.layer.shadowOffset = CGSizeMake(1, 1)
-		fullCalendarView.layer.shadowColor = UIColor.lightGrayColor().CGColor
-		fullCalendarView.layer.shadowOpacity = 0.5
-		
-		paymentCard.layer.shadowOffset = CGSizeMake(1, 1)
-		paymentCard.layer.shadowColor = UIColor.lightGrayColor().CGColor
-		paymentCard.layer.shadowOpacity = 0.3
 		
 		amtOwedView.layer.shadowOffset = CGSizeMake(1, 1)
 		amtOwedView.layer.shadowColor = UIColor.lightGrayColor().CGColor
 		amtOwedView.layer.shadowOpacity = 0.5
-		
-		blurView.backgroundColor = UIColor.blackColor()
-		blurView.alpha = 0.8
-		
-//		self.navigationController!.navigationBar.setBackgroundImage(imageLayerForGradientBackground(), forBarMetrics: .Default)
-		
-		// blur version
-//		let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
-//		let blurEffectView = UIVisualEffectView(effect: blurEffect)
-//		blurEffectView.alpha = 0.7
-//		blurEffectView.frame = blurView.bounds
-//		blurView.addSubview(blurEffectView)
 	}
 	
 	func logViewLoaded() {
@@ -118,45 +100,28 @@ class DeadlinesViewController: UIViewController {
 		self.checkIfUserNeedsToPay()
 	}
 	
-	// TODO: change to static variables for performance
 	func checkIfUserNeedsToPay() {
-		// check only if user is looking at next day
-		let todayDate = formatter.stringFromDate(NSDate()) // just get the date portion of today
-		if dayUserIsLookingAt < todayDate { // if user is looking at any date before today
-			self.blurView.hidden = true
-			self.paymentCard.hidden = true
-			self.editButton.enabled = true
-			return
-		}
-		
-		lastDatePaid.observeEventType(.Value, withBlock: { snapshot in
-			if let str_ld = snapshot.value as? String {
-				let calendar = NSCalendar.currentCalendar()
-				// convert str_ld to NSDate format
-				let dateFormatter = NSDateFormatter()
-				dateFormatter.dateFormat = "yyyy-MM-dd Z"
-				self.lastDateUserPaid = dateFormatter.dateFromString(str_ld)!
-				let nextDay = calendar.dateByAddingUnit(.Day, value: 1, toDate: self.lastDateUserPaid, options: [])
-				
-				// convert next date back to string
-				let str_nd = dateFormatter.stringFromDate(nextDay!)
-				
-				// compare the last date user paid to owed deadlines
-				self.masterRef.child("Owed").queryOrderedByKey().queryStartingAtValue(str_nd).observeSingleEventOfType(.Value, withBlock: { snapshot in
-					if let items = snapshot.value as? [String : String] {
-						var total: Double = 0
-						for item in items { total += Double(item.1)! }
-						self.paymentCardLabel.text = "You owe $\(String(format: "%.2f", total)).\nYou can't access this day until you pay your partner."
-						self.blurView.hidden = false
-						self.paymentCard.hidden = false
-						self.editButton.enabled = false
-					} else {
-						self.blurView.hidden = true
-						self.paymentCard.hidden = true
-						self.editButton.enabled = true
-					}
-				})
-			}
+		self.lastDatePaid.observeEventType(.Value, withBlock: { snapshot in
+			let str_ld = snapshot.value as! String
+			let calendar = NSCalendar.currentCalendar()
+			// convert str_ld to NSDate format
+			let dateFormatter = NSDateFormatter()
+			dateFormatter.dateFormat = "yyyy-MM-dd Z"
+			self.lastDateUserPaid = dateFormatter.dateFromString(str_ld)!
+			let nextDay = calendar.dateByAddingUnit(.Day, value: 1, toDate: self.lastDateUserPaid, options: [])
+			
+			// convert next date back to string
+			let str_nd = dateFormatter.stringFromDate(nextDay!)
+			
+			self.masterRef.child("Owed").queryOrderedByKey().queryStartingAtValue(str_nd).observeEventType(.Value, withBlock: { snapshot in
+				var tot: Double = 0
+				if let items = snapshot.value as? [String : String] {
+					for item in items { tot += Double(item.1)! }
+				}
+				self.total = tot
+				self.amtOwedLabel.text! = tot == 0 ? "nothing owed :)" : "total owed: $\(String(format: "%.2f", tot))"
+				self.payButton.enabled = !(tot == 0)
+			})
 		})
 	}
 	
@@ -195,10 +160,8 @@ class DeadlinesViewController: UIViewController {
 				amt = Double(round(100*amt)/100)
 				strAmt = String(format: "%.2f", amt)
 				self.amtOwedEachDayRef.setValue(strAmt)
-				self.amtOwedLabel.text! = "owed: $\(strAmt)"
 			} else {
 				self.amtOwedEachDayRef.removeValue()
-				self.amtOwedLabel.text = "nothing owed!"
 			}
 		}
 	}
@@ -350,14 +313,18 @@ extension DeadlinesViewController {
 	@IBAction func didChangeSegment(sender: AnyObject) {
 		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
 			userWhoseDeadlinesAreShown = AppState.sharedInstance.userID
-			// show edit button
+			// show edit and pay buttons
 			self.editButton.tintColor = self.navigationController?.navigationBar.tintColor
 			self.editButton.enabled = true
+			self.payButton.tintColor = self.navigationController?.navigationBar.tintColor
+			self.payButton.enabled = true
 		} else { // user looking at partner's deadlines
 			userWhoseDeadlinesAreShown = AppState.sharedInstance.f_firID!
-			// jank way of hiding edit button
+			// jank way of hiding edit and pay buttons
 			self.editButton.tintColor = UIColor.clearColor()
 			self.editButton.enabled = false
+			self.payButton.tintColor = UIColor.clearColor()
+			self.payButton.enabled = false
 		}
 		setup()
 	}
@@ -365,21 +332,21 @@ extension DeadlinesViewController {
 	// called when starting to change from one screen in storyboard to next
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
 		let navController = segue.destinationViewController as! UINavigationController
-		let deadlinesViewController = navController.topViewController as! EditDeadlinesViewController
-		deadlinesViewController.deadlines = deadlines
-		deadlinesViewController.date = dayUserIsLookingAt
+		let editDeadlinesVC = navController.topViewController as! EditDeadlinesViewController
+		editDeadlinesVC.deadlines = deadlines
+		editDeadlinesVC.date = dayUserIsLookingAt
+		editDeadlinesVC.explanationEnabled = !deadlines.isEmpty
 	}
 	
 	// saving when adding a new item or finished editing an old one
 	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
 		if let sourceViewController = sender.sourceViewController as? EditDeadlinesViewController {
-			// set Firebase to updated items
 			deadlinesRef.removeValue()
 			for deadline in sourceViewController.deadlines {
 				deadlinesRef.childByAutoId().setValue(deadline.toAnyObject())
 			}
 			
-			if let chatId = AppState.sharedInstance.groupchat_id {
+			if let chatId = AppState.sharedInstance.groupchat_id where sourceViewController.hasBeenEdited == true { // if user is part of a group chat and hasn't edited their deadlines
 				let messageRef = FIRDatabase.database().reference().child("Messages/\(chatId)")
 				
 				// get timestamp for new message
@@ -390,20 +357,27 @@ extension DeadlinesViewController {
 				// add sender's ID so if users send messages at the exact same time (however unlikely), they won't erase one another
 				let timestamp = dateFormatter.stringFromDate(NSDate()) + "<" + AppState.sharedInstance.userID + ">"
 				
-				let status = sourceViewController.deadlines.count == 0 ? "set" : "edited"
-				let message = status + " my schedule for \(sourceViewController.dateLabel.text!)"
-				
+				var status = " my schedule for \(sourceViewController.dateLabel.text!)"
+				var message: String
+				if sourceViewController.explanation == "" {
+					status = "Set" + status
+					message = status
+				} else {
+					status = "Edited" + status
+					message = status + ". Reason: " + sourceViewController.explanation
+				}
+
 				// create the new entry
 				let messageItem = [
 					"id" : AppState.sharedInstance.userID,
 					"displayName" : AppState.sharedInstance.firstName,
-					"text" : message + " – " + sourceViewController.explanation // TODO: remove - when status == "set"
+					"text" : message
 				]
 				messageRef.child(timestamp).setValue(messageItem)
 				
 				// send a notification to partner
 				OneSignal.postNotification([
-					"contents": ["en": AppState.sharedInstance.firstName + ": " + message],
+					"contents": ["en": AppState.sharedInstance.firstName + ": " + status],
 					"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
 					"content_available": ["true"]
 					])
@@ -411,9 +385,15 @@ extension DeadlinesViewController {
 		}
 	}
 	
-	// TODO
 	@IBAction func didPressPayButton(sender: AnyObject) {
+		self.lastDatePaid.setValue(self.formatter.stringFromDate(NSDate()))
 		
+		// send a notification to partner
+		OneSignal.postNotification([
+			"contents": ["en": AppState.sharedInstance.firstName + " paid you $" + String(format: "%.2f", self.total)],
+			"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
+			"content_available": ["true"]
+			])
 	}
 }
 
