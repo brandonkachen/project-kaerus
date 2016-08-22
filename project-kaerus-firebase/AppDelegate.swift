@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Override point for customization after application launch.
 		OneSignal.registerForPushNotifications()
 		FIRApp.configure()
-		FIRDatabase.database().persistenceEnabled = true
+//		FIRDatabase.database().persistenceEnabled = true
 		
 		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00",
 		                                handleNotificationReceived: nil, //{ (notification) in  self.notifRcv },

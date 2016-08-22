@@ -14,8 +14,12 @@ class ChatViewController: JSQMessagesViewController {
 	var outgoingBubbleImageView, incomingBubbleImageView: JSQMessagesBubbleImage!
 	var messages = [JSQMessage]()
 	var avatars = Dictionary<String, JSQMessagesAvatarImage>()
-	var messageRef, userIsTypingRef: FIRDatabaseReference!
+	var chatRef, userIsTypingRef, seenRef: FIRDatabaseReference!
+	let detailedDateFormatter = NSDateFormatter() // for timestamp
+//	var usersTypingQuery: FIRDatabaseQuery!
+
 //	private var localTyping = false
+	private var lastSeen: NSDate = NSDate.distantPast()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -28,19 +32,27 @@ class ChatViewController: JSQMessagesViewController {
 		self.senderDisplayName = AppState.sharedInstance.name
 		self.edgesForExtendedLayout = UIRectEdge.None
 		self.setupBubbles()
+		self.collectionView.collectionViewLayout.springinessEnabled = false
+		seenRef = FIRDatabase.database().reference().child("Chat").child(AppState.sharedInstance.groupchat_id!).child("Seen")
+		
+		// set timestamp
+		detailedDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
+		detailedDateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
 
+		avatars["PK"] = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(13)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
+		
 		// set up Firebase branch where messages will be stored
 		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
 			self.navigationItem.title = AppState.sharedInstance.f_firstName
+			// add user and partner picture icons
 			avatars[senderId] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.photo)
 			avatars[AppState.sharedInstance.f_firID!] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.f_photo)
-			avatars["PK"] = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(13)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
 			
-			messageRef = FIRDatabase.database().reference().child("Messages/\(chat_id)")
-			// get latest messages
+			// get messages
+			chatRef = FIRDatabase.database().reference().child("Chat/\(chat_id)/Messages")
 			observeMessages()
 			} else {	// user doesn't have a partner
-			let sys_message = JSQMessage(senderId: "Project Kaerus", displayName: "Project Kaerus", text: "Looks like you don't have a friend working with you yet  :(\n\nPlease ask them to install this app, then add them in the 'Settings' pane!")
+			let sys_message = JSQMessage(senderId: "PK", displayName: "PK", text: "Looks like you don't have a friend working with you yet  :(\n\nPlease ask them to install this app, then add them in the 'Settings' pane!")
 			messages.append(sys_message)
 			self.inputToolbar.removeFromSuperview()
 		}
@@ -51,46 +63,46 @@ class ChatViewController: JSQMessagesViewController {
 		
 		// see if partner is typing
 //		observeTyping()
+		
+		// see last message seen by partner
+		observePartnerSeen()
 	}
 	
 	
 	// MARK: - messaging
 	
-	func addMessage(id: String, name: String, content: String) {
-		let message = JSQMessage(senderId: id, displayName: name, text: content)
+	func addMessage(id: String, name: String, date: NSDate,content: String) {
+		let message = JSQMessage(senderId: id, senderDisplayName: name, date: date, text: content)
 		messages.append(message)
 	}
 	
 	private func observeMessages() {
-		let messagesQuery = messageRef.queryLimitedToLast(10)
+		let messagesQuery = chatRef.queryLimitedToLast(10)
 		messagesQuery.observeEventType(.ChildAdded) { (snapshot: FIRDataSnapshot!) in
 			// get the info from snapshot
 			let id = snapshot.childSnapshotForPath("id").value as! String
 			let displayName = snapshot.childSnapshotForPath("displayName").value as! String
 			let text = snapshot.childSnapshotForPath("text").value as! String
+			let strDate = snapshot.childSnapshotForPath("date").value as! String
+			let date = self.detailedDateFormatter.dateFromString(strDate)!
 			
 			// add to local messages array
-			self.addMessage(id, name: displayName, content: text)
+			self.addMessage(id, name: displayName, date: date,content: text)
 			self.finishReceivingMessage()
+			
+			self.seenRef.child(AppState.sharedInstance.userID).setValue(strDate)
 		}
 	}
 	
 	override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!,
 	                                 senderDisplayName: String!, date: NSDate!) {
-		// get timestamp to order things in Firebase
-		let dateFormatter = NSDateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
-		dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
-		
-		// add sender's ID so if users send messages at the exact same time (however unlikely), they won't erase one another
-		let timestamp = dateFormatter.stringFromDate(NSDate()) + "<" + self.senderId + ">"
-		
 		// create the new entry
-		let itemRef = messageRef.child(timestamp)
+		let itemRef = chatRef.childByAutoId()
 		let messageItem = [
 			"id" : senderId,
 			"displayName" : senderDisplayName,
-			"text" : text
+			"text" : text,
+			"date" : detailedDateFormatter.stringFromDate(date)
 		]
 		itemRef.setValue(messageItem)
 		
@@ -108,8 +120,20 @@ class ChatViewController: JSQMessagesViewController {
 	}
 	
 	
-//	// MARK: - check if user is typing
-//	
+	// MARK: - check if partner has seen messages yet
+	
+	func observePartnerSeen() {
+		seenRef.child(AppState.sharedInstance.f_firID!).observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
+			if let strDate = snapshot.value as? String {
+				self.lastSeen = self.detailedDateFormatter.dateFromString(strDate)!
+				self.reloadMessagesView()
+			}
+		}
+	}
+
+	
+	// MARK: - check if user is typing
+	
 //	var isTyping: Bool {
 //		get {
 //			return localTyping
@@ -120,9 +144,19 @@ class ChatViewController: JSQMessagesViewController {
 //	}
 //
 //	private func observeTyping() {
-//		let typingIndicatorRef = FIRDatabase.database().reference().child("typingIndicator")
+//		let typingIndicatorRef = FIRDatabase.database().reference().child("Chat").child(AppState.sharedInstance.groupchat_id!).child("typingIndicator")
 //		userIsTypingRef = typingIndicatorRef.child(senderId)
 //		userIsTypingRef.onDisconnectRemoveValue()
+//		
+//		usersTypingQuery = typingIndicatorRef.queryOrderedByValue().queryEqualToValue(true)
+//		
+//		usersTypingQuery.observeEventType(.Value) { (data: FIRDataSnapshot!) in
+//			if data.childrenCount == 1 && self.isTyping { // You're the only typing, don't show the indicator
+//				return
+//			}
+//			self.showTypingIndicator = data.childrenCount > 0
+//			self.scrollToBottomAnimated(true)
+//		}
 //	}
 //	
 //	override func textViewDidChange(textView: UITextView) {
@@ -171,6 +205,60 @@ class ChatViewController: JSQMessagesViewController {
 	  return cell
 	}
 	
+	override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+		let message = messages[indexPath.item]
+		
+		if indexPath.item == 0 {
+			return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date)
+		}
+		
+		if indexPath.item > 1 {
+			let previousMessage = self.messages[indexPath.item - 1] // get the message before this one
+			
+			if (message.date.timeIntervalSinceDate(previousMessage.date)/60) > 30 {
+				return JSQMessagesTimestampFormatter.sharedFormatter().attributedTimestampForDate(message.date)
+			}
+		}
+		return nil
+	}
+	
+	override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+		if indexPath.item == 0 {
+			return kJSQMessagesCollectionViewCellLabelHeightDefault
+		}
+		
+		if indexPath.item > 1 {
+			let message = messages[indexPath.item]
+			let previousMessage = messages[indexPath.item - 1]
+			
+			if message.date.timeIntervalSinceDate(previousMessage.date)/60 > 30 {
+				return kJSQMessagesCollectionViewCellLabelHeightDefault
+			}
+		}
+		
+		return 0
+	}
+	
+	override func collectionView(collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, atIndexPath indexPath: NSIndexPath!) {
+		print("tapped avatar image")
+	}
+	
+	override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
+		let message = messages[indexPath.item]
+		if message.date == lastSeen && message.senderId == AppState.sharedInstance.userID {
+			let attributedString = NSAttributedString(string: "seen ✓   ")
+			return attributedString
+		}
+		return nil
+	}
+	
+	override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+		let message = messages[indexPath.item]
+		if message.date == lastSeen && message.senderId == AppState.sharedInstance.userID {
+			return kJSQMessagesCollectionViewCellLabelHeightDefault
+		}
+		return 0.0
+	}
 	
 	// MARK: - Other stuff
 	

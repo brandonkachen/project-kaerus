@@ -347,7 +347,7 @@ extension DeadlinesViewController {
 			}
 			
 			if let chatId = AppState.sharedInstance.groupchat_id where sourceViewController.hasBeenEdited == true { // if user is part of a group chat and hasn't edited their deadlines
-				let messageRef = FIRDatabase.database().reference().child("Messages/\(chatId)")
+				let chatRef = FIRDatabase.database().reference().child("Chat").child(chatId).child("Messages")
 				
 				// get timestamp for new message
 				let dateFormatter = NSDateFormatter()
@@ -373,7 +373,7 @@ extension DeadlinesViewController {
 					"displayName" : AppState.sharedInstance.firstName,
 					"text" : message
 				]
-				messageRef.child(timestamp).setValue(messageItem)
+				chatRef.child(timestamp).setValue(messageItem)
 				
 				// send a notification to partner
 				OneSignal.postNotification([
