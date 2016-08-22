@@ -246,8 +246,11 @@ class ChatViewController: JSQMessagesViewController {
 	override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
 		let message = messages[indexPath.item]
 		if message.date == lastSeen && message.senderId == AppState.sharedInstance.userID {
-			let attributedString = NSAttributedString(string: "seen ✓   ")
-			return attributedString
+			return NSAttributedString(string: "seen ✓")
+		}
+		print(indexPath.item, messages.count)
+		if indexPath.item == messages.count-1 && message.senderId == AppState.sharedInstance.userID {
+			return NSAttributedString(string: "delivered")
 		}
 		return nil
 	}
@@ -255,6 +258,9 @@ class ChatViewController: JSQMessagesViewController {
 	override func collectionView(collectionView: JSQMessagesCollectionView!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayout!, heightForCellBottomLabelAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
 		let message = messages[indexPath.item]
 		if message.date == lastSeen && message.senderId == AppState.sharedInstance.userID {
+			return kJSQMessagesCollectionViewCellLabelHeightDefault
+		}
+		if indexPath.item == messages.count-1 && message.senderId == AppState.sharedInstance.userID {
 			return kJSQMessagesCollectionViewCellLabelHeightDefault
 		}
 		return 0.0
