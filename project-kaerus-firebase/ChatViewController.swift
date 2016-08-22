@@ -33,9 +33,8 @@ class ChatViewController: JSQMessagesViewController {
 		self.edgesForExtendedLayout = UIRectEdge.None
 		self.setupBubbles()
 		self.collectionView.collectionViewLayout.springinessEnabled = false
-		seenRef = FIRDatabase.database().reference().child("Chat").child(AppState.sharedInstance.groupchat_id!).child("Seen")
 		
-		// set timestamp
+		// set timestamp formatter
 		detailedDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
 		detailedDateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
 
@@ -43,15 +42,16 @@ class ChatViewController: JSQMessagesViewController {
 		
 		// set up Firebase branch where messages will be stored
 		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
-			self.navigationItem.title = AppState.sharedInstance.f_firstName
 			// add user and partner picture icons
 			avatars[senderId] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.photo)
 			avatars[AppState.sharedInstance.f_firID!] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.f_photo)
 			
+			seenRef = FIRDatabase.database().reference().child("Chat").child(AppState.sharedInstance.groupchat_id!).child("Seen")
+
 			// get messages
 			chatRef = FIRDatabase.database().reference().child("Chat/\(chat_id)/Messages")
 			observeMessages()
-			} else {	// user doesn't have a partner
+		} else {	// user doesn't have a partner
 			let sys_message = JSQMessage(senderId: "PK", displayName: "PK", text: "Looks like you don't have a friend working with you yet  :(\n\nPlease ask them to install this app, then add them in the 'Settings' pane!")
 			messages.append(sys_message)
 			self.inputToolbar.removeFromSuperview()
@@ -61,11 +61,13 @@ class ChatViewController: JSQMessagesViewController {
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		
-		// see if partner is typing
-//		observeTyping()
-		
-		// see last message seen by partner
-		observePartnerSeen()
+		if AppState.sharedInstance.partnerStatus == true {
+			// see if partner is typing
+//			observeTyping()
+			
+			// see last message seen by partner
+			observePartnerSeen()
+		}
 	}
 	
 	
@@ -248,7 +250,6 @@ class ChatViewController: JSQMessagesViewController {
 		if message.date == lastSeen && message.senderId == AppState.sharedInstance.userID {
 			return NSAttributedString(string: "seen ✓")
 		}
-		print(indexPath.item, messages.count)
 		if indexPath.item == messages.count-1 && message.senderId == AppState.sharedInstance.userID {
 			return NSAttributedString(string: "delivered")
 		}

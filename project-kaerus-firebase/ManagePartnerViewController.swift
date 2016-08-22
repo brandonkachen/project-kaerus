@@ -12,17 +12,13 @@ import Firebase
 
 class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 	@IBOutlet weak var noPartnerScreen: UIView!
-	@IBOutlet weak var searchBar: UISearchBar!
 	@IBOutlet weak var tableView: UITableView!
-	
 	@IBOutlet weak var partnerScreen: UIView!
 	@IBOutlet weak var profilePic: UIImageView!
 	@IBOutlet weak var partnerLabel: UILabel!
 	@IBOutlet weak var endPartnershipButton: UIButton!
 	
-	var searchActive : Bool = false
 	var friendData = [FriendData]()
-	var filteredFriendData = [FriendData]()
 	var requests = [String : AnyObject]()
 	let ref = FIRDatabase.database().reference()
 	
@@ -30,16 +26,21 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
 		tableView.delegate = self
 		tableView.dataSource = self
-		searchBar.delegate = self
 		
 		// Determine if user has a friend or not
 		if AppState.sharedInstance.partnerStatus == true {
 			setPartnerScreen()
 		} else { // user doesn't have a friend
-			self.title = "Find Partner"
-			partnerScreen.hidden = true
-			setFriendData()
+			setNoPartnerScreen()
 		}
+	}
+	
+	// set up No Partner screen
+	func setNoPartnerScreen() {
+		self.title = "Find Partner"
+		partnerScreen.hidden = true
+		noPartnerScreen.hidden = false
+		setFriendData()
 	}
 	
 	// set up Partner Screen
@@ -52,23 +53,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		profilePic.layer.cornerRadius = profilePic.frame.height / 2
 		profilePic.clipsToBounds = true
 		partnerLabel.text = "Your partner is:\n\(AppState.sharedInstance.f_name!)"
-		endPartnershipButton.layer.cornerRadius = 5
-	}
-	
-	func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-		searchActive = true
-	}
-	
-	func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-		searchActive = false
-	}
-	
-	func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-		searchActive = false
-	}
-	
-	func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-		searchActive = false
+		endPartnershipButton.layer.cornerRadius = 7
 	}
 
     override func didReceiveMemoryWarning() {
@@ -129,44 +114,40 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 	}
 	
 	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return searchActive ? filteredFriendData.count : friendData.count
+		return friendData.count
 	}
 	
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCellWithIdentifier("FindFriendsTableViewCell", forIndexPath: indexPath) as! FindFriendsTableViewCell
 		let friend = friendData[indexPath.row]
 
-		if searchActive { // filtered data
-			
-		} else { // all data
-			cell.name.text = friend.name
-			cell.profilePic.image = friend.pic
-			
-			cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2
-			cell.profilePic.clipsToBounds = true
-			
-			if let status = friend.partnerStatus where status {	// friend already has a partner
-				cell.partnerStatus.text = "already has a partner"
-			} else if friend.whoAsked == friend.id { // if friend has requested user
-				cell.partnerStatus.text = "wants to be your partner!"
-				cell.acceptButton.hidden = false
-				cell.rejectButton.hidden = false
-				cell.acceptButton.tag = indexPath.row
-				cell.rejectButton.tag = indexPath.row
-			} else { // show send request button
-				cell.requestButton.hidden = false
-				cell.requestButton.tag = indexPath.row
-				if friend.whoAsked == AppState.sharedInstance.userID { // if user has requested friend
-					cell.partnerStatus.text = "partner request sent!"
-					cell.requestButton.setTitle("Cancel", forState: .Normal)
-					cell.requestButton.backgroundColor = UIColor.lightGrayColor()
-				} else if friend.whoAsked == "IGNORED" {
-					cell.partnerStatus.text = "request ignored. you can still request this partner"
-					cell.acceptButton.hidden = true
-					cell.rejectButton.hidden = true
-				} else {
-					cell.partnerStatus.text = ""
-				}
+		cell.name.text = friend.name
+		cell.profilePic.image = friend.pic
+		
+		cell.profilePic.layer.cornerRadius = cell.profilePic.frame.size.width / 2
+		cell.profilePic.clipsToBounds = true
+		
+		if let status = friend.partnerStatus where status {	// friend already has a partner
+			cell.partnerStatus.text = "already has a partner"
+		} else if friend.whoAsked == friend.id { // if friend has requested user
+			cell.partnerStatus.text = "wants to be your partner!"
+			cell.acceptButton.hidden = false
+			cell.rejectButton.hidden = false
+			cell.acceptButton.tag = indexPath.row
+			cell.rejectButton.tag = indexPath.row
+		} else { // show send request button
+			cell.requestButton.hidden = false
+			cell.requestButton.tag = indexPath.row
+			if friend.whoAsked == AppState.sharedInstance.userID { // if user has requested friend
+				cell.partnerStatus.text = "partner request sent!"
+				cell.requestButton.setTitle("Cancel", forState: .Normal)
+				cell.requestButton.backgroundColor = UIColor.lightGrayColor()
+			} else if friend.whoAsked == "IGNORED" {
+				cell.partnerStatus.text = "request ignored. you can still request this partner"
+				cell.acceptButton.hidden = true
+				cell.rejectButton.hidden = true
+			} else {
+				cell.partnerStatus.text = ""
 			}
 		}
 		return cell
@@ -187,7 +168,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 			
 			FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value, withBlock: { snapshot in
 				let id = snapshot.value as! String
-				// send a notification to potential partner
+				// send a notification to requested partner
 				OneSignal.postNotification([
 					"contents": ["en": AppState.sharedInstance.firstName + " would like to be your partner"],
 					"include_player_ids": [id],
@@ -206,56 +187,47 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 	
 	@IBAction func didPressAcceptButton(sender: AnyObject) {
 		let friend = friendData[sender.tag]
-		
-		// update AppState with friend info
-		AppState.sharedInstance.partnerStatus = true
-		AppState.sharedInstance.f_name = friend.name
-		AppState.sharedInstance.f_firstName = friend.first_name
-		AppState.sharedInstance.f_firID = friend.id
-		AppState.sharedInstance.f_photoURL = friend.picURL
-		
-		FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value, withBlock: { snapshot in
+
+		FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
 			AppState.sharedInstance.f_oneSignalID = snapshot.value as? String
-			OneSignal.postNotification([
-				"contents": ["en": AppState.sharedInstance.firstName + " has accepted your partner request"],
-				"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
-				"content_available": ["true"]
-				])
-		})
+			let acceptMsg = AppState.sharedInstance.firstName + " has accepted your partner request"
+			sendNotification(acceptMsg)
+		}
 		
 		// set group_id. to get group id: 1) sort both ids in alphabetical order. 2) put a “.” sign between the two
-		let sortedIds = [AppState.sharedInstance.userID, AppState.sharedInstance.f_firID!].sort()
-		AppState.sharedInstance.groupchat_id = sortedIds[0] + "+" + sortedIds[1]
+		let sortedIds = [AppState.sharedInstance.userID, friend.id].sort()
+		let groupchatId = sortedIds[0] + "+" + sortedIds[1]
+		
+		// update AppState with friend info
+		AppState.sharedInstance.setFriendState(true, f_firstName: friend.first_name, f_id: friend.id, f_picURL: friend.picURL, f_fullName: friend.name, f_groupchatId: groupchatId)
 		
 		// set both partner statuses to true
-		ref.child("Has-Partner/\(friend.id)").setValue(true)
-		ref.child("Has-Partner/\(AppState.sharedInstance.userID)").setValue(true)
+		ref.child("Has-Partner").child(friend.id).setValue(true)
+		ref.child("Has-Partner").child(AppState.sharedInstance.userID).setValue(true)
 		
-		// set both friend-info
-		// set friend info
-		let friend_info = [
-			"friend_id" : AppState.sharedInstance.userID,
-			"friend_name" : AppState.sharedInstance.name,
-			"friend_firstName" : AppState.sharedInstance.firstName,
-			"friend_pic" : AppState.sharedInstance.photoUrl!.absoluteString,
-			"groupchat_id" : AppState.sharedInstance.groupchat_id!
-		]
-		let setFriendInfoRef = ref.child("Friend-Info/\(AppState.sharedInstance.f_firID!)")
-		setFriendInfoRef.setValue(friend_info)
+		// set friend's info dict and send to Firebase
+		let friendInfoDict = setFriendInfoDict(AppState.sharedInstance.userID, name: AppState.sharedInstance.name, firstName: AppState.sharedInstance.firstName, picString: AppState.sharedInstance.photoUrl!.absoluteString)
+		let setFriendInfoRef = ref.child("Friend-Info").child(AppState.sharedInstance.f_firID!)
+		setFriendInfoRef.setValue(friendInfoDict)
 		
-		// set user's info
-		let my_info = [
-			"friend_id" : friend.id,
-			"friend_name" : friend.name,
-			"friend_firstName" : friend.first_name,
-			"friend_pic" : friend.picURL.absoluteString,
-			"groupchat_id" : AppState.sharedInstance.groupchat_id!
-		]
-		let setMyInfoRef = ref.child("Friend-Info/\(AppState.sharedInstance.userID)")
-		setMyInfoRef.setValue(my_info)
-		
+		// repeat for user
+		let myInfoDict = setFriendInfoDict(friend.id, name: friend.name, firstName: friend.first_name, picString: friend.picURL.absoluteString)
+		let setMyInfoRef = ref.child("Friend-Info").child(AppState.sharedInstance.userID)
+		setMyInfoRef.setValue(myInfoDict)
+
 		// change view
 		setPartnerScreen()
+	}
+	
+	func setFriendInfoDict(id: String, name: String, firstName: String, picString: String) -> [String : String] {
+		let infoDict = [
+			"partner_id" : id,
+			"partner_name" : name,
+			"partner_firstName" : firstName,
+			"partner_pic" : picString,
+			"groupchat_id" : AppState.sharedInstance.groupchat_id!
+		]
+		return infoDict
 	}
 	
 	@IBAction func didPressRejectButton(sender: AnyObject) {
@@ -264,5 +236,33 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		let partnerRequestRef = ref.child("Partner-Requests/\(AppState.sharedInstance.userID)/\(friend.id)")
 		partnerRequestRef.removeValue()
 		self.tableView.reloadData()
+	}
+	
+	@IBAction func didPressEndPartnershipButton(sender: AnyObject) {
+		// Set both users' Has-Partner to false
+		ref.child("Has-Partner").child(AppState.sharedInstance.f_firID!).setValue(false)
+		ref.child("Has-Partner").child(AppState.sharedInstance.userID).setValue(false)
+		
+		// Inform user's former partner
+		let endPartnershipMessage = AppState.sharedInstance.firstName + " has ended your partnership"
+		sendNotification(endPartnershipMessage)
+		
+		// Remove Friend-Info for both users
+		let setFriendInfoRef = ref.child("Friend-Info").child(AppState.sharedInstance.f_firID!)
+		let setMyInfoRef = ref.child("Friend-Info").child(AppState.sharedInstance.userID)
+		setFriendInfoRef.removeValue()
+		setMyInfoRef.removeValue()
+		
+		// Remove Partner-Requests for both users
+		let friendPartnerRequestRef = ref.child("Partner-Requests").child(AppState.sharedInstance.f_firID!).child(AppState.sharedInstance.userID)
+		friendPartnerRequestRef.removeValue()
+		let myPartnerRequestRef = ref.child("Partner-Requests").child(AppState.sharedInstance.userID).child(AppState.sharedInstance.f_firID!)
+		myPartnerRequestRef.removeValue()
+
+		// reset AppState friend values
+		AppState.sharedInstance.setFriendState(false, f_firstName: nil, f_id: nil, f_picURL: nil, f_fullName: nil, f_groupchatId: nil)
+		AppState.sharedInstance.f_oneSignalID = nil
+		
+		setNoPartnerScreen()
 	}
 }

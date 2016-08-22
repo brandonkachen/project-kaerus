@@ -49,10 +49,6 @@ class DeadlinesViewController: UIViewController {
 		formatter.dateFormat = "yyyy-MM-dd Z"
 		dayUserIsLookingAt = formatter.stringFromDate(NSDate())
 		
-		AppState.sharedInstance.f_firstName != nil ?
-			segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1) :
-			segControl.setEnabled(false, forSegmentAtIndex: 1)
-		
 		calendarView.dataSource = self
 		calendarView.delegate = self
 		calendarView.registerCellViewXib(fileName: "CellView")
@@ -62,6 +58,14 @@ class DeadlinesViewController: UIViewController {
 		amtOwedView.layer.shadowOffset = CGSizeMake(1, 1)
 		amtOwedView.layer.shadowColor = UIColor.lightGrayColor().CGColor
 		amtOwedView.layer.shadowOpacity = 0.5
+	}
+	
+	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		AppState.sharedInstance.f_firstName != nil ?
+			segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1) :
+			segControl.setEnabled(false, forSegmentAtIndex: 1)
 	}
 	
 	func logViewLoaded() {
@@ -292,15 +296,17 @@ extension DeadlinesViewController {
 	}
 	
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		// get cell, its ref, and its status
-		let cell = tableView.cellForRowAtIndexPath(indexPath)!
-		let deadlineItem = self.deadlines[indexPath.row]
-		let toggledCompletion = !deadlineItem.complete
-		
-		// update item
-		self.toggleCellCheckbox(cell, isCompleted: toggledCompletion)
-		deadlineItem.ref?.updateChildValues([
-			"complete": toggledCompletion ])
+		if segControl.selectedSegmentIndex == 0 {
+			// get cell, its ref, and its status
+			let cell = tableView.cellForRowAtIndexPath(indexPath)!
+			let deadlineItem = self.deadlines[indexPath.row]
+			let toggledCompletion = !deadlineItem.complete
+			
+			// update item
+			self.toggleCellCheckbox(cell, isCompleted: toggledCompletion)
+			let completeDict = [ "complete": toggledCompletion ]
+			deadlineItem.ref?.updateChildValues(completeDict)
+		}
 	}
 }
 
@@ -346,7 +352,9 @@ extension DeadlinesViewController {
 				deadlinesRef.childByAutoId().setValue(deadline.toAnyObject())
 			}
 			
-			if let chatId = AppState.sharedInstance.groupchat_id where sourceViewController.hasBeenEdited == true { // if user is part of a group chat and hasn't edited their deadlines
+			// if user is part of a group chat and hasn't edited their deadlines
+			if let chatId = AppState.sharedInstance.groupchat_id
+				where sourceViewController.hasBeenEdited == true {
 				let chatRef = FIRDatabase.database().reference().child("Chat").child(chatId).child("Messages")
 				
 				// get timestamp for new message
@@ -376,11 +384,8 @@ extension DeadlinesViewController {
 				chatRef.child(timestamp).setValue(messageItem)
 				
 				// send a notification to partner
-				OneSignal.postNotification([
-					"contents": ["en": AppState.sharedInstance.firstName + ": " + status],
-					"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
-					"content_available": ["true"]
-					])
+				let schedMsg = AppState.sharedInstance.firstName + ": " + status
+				AppState.sharedInstance.sendNotification(schedMsg)
 			}
 		}
 	}
@@ -388,12 +393,8 @@ extension DeadlinesViewController {
 	@IBAction func didPressPayButton(sender: AnyObject) {
 		self.lastDatePaid.setValue(self.formatter.stringFromDate(NSDate()))
 		
-		// send a notification to partner
-		OneSignal.postNotification([
-			"contents": ["en": AppState.sharedInstance.firstName + " paid you $" + String(format: "%.2f", self.total)],
-			"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
-			"content_available": ["true"]
-			])
+		// tell partner you've paid
+		AppState.sharedInstance.sendNotification(AppState.sharedInstance.firstName + " paid you $" + String(format: "%.2f", self.total))
 	}
 }
 

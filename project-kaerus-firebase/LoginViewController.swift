@@ -72,7 +72,7 @@ class LoginViewController: UIViewController {
 		let user = FIRAuth.auth()?.currentUser
 		
 		if user != nil && FBSDKAccessToken.currentAccessToken() != nil {
-			// user is logged in: load their info, then go to Goals screen
+			// user is logged in so load their info and go to DeadlinesViewController
 			self.signedIn(user)
 		} else {
 			self.splashScreen.hidden = true
@@ -235,26 +235,20 @@ class LoginViewController: UIViewController {
 	// get partner status
 	func partnerSetup() {
 		dispatch_group_enter(group)
-		let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner/\(AppState.sharedInstance.userID)")
+		let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner").child(AppState.sharedInstance.userID)
 		partnerStatusRef.observeSingleEventOfType(.Value, withBlock: { partnerStatus in
 			if let status = partnerStatus.value as? Bool where status == true {
-				let getIdRef = FIRDatabase.database().reference().child("Friend-Info/\(AppState.sharedInstance.userID)")
-				getIdRef.observeEventType(FIRDataEventType.Value, withBlock: { (snapshot) in
+				let getIdRef = FIRDatabase.database().reference().child("Friend-Info").child(AppState.sharedInstance.userID)
+				getIdRef.observeSingleEventOfType(FIRDataEventType.Value, withBlock: { (snapshot) in
 					if let postDict = snapshot.value as? [String : String] {
 						// set AppState stuff
-						AppState.sharedInstance.partnerStatus = status
-						AppState.sharedInstance.f_firstName = postDict["friend_firstName"]
-						AppState.sharedInstance.f_firID = postDict["friend_id"]
-						AppState.sharedInstance.f_photoURL = NSURL(string: postDict["friend_pic"]!)
-						AppState.sharedInstance.f_photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!)!.circle
-						AppState.sharedInstance.f_name = postDict["friend_name"]
-						AppState.sharedInstance.groupchat_id = postDict["groupchat_id"]
-						let ref = FIRDatabase.database().reference().child("FIR-to-OS/\(AppState.sharedInstance.f_firID!)")
+						AppState.sharedInstance.setFriendState(true, f_firstName: postDict["partner_firstName"], f_id: postDict["partner_id"], f_picURL: NSURL(string: postDict["partner_pic"]!), f_fullName: postDict["partner_name"], f_groupchatId: postDict["groupchat_id"])
 						
-						ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+						let ref = FIRDatabase.database().reference().child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
+						ref.observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
 							AppState.sharedInstance.f_oneSignalID = snapshot.value as? String
 							dispatch_group_leave(self.group)
-						})
+						}
 					} else {
 						dispatch_group_leave(self.group)
 					}

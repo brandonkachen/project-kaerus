@@ -34,8 +34,7 @@ class AddDeadlineViewController: UIViewController,  UIBarPositioningDelegate, UI
 	var deadline: Deadline?
 	var deadlineComplete: Bool?
 	
-	override func viewDidLoad()
-	{
+	override func viewDidLoad()	{
 		super.viewDidLoad()
 		
 		self.text.delegate = self

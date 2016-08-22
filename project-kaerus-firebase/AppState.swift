@@ -45,11 +45,38 @@ class AppState: NSObject {
 	
 	// notification stuff
 	var notificationReceived: Bool!
-	
+}
+
+// all the functions
+extension AppState {
 	func setState(user: FIRUser?) {
 		self.signedIn = true
 		self.name = user?.displayName //?? user?.email
 		self.userID = user?.uid
 		self.email = user?.email
+	}
+	
+	func setFriendState(status: Bool,
+	                    f_firstName: String?,
+	                    f_id: String?,
+	                    f_picURL: NSURL?,
+	                    f_fullName: String?,
+	                    f_groupchatId: String?) {
+		self.partnerStatus = status
+		self.f_firstName = f_firstName
+		self.f_firID = f_id
+		self.f_photoURL = f_picURL
+		self.f_photo = (f_picURL == nil) ? nil : UIImage(data: NSData(contentsOfURL: self.f_photoURL!)!)!.circle
+		self.f_name = f_fullName
+		self.groupchat_id = f_groupchatId
+	}
+	
+	func sendNotification(text: String) {
+		let osItem = [
+			"contents": ["en": text],
+			"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
+			"content_available": ["true"]
+		]
+		OneSignal.postNotification(osItem)
 	}
 }

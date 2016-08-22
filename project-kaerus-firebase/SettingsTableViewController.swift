@@ -55,6 +55,16 @@ class SettingsTableViewController: UITableViewController {
 		do {
 			try firebaseAuth?.signOut()
 			AppState.sharedInstance.signedIn = false
+			AppState
+				.sharedInstance
+				.setFriendState(false,
+				                f_firstName: nil,
+				                f_id: nil,
+								f_picURL: nil,
+								f_fullName: nil,
+								f_groupchatId: nil)
+			AppState.sharedInstance.f_oneSignalID = nil
+			
 			let loginScreenViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
 			self.presentViewController(loginScreenViewController, animated: true, completion: nil)
 		} catch let signOutError as NSError {
