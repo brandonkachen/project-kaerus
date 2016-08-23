@@ -16,6 +16,7 @@ class DeadlinesViewController: UIViewController {
 	@IBOutlet weak var monthLabel: UILabel!
 	let calendar: NSCalendar! = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
 	let formatter = NSDateFormatter()
+	let detailedDateFormatter = NSDateFormatter()
 	
 	// deadline table stuff
 	@IBOutlet weak var segControl: UISegmentedControl!
@@ -48,6 +49,10 @@ class DeadlinesViewController: UIViewController {
 		// get today's deadlines on initial load
 		formatter.dateFormat = "yyyy-MM-dd Z"
 		dayUserIsLookingAt = formatter.stringFromDate(NSDate())
+		
+		// used for timestamps or where time precision is needed
+		detailedDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
+		detailedDateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
 		
 		calendarView.dataSource = self
 		calendarView.delegate = self
@@ -240,11 +245,6 @@ extension DeadlinesViewController {
 		return deadlines.count
 	}
 	
-	func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-		// user is only allowed to mark "finished" or delete their own deadlines
-		return segControl.selectedSegmentIndex == 0 ? true : false
-	}
-	
 	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 		return UITableViewAutomaticDimension
 	}
@@ -342,6 +342,7 @@ extension DeadlinesViewController {
 		editDeadlinesVC.deadlines = deadlines
 		editDeadlinesVC.date = dayUserIsLookingAt
 		editDeadlinesVC.explanationEnabled = !deadlines.isEmpty
+		editDeadlinesVC.title = (self.navigationItem.leftBarButtonItem?.title == "New") ? "New Schedule" : "Edit Schedule"
 	}
 	
 	// saving when adding a new item or finished editing an old one
@@ -357,14 +358,6 @@ extension DeadlinesViewController {
 				where sourceViewController.hasBeenEdited == true {
 				let chatRef = FIRDatabase.database().reference().child("Chat").child(chatId).child("Messages")
 				
-				// get timestamp for new message
-				let dateFormatter = NSDateFormatter()
-				dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
-				dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
-				
-				// add sender's ID so if users send messages at the exact same time (however unlikely), they won't erase one another
-				let timestamp = dateFormatter.stringFromDate(NSDate()) + "<" + AppState.sharedInstance.userID + ">"
-				
 				var status = " my schedule for \(sourceViewController.dateLabel.text!)"
 				var message: String
 				if sourceViewController.explanation == "" {
@@ -379,22 +372,22 @@ extension DeadlinesViewController {
 				let messageItem = [
 					"id" : AppState.sharedInstance.userID,
 					"displayName" : AppState.sharedInstance.firstName,
-					"text" : message
+					"text" : message,
+					"date" : detailedDateFormatter.stringFromDate(NSDate())
 				]
-				chatRef.child(timestamp).setValue(messageItem)
+				chatRef.childByAutoId().setValue(messageItem)
 				
 				// send a notification to partner
-				let schedMsg = AppState.sharedInstance.firstName + ": " + status
-				AppState.sharedInstance.sendNotification(schedMsg)
+				sendNotification(AppState.sharedInstance.firstName + ": " + status)
 			}
 		}
 	}
 	
 	@IBAction func didPressPayButton(sender: AnyObject) {
-		self.lastDatePaid.setValue(self.formatter.stringFromDate(NSDate()))
+		self.lastDatePaid.setValue(self.detailedDateFormatter.stringFromDate(NSDate()))
 		
 		// tell partner you've paid
-		AppState.sharedInstance.sendNotification(AppState.sharedInstance.firstName + " paid you $" + String(format: "%.2f", self.total))
+		sendNotification(AppState.sharedInstance.firstName + " says they paid you $" + String(format: "%.2f", self.total))
 	}
 }
 

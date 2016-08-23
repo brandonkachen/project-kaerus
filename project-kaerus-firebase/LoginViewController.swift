@@ -238,7 +238,7 @@ class LoginViewController: UIViewController {
 		let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner").child(AppState.sharedInstance.userID)
 		partnerStatusRef.observeSingleEventOfType(.Value, withBlock: { partnerStatus in
 			if let status = partnerStatus.value as? Bool where status == true {
-				let getIdRef = FIRDatabase.database().reference().child("Friend-Info").child(AppState.sharedInstance.userID)
+				let getIdRef = FIRDatabase.database().reference().child("Partner-Info").child(AppState.sharedInstance.userID)
 				getIdRef.observeSingleEventOfType(FIRDataEventType.Value, withBlock: { (snapshot) in
 					if let postDict = snapshot.value as? [String : String] {
 						// set AppState stuff

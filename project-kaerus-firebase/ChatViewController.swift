@@ -113,11 +113,7 @@ class ChatViewController: JSQMessagesViewController {
 		finishSendingMessage()
 		
 		// send a notification to partner
-		OneSignal.postNotification([
-				"contents": ["en": AppState.sharedInstance.firstName + ": " + text],
-				"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
-				"content_available": ["true"]
-			])
+		sendNotification(AppState.sharedInstance.firstName + ": " + text)
 //		isTyping = false
 	}
 	

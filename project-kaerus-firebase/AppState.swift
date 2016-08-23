@@ -70,13 +70,4 @@ extension AppState {
 		self.f_name = f_fullName
 		self.groupchat_id = f_groupchatId
 	}
-	
-	func sendNotification(text: String) {
-		let osItem = [
-			"contents": ["en": text],
-			"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
-			"content_available": ["true"]
-		]
-		OneSignal.postNotification(osItem)
-	}
 }

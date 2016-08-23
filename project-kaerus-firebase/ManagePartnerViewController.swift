@@ -166,15 +166,12 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 			(sender as! UIButton).backgroundColor = UIColor.lightGrayColor()
 			friendData[sender.tag!].whoAsked = AppState.sharedInstance.userID
 			
-			FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value, withBlock: { snapshot in
+			FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
 				let id = snapshot.value as! String
 				// send a notification to requested partner
-				OneSignal.postNotification([
-					"contents": ["en": AppState.sharedInstance.firstName + " would like to be your partner"],
-					"include_player_ids": [id],
-					"content_available": ["true"]
-					])
-			})
+				let msg = AppState.sharedInstance.firstName + " would like to be your partner"
+				sendNotification(msg, id: id)
+			}
 		} else { // user pressed "cancel" button
 			setFriendInfoRef.removeValue()
 			setMyInfoRef.removeValue()
@@ -207,12 +204,12 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		
 		// set friend's info dict and send to Firebase
 		let friendInfoDict = setFriendInfoDict(AppState.sharedInstance.userID, name: AppState.sharedInstance.name, firstName: AppState.sharedInstance.firstName, picString: AppState.sharedInstance.photoUrl!.absoluteString)
-		let setFriendInfoRef = ref.child("Friend-Info").child(AppState.sharedInstance.f_firID!)
+		let setFriendInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.f_firID!)
 		setFriendInfoRef.setValue(friendInfoDict)
 		
 		// repeat for user
 		let myInfoDict = setFriendInfoDict(friend.id, name: friend.name, firstName: friend.first_name, picString: friend.picURL.absoluteString)
-		let setMyInfoRef = ref.child("Friend-Info").child(AppState.sharedInstance.userID)
+		let setMyInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		setMyInfoRef.setValue(myInfoDict)
 
 		// change view
@@ -247,9 +244,9 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		let endPartnershipMessage = AppState.sharedInstance.firstName + " has ended your partnership"
 		sendNotification(endPartnershipMessage)
 		
-		// Remove Friend-Info for both users
-		let setFriendInfoRef = ref.child("Friend-Info").child(AppState.sharedInstance.f_firID!)
-		let setMyInfoRef = ref.child("Friend-Info").child(AppState.sharedInstance.userID)
+		// Remove Partner-Info for both users
+		let setFriendInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.f_firID!)
+		let setMyInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		setFriendInfoRef.removeValue()
 		setMyInfoRef.removeValue()
 		

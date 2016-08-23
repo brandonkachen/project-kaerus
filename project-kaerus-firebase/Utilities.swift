@@ -16,3 +16,12 @@ func sendNotification(text: String) {
 	]
 	OneSignal.postNotification(osItem)
 }
+
+func sendNotification(text: String, id: String) {
+	let item = [
+		"contents": ["en": text],
+		"include_player_ids": [id],
+		"content_available": ["true"]
+	]
+	OneSignal.postNotification(item)
+}
