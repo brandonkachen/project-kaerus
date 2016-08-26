@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseDatabase
 
 class SettingsTableViewController: UITableViewController {
 	
@@ -55,9 +56,10 @@ class SettingsTableViewController: UITableViewController {
 		do {
 			try firebaseAuth?.signOut()
 			AppState.sharedInstance.signedIn = false
+			// reset AppState's friend data, so if next user doesn't have a partner, they don't get this user's partner info
 			AppState
 				.sharedInstance
-				.setFriendState(false,
+				.setPartnerState(false,
 				                f_firstName: nil,
 				                f_id: nil,
 								f_picURL: nil,
@@ -65,82 +67,26 @@ class SettingsTableViewController: UITableViewController {
 								f_groupchatId: nil)
 			AppState.sharedInstance.f_oneSignalID = nil
 			
-			let loginScreenViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
-			self.presentViewController(loginScreenViewController, animated: true, completion: nil)
+			let group = dispatch_group_create()
+			var osId: String!
+			dispatch_group_enter(group)
+			OneSignal.IdsAvailable() { (userId, pushToken) in
+				if (pushToken != nil) {
+					NSLog("pushToken:%@", pushToken)
+				}
+				osId = userId
+				dispatch_group_leave(group)
+			}
+			
+			dispatch_group_notify(group, dispatch_get_main_queue()) {
+				let oneSignalRef = FIRDatabase.database().reference().child("FIR-to-OS").child(AppState.sharedInstance.userID).child(osId)
+				oneSignalRef.removeValue()
+				
+				let loginScreenViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
+				self.presentViewController(loginScreenViewController, animated: true, completion: nil)
+			}
 		} catch let signOutError as NSError {
 			print ("Error signing out: \(signOutError)")
 		}
 	}
-    // MARK: - Table view data source
-	
-//	override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
-//	{
-//		return
-//	}
-	
-//	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//		self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-//	}
-
-//    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return 1
-//    }
-
-//    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return settingItems.count
-//    }
-//
-//    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//		let cellIdentifier = "SettingTableViewCell"
-//		let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! SettingTableViewCell
-//		cell.titleLabel.text = settingItems[indexPath.row]
-//		cell.subtitleLabel.text = ""
-//        return cell
-//    }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

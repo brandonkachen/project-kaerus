@@ -18,28 +18,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var window: UIWindow?
 	
+	override init() {
+		FIRApp.configure()
+		FIRDatabase.database().persistenceEnabled = true
+	}
+	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
 		// Override point for customization after application launch.
 		OneSignal.registerForPushNotifications()
-		FIRApp.configure()
-//		FIRDatabase.database().persistenceEnabled = true
 		
 		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00",
 		                                handleNotificationReceived: nil, //{ (notification) in  self.notifRcv },
 			handleNotificationAction: { (result) in self.notifAct(result) },
 			settings: [kOSSettingsKeyAutoPrompt : false, kOSSettingsKeyInAppAlerts : false])
 		
+		let user = FIRAuth.auth()?.currentUser
+		if user != nil { // user is logged in so load their info and go to loadingViewController
+			AppState.sharedInstance.setState(user)
+			MeasurementHelper.sendLoginEvent()
+			NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
+		} else { // not logged in, go to loginViewController
+			let loginStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+			let loginVC : UIViewController = loginStoryboard.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
+			self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+			self.window?.rootViewController = loginVC
+			self.window?.makeKeyAndVisible()
+		}
+		
 		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 	}
 	
 	// called when user is in app and receives a notification
 	func notifRcv() {
-		
+		print("notification received while user was in app")
 	}
 	
-	// called when user opens app upon receiving a notification
+	// called when user opens notification
 	func notifAct(result: OSNotificationResult!) {
-		print("new message opened")
+		print("notification opened")
 //		let storyBoard = UIStoryboard(name: "Main", bundle: nil)
 //		let tabBarVC = storyBoard.instantiateViewControllerWithIdentifier("tabBarControl")
 //		self.window?.rootViewController = tabBarVC

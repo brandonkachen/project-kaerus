@@ -28,6 +28,7 @@ class AppState: NSObject {
 	var userID: String!
 	var email: String!
 	var firstName: String!
+	
 	var startDate: NSDate!
 	var lastPaidDate: NSDate!
 	
@@ -42,12 +43,9 @@ class AppState: NSObject {
 	// partner stuff
 	var partnerStatus: Bool!
 	var groupchat_id: String?
-	
-	// notification stuff
-	var notificationReceived: Bool!
 }
 
-// all the functions
+// all AppState functions
 extension AppState {
 	func setState(user: FIRUser?) {
 		self.signedIn = true
@@ -56,7 +54,7 @@ extension AppState {
 		self.email = user?.email
 	}
 	
-	func setFriendState(status: Bool,
+	func setPartnerState(status: Bool,
 	                    f_firstName: String?,
 	                    f_id: String?,
 	                    f_picURL: NSURL?,

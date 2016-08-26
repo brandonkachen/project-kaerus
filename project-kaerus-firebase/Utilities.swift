@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import Firebase
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 func sendNotification(text: String) {
 	let osItem = [

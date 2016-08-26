@@ -14,12 +14,13 @@ class ChatViewController: JSQMessagesViewController {
 	var outgoingBubbleImageView, incomingBubbleImageView: JSQMessagesBubbleImage!
 	var messages = [JSQMessage]()
 	var avatars = Dictionary<String, JSQMessagesAvatarImage>()
-	var chatRef, userIsTypingRef, seenRef: FIRDatabaseReference!
+	var messagesRef, userIsTypingRef, seenRef: FIRDatabaseReference!
 	let detailedDateFormatter = NSDateFormatter() // for timestamp
 //	var usersTypingQuery: FIRDatabaseQuery!
 
 //	private var localTyping = false
 	private var lastSeen: NSDate = NSDate.distantPast()
+	private var _chatRefHandle, _seenRefHandle: FIRDatabaseHandle!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -38,38 +39,71 @@ class ChatViewController: JSQMessagesViewController {
 		detailedDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
 		detailedDateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
 
-		avatars["PK"] = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(13)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
+		avatars["PK"] = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(14)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
 		
+		chatSetup()
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerInfoChanged(_:)), name: "PartnerInfoChanged", object: nil)
+	}
+	
+	func partnerInfoChanged(_: NSNotification) {
+		print("activated")
+		messages.removeAll()
+		chatSetup()
+		viewWillAppear(true)
+	}
+	
+	func chatSetup() {
 		// set up Firebase branch where messages will be stored
 		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
-			// add user and partner picture icons
+			// add user and partner icons
 			avatars[senderId] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.photo)
 			avatars[AppState.sharedInstance.f_firID!] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.f_photo)
 			
-			seenRef = FIRDatabase.database().reference().child("Chat").child(AppState.sharedInstance.groupchat_id!).child("Seen")
-
-			// get messages
-			chatRef = FIRDatabase.database().reference().child("Chat/\(chat_id)/Messages")
+			// set refs
+			let ref = FIRDatabase.database().reference().child("Chat").child(chat_id)
+			seenRef = ref.child("Seen")
+			messagesRef = ref.child("Messages")
+			self.inputToolbar.hidden = false
 			observeMessages()
-		} else {	// user doesn't have a partner
-			let sys_message = JSQMessage(senderId: "PK", displayName: "PK", text: "Looks like you don't have a friend working with you yet  :(\n\nPlease ask them to install this app, then add them in the 'Settings' pane!")
-			messages.append(sys_message)
-			self.inputToolbar.removeFromSuperview()
-		}
-	}
-	
-	override func viewDidAppear(animated: Bool) {
-		super.viewDidAppear(animated)
-		
-		if AppState.sharedInstance.partnerStatus == true {
-			// see if partner is typing
-//			observeTyping()
-			
-			// see last message seen by partner
 			observePartnerSeen()
+		} else { // user doesn't have a partner
+			let sys_message = JSQMessage(senderId: "PK", displayName: "PK", text: "Looks like you don't have a friend working with you  :(\n\nPlease ask them to install this app, then add them in the 'Settings' pane!")
+			messages.append(sys_message)
+			removeRefObservers()
+			seenRef = nil
+			messagesRef = nil
+			self.inputToolbar.hidden = true
 		}
 	}
 	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
+		print("appearing")
+//		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
+//			observeMessages()
+//			observePartnerSeen()
+//		}
+	}
+	
+	override func viewWillDisappear(animated: Bool) {
+		super.viewWillDisappear(animated)
+		print("disappearing")
+		removeRefObservers()
+	}
+	
+	func removeRefObservers() {
+		if messagesRef != nil {
+			messagesRef.removeObserverWithHandle(_chatRefHandle)
+		}
+		if seenRef != nil {
+			seenRef.removeObserverWithHandle(_seenRefHandle)
+		}
+	}
+	
+	deinit {
+		removeRefObservers()
+		NSNotificationCenter.defaultCenter().removeObserver(self)
+	}
 	
 	// MARK: - messaging
 	
@@ -79,27 +113,29 @@ class ChatViewController: JSQMessagesViewController {
 	}
 	
 	private func observeMessages() {
-		let messagesQuery = chatRef.queryLimitedToLast(10)
-		messagesQuery.observeEventType(.ChildAdded) { (snapshot: FIRDataSnapshot!) in
-			// get the info from snapshot
-			let id = snapshot.childSnapshotForPath("id").value as! String
-			let displayName = snapshot.childSnapshotForPath("displayName").value as! String
-			let text = snapshot.childSnapshotForPath("text").value as! String
-			let strDate = snapshot.childSnapshotForPath("date").value as! String
-			let date = self.detailedDateFormatter.dateFromString(strDate)!
-			
-			// add to local messages array
-			self.addMessage(id, name: displayName, date: date,content: text)
-			self.finishReceivingMessage()
-			
-			self.seenRef.child(AppState.sharedInstance.userID).setValue(strDate)
+		let messagesQuery = messagesRef.queryLimitedToLast(10)
+		_chatRefHandle = messagesQuery.observeEventType(.ChildAdded) { (snapshot: FIRDataSnapshot!) in
+			if snapshot.exists() {
+				let id = snapshot.childSnapshotForPath("id").value as! String
+				let displayName = snapshot.childSnapshotForPath("displayName").value as! String
+				let text = snapshot.childSnapshotForPath("text").value as! String
+				let strDate = snapshot.childSnapshotForPath("date").value as! String
+				let date = self.detailedDateFormatter.dateFromString(strDate)!
+				
+				// add to local messages array
+				self.addMessage(id, name: displayName, date: date,content: text)
+				self.finishReceivingMessage()
+				
+				// set seen to this message
+				self.seenRef.child(AppState.sharedInstance.userID).setValue(strDate)
+			}
 		}
 	}
 	
 	override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!,
 	                                 senderDisplayName: String!, date: NSDate!) {
 		// create the new entry
-		let itemRef = chatRef.childByAutoId()
+		let itemRef = messagesRef.childByAutoId()
 		let messageItem = [
 			"id" : senderId,
 			"displayName" : senderDisplayName,
@@ -121,7 +157,7 @@ class ChatViewController: JSQMessagesViewController {
 	// MARK: - check if partner has seen messages yet
 	
 	func observePartnerSeen() {
-		seenRef.child(AppState.sharedInstance.f_firID!).observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
+		_seenRefHandle = seenRef.child(AppState.sharedInstance.f_firID!).observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
 			if let strDate = snapshot.value as? String {
 				self.lastSeen = self.detailedDateFormatter.dateFromString(strDate)!
 				self.reloadMessagesView()

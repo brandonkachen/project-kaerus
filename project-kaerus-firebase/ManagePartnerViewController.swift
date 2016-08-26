@@ -27,17 +27,38 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		tableView.delegate = self
 		tableView.dataSource = self
 		
-		// Determine if user has a friend or not
-		if AppState.sharedInstance.partnerStatus == true {
-			setPartnerScreen()
-		} else { // user doesn't have a friend
-			setNoPartnerScreen()
-		}
+		// show different screens depending on partnerStatus value
+		setScreen()
+	}
+	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerStatusChanged(_:)), name: "hasPartnerChanged", object: nil)
+	}
+	
+	override func viewWillDisappear(animated: Bool) {
+		super.viewWillDisappear(animated)
+		NSNotificationCenter.defaultCenter().removeObserver(self)
+	}
+	
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+	
+	// MARK: set VC screen
+	
+	func partnerStatusChanged(_: NSNotification) {
+		setScreen()
+	}
+	
+	func setScreen() {
+		AppState.sharedInstance.partnerStatus == true ? setPartnerScreen() : setNoPartnerScreen()
 	}
 	
 	// set up No Partner screen
 	func setNoPartnerScreen() {
-		self.title = "Find Partner"
+		self.title = "Find a Partner"
 		partnerScreen.hidden = true
 		noPartnerScreen.hidden = false
 		setFriendData()
@@ -55,11 +76,6 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		partnerLabel.text = "Your partner is:\n\(AppState.sharedInstance.f_name!)"
 		endPartnershipButton.layer.cornerRadius = 7
 	}
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 	
 	// fills the array 'friendData' with all friends of the user who also have this app
 	func setFriendData() {
@@ -196,7 +212,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		let groupchatId = sortedIds[0] + "+" + sortedIds[1]
 		
 		// update AppState with friend info
-		AppState.sharedInstance.setFriendState(true, f_firstName: friend.first_name, f_id: friend.id, f_picURL: friend.picURL, f_fullName: friend.name, f_groupchatId: groupchatId)
+		AppState.sharedInstance.setPartnerState(true, f_firstName: friend.first_name, f_id: friend.id, f_picURL: friend.picURL, f_fullName: friend.name, f_groupchatId: groupchatId)
 		
 		// set both partner statuses to true
 		ref.child("Has-Partner").child(friend.id).setValue(true)
@@ -257,9 +273,9 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		myPartnerRequestRef.removeValue()
 
 		// reset AppState friend values
-		AppState.sharedInstance.setFriendState(false, f_firstName: nil, f_id: nil, f_picURL: nil, f_fullName: nil, f_groupchatId: nil)
+		AppState.sharedInstance.setPartnerState(false, f_firstName: nil, f_id: nil, f_picURL: nil, f_fullName: nil, f_groupchatId: nil)
 		AppState.sharedInstance.f_oneSignalID = nil
 		
-		setNoPartnerScreen()
+//		setNoPartnerScreen()
 	}
 }

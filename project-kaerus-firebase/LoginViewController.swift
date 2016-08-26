@@ -30,16 +30,17 @@ class LoginViewController: UIViewController {
 	// MARK: Constants
 	let LoggedIn = "LoggedIn"
 	let group = dispatch_group_create()
-
+	
 	// MARK: Outlets
 //	@IBOutlet weak var textFieldLoginEmail: UITextField!
 //	@IBOutlet weak var textFieldLoginPassword: UITextField!
-	@IBOutlet weak var titleLabel: UILabel!
-
-	@IBOutlet weak var splashScreen: UIView!
+	@IBOutlet var titleView: UIView!
+	@IBOutlet weak var loadingView: UIView!
 	
 	// MARK: Properties
-	
+	let ref = FIRDatabase.database().reference()
+	var storageRef: FIRStorageReference!
+
 	// MARK: UIViewController Lifecycle
 	@IBAction func facebookLogin (sender: AnyObject){
 		let facebookLogin = FBSDKLoginManager()
@@ -49,8 +50,7 @@ class LoginViewController: UIViewController {
 			if facebookError != nil { print("Facebook login failed. Error \(facebookError)")
 			} else if facebookResult.isCancelled { print("Facebook login was cancelled.")
 			} else {
-				// show splash screen after user successfully logs in
-				self.splashScreen.hidden = false
+				
 				
 				let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
 				FIRAuth.auth()?.signInWithCredential(credential) { (user, error) in
@@ -58,28 +58,19 @@ class LoginViewController: UIViewController {
 						print(error.localizedDescription)
 						return
 					}
+					self.loadingView.hidden = false
+				self.titleView.backgroundColor = UIColor.blackColor()
+				self.titleView.alpha = 0.8
 					self.signedIn(user!)
 				}
 			}
-		});
+		})
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		// show splash screen
-		splashScreen.alpha = 1
-		let user = FIRAuth.auth()?.currentUser
-		
-		if user != nil && FBSDKAccessToken.currentAccessToken() != nil {
-			// user is logged in so load their info and go to DeadlinesViewController
-			self.signedIn(user)
-		} else {
-			self.splashScreen.hidden = true
-		}
-
+		storageRef = FIRStorage.storage().referenceForURL("gs://project-kaerus.appspot.com")
 	}
-
 	// MARK: Actions
 //	@IBAction func loginDidTouch(sender: AnyObject) {
 //		// Sign In with credentials.
@@ -122,143 +113,152 @@ class LoginViewController: UIViewController {
 		MeasurementHelper.sendLoginEvent()
 		AppState.sharedInstance.setState(user)
 		NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
-
-		getFBInfo(user)
-		partnerSetup()
-		oneSignalIdSetup()
-		startDateSetup()
-		lastPaidDaySetup()
 		
-		dispatch_group_notify(group, dispatch_get_main_queue()) {
-			self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
+		// set up firebase for user, if they're new
+		isFirstTimeLogin(user!.uid) { (result) -> () in
+			result ?
+				self.setupForFirstTime() :
+				self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
 		}
 	}
 	
-	func getFBInfo(user: FIRUser?) {
-		dispatch_group_enter(group)
+	func isFirstTimeLogin(uid: String, completion: (res: Bool)->()) {
+		FIRDatabase.database().reference().child("First-Login").child(uid).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
+			completion(res: (snapshot.exists() ? false : true)) // if snapshot exists, user is NOT a first timer
+		}
+	}
+}
+
+// all the stuff needed to set up a first-time user
+extension LoginViewController {
+	func setupForFirstTime() {
+		setFirstTimeLogin()
+		saveFBInfo()
+		setOneSignalId()
+		setAllPartnerStuff()
+		let startDate = setStartDate()
+		let lastPaidDate = setLastPaidDate()
+		
+		// set AppState
+		AppState.sharedInstance.startDate = startDate
+		AppState.sharedInstance.lastPaidDate = lastPaidDate
+		AppState.sharedInstance.setPartnerState(false,
+		                                        f_firstName: nil,
+		                                        f_id: nil,
+		                                        f_picURL: nil,
+		                                        f_fullName: nil,
+		                                        f_groupchatId: nil)
+		
+		let tabBarController = self.storyboard!.instantiateViewControllerWithIdentifier("tabBarController") as! UITabBarController
+		self.presentViewController(tabBarController, animated: false, completion: nil)
+	}
+	
+	func setFirstTimeLogin() {
+		FIRDatabase.database().reference().child("First-Login").child(AppState.sharedInstance.userID).setValue(true)
+	}
+	
+	func saveFBInfo() {
 		// Add user to firebase database, if not already in there
 		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name, picture.width(200).height(200)"])
 		graphRequest.startWithCompletionHandler(){ (connection, result, error) -> Void in
-			if ((error) != nil) {
-				print("Error: \(error)")
+			dispatch_group_enter(self.group)
+			if (error != nil) {
+				print("Error!", error.localizedDescription)
 			} else {
 				// fbID needed for FB-to-FIR conversion
 				let fbID = result.valueForKey("id") as! String
-				
+				// fbID is unique. get this so others can find user by their fb id (when user is looking for a partner)
+				self.ref.child("FB-to-FIR").child(fbID).setValue(AppState.sharedInstance.userID)
+
 				// firstName not included in FIRUser object
 				AppState.sharedInstance.firstName = result.valueForKey("first_name") as! String
 				
 				// default picture is too low quality
 				let picName = result.valueForKey("picture")?.objectForKey("data")?.objectForKey("url") as! String
 				AppState.sharedInstance.photoUrl = NSURL(string: picName)!
-				AppState.sharedInstance.photo = UIImage(data: NSData(contentsOfURL: AppState.sharedInstance.photoUrl)!)!.circle
+				let picData = NSData(contentsOfURL: AppState.sharedInstance.photoUrl)!
+				AppState.sharedInstance.photo = UIImage(data: picData)!.circle
 				
-				// fbID is unique. get this so others can find user by their fb id (when user is looking for a partner)
-				FIRDatabase.database().reference().child("FB-to-FIR/\(fbID)").setValue(user?.uid)
-				
-				/* if firebase counts modifying a value to the same value as using bandwidth, use this
-				firstTimeLoginRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
-				if snapshot.value as? String == nil{
-				firstTimeLoginRef.setValue(user?.uid)
+				let myInfoItem = [
+					"firstName" : AppState.sharedInstance.firstName,
+					"photoURL" : AppState.sharedInstance.photoUrl.absoluteString
+				]
+				self.ref.child("My-Info").child(AppState.sharedInstance.userID).setValue(myInfoItem)
+
+				dispatch_group_enter(self.group)
+				let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID).child("profilePic.jpg")
+				let uploadTask = profilePicRef.putData(picData, metadata: nil)
+				uploadTask.observeStatus(.Success) { snapshot in	// Upload completed successfully
+					dispatch_group_leave(self.group)
 				}
-				})*/
+				uploadTask.observeStatus(.Failure) { snapshot in	// Upload failed
+					guard let storageError = snapshot.error else { return }
+					guard let errorCode = FIRStorageErrorCode(rawValue: storageError.code) else { return }
+					
+					switch errorCode {
+						case .ObjectNotFound:
+							// File doesn't exist
+							print("Error! File doesn't exist")
+						case .Unauthorized:
+							// User doesn't have permission to access file
+							print("Error! User doesn't have permission to access file")
+						case .Cancelled:
+							// User canceled the upload
+							print("Error! User cancelled upload")
+						case .Unknown:
+							// Unknown error occurred, inspect the server response
+							print("unknown error")
+						default:
+							print("default")
+					}
+					dispatch_group_leave(self.group)
+				}
 			}
 			dispatch_group_leave(self.group)
 		}
 	}
 	
-	
-	// get oneSignal Id
-	func oneSignalIdSetup() {
-		dispatch_group_enter(group)
-		let oneSignalIdRef = FIRDatabase.database().reference().child("FIR-to-OS/\(AppState.sharedInstance.userID)")
+	// set user's oneSignal Id
+	func setOneSignalId() {
+		dispatch_group_enter(self.group)
+		let oneSignalIdRef = FIRDatabase.database().reference().child("FIR-to-OS").child(AppState.sharedInstance.userID)
 		OneSignal.IdsAvailable(){ (userId, pushToken) in
 			if (pushToken != nil) {
 				NSLog("pushToken:%@", pushToken)
 			}
-			oneSignalIdRef.setValue(userId)
+			oneSignalIdRef.child(userId).setValue(true)
 			dispatch_group_leave(self.group)
 		}
-		
-		/* if firebase counts setting a value to the same value it was previously as using bandwidth, use this
-		oneSignalIdRef.observeSingleEventOfType(.Value, withBlock: { id in
-			if id.value as? String == nil {
-				OneSignal.IdsAvailable(){ (userId, pushToken) in
-					if (pushToken != nil) {
-						NSLog("pushToken:%@", pushToken)
-					}
-					oneSignalIdRef.setValue(userId)
-					dispatch_group_leave(group)
-				}
-			} else {
-				dispatch_group_leave(group)
-			}
-		})*/
 	}
 	
-	// get startDate
-	func startDateSetup() {
+	// set user's startDate
+	func setStartDate() -> NSDate {
 		let formatter = NSDateFormatter()
 		formatter.dateFormat = "yyyy-MM-dd Z"
-
-		dispatch_group_enter(group)
-		let startDateRef = FIRDatabase.database().reference().child("User-Deadlines/\(AppState.sharedInstance.userID)/Start-Date")
-		startDateRef.observeSingleEventOfType(.Value, withBlock: { startDate in
-			if let date = startDate.value as? String {
-				AppState.sharedInstance.startDate = formatter.dateFromString(date)
-			} else {
-				startDateRef.setValue(formatter.stringFromDate(NSDate()))
-				AppState.sharedInstance.startDate = NSDate()
-			}
-			dispatch_group_leave(self.group)
-		})
-	}
-	
-	func lastPaidDaySetup() {
-		let formatter = NSDateFormatter()
-		formatter.dateFormat = "yyyy-MM-dd Z"
+		let startDateRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Start-Date")
+		let startDate = formatter.stringFromDate(NSDate())
+		startDateRef.setValue(startDate)
 		
-		dispatch_group_enter(group)
-		let lastPaidDayRef = FIRDatabase.database().reference().child("User-Deadlines/\(AppState.sharedInstance.userID)/Last-Date-Paid")
-		lastPaidDayRef.observeSingleEventOfType(.Value, withBlock: { lastPaidDate in
-			if let date = lastPaidDate.value as? String {
-				AppState.sharedInstance.lastPaidDate = formatter.dateFromString(date)
-			} else {
-				let yesterday = NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: NSCalendarOptions.MatchStrictly)!
-				lastPaidDayRef.setValue(formatter.stringFromDate(yesterday))
-				AppState.sharedInstance.lastPaidDate = yesterday
-			}
-			dispatch_group_leave(self.group)
-		})
+		return formatter.dateFromString(startDate)!
 	}
 	
-	// get partner status
-	func partnerSetup() {
-		dispatch_group_enter(group)
+	// set user's lastPaidDate to a far distant past
+	func setLastPaidDate() -> NSDate {
+		let detailedDateFormatter = NSDateFormatter()
+		detailedDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
+		detailedDateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
+		
+		let lastPaidDayRef = ref.child("User-Deadlines/\(AppState.sharedInstance.userID)/Last-Date-Paid")
+		let distantPast = NSDate.distantPast()
+		lastPaidDayRef.setValue(detailedDateFormatter.stringFromDate(distantPast))
+	
+		return distantPast
+	}
+	
+	// set partner status. info doesn't need to be set
+	func setAllPartnerStuff() {
 		let partnerStatusRef = FIRDatabase.database().reference().child("Has-Partner").child(AppState.sharedInstance.userID)
-		partnerStatusRef.observeSingleEventOfType(.Value, withBlock: { partnerStatus in
-			if let status = partnerStatus.value as? Bool where status == true {
-				let getIdRef = FIRDatabase.database().reference().child("Partner-Info").child(AppState.sharedInstance.userID)
-				getIdRef.observeSingleEventOfType(FIRDataEventType.Value, withBlock: { (snapshot) in
-					if let postDict = snapshot.value as? [String : String] {
-						// set AppState stuff
-						AppState.sharedInstance.setFriendState(true, f_firstName: postDict["partner_firstName"], f_id: postDict["partner_id"], f_picURL: NSURL(string: postDict["partner_pic"]!), f_fullName: postDict["partner_name"], f_groupchatId: postDict["groupchat_id"])
-						
-						let ref = FIRDatabase.database().reference().child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
-						ref.observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
-							AppState.sharedInstance.f_oneSignalID = snapshot.value as? String
-							dispatch_group_leave(self.group)
-						}
-					} else {
-						dispatch_group_leave(self.group)
-					}
-				})
-			} else {
-				partnerStatusRef.setValue(false)
-				AppState.sharedInstance.partnerStatus = false
-				dispatch_group_leave(self.group)
-			}
-		})
+		partnerStatusRef.setValue(false)
 	}
 }
 
