@@ -42,14 +42,12 @@ class ChatViewController: JSQMessagesViewController {
 		avatars["PK"] = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(14)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
 		
 		chatSetup()
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerInfoChanged(_:)), name: "PartnerInfoChanged", object: nil)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerInfoChanged(_:)), name: "PartnerInfoChanged_Chat", object: nil)
 	}
 	
 	func partnerInfoChanged(_: NSNotification) {
-		print("activated")
 		messages.removeAll()
 		chatSetup()
-		viewWillAppear(true)
 	}
 	
 	func chatSetup() {
@@ -63,9 +61,9 @@ class ChatViewController: JSQMessagesViewController {
 			let ref = FIRDatabase.database().reference().child("Chat").child(chat_id)
 			seenRef = ref.child("Seen")
 			messagesRef = ref.child("Messages")
-			self.inputToolbar.hidden = false
-			observeMessages()
+			observeMessages() // cannot be in viewWill/DidAppear because it will duplicate messages!
 			observePartnerSeen()
+			self.inputToolbar.hidden = false
 		} else { // user doesn't have a partner
 			let sys_message = JSQMessage(senderId: "PK", displayName: "PK", text: "Looks like you don't have a friend working with you  :(\n\nPlease ask them to install this app, then add them in the 'Settings' pane!")
 			messages.append(sys_message)
@@ -74,21 +72,17 @@ class ChatViewController: JSQMessagesViewController {
 			messagesRef = nil
 			self.inputToolbar.hidden = true
 		}
+		self.reloadMessagesView()
 	}
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		print("appearing")
-//		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
-//			observeMessages()
-//			observePartnerSeen()
-//		}
+		//TODO: refresh Appstate
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
 		super.viewWillDisappear(animated)
-		print("disappearing")
-		removeRefObservers()
+//		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 	
 	func removeRefObservers() {
@@ -102,7 +96,6 @@ class ChatViewController: JSQMessagesViewController {
 	
 	deinit {
 		removeRefObservers()
-		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 	
 	// MARK: - messaging

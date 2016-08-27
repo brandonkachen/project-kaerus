@@ -26,14 +26,13 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
 		tableView.delegate = self
 		tableView.dataSource = self
-		
-		// show different screens depending on partnerStatus value
-		setScreen()
 	}
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerStatusChanged(_:)), name: "hasPartnerChanged", object: nil)
+		// if user is looking at this screen the moment PartnerInfo changes, NSNotificationCenter gets activated
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerInfoChanged(_:)), name: "PartnerInfoChanged_Manage", object: nil)
+		setScreen()
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
@@ -48,7 +47,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 	
 	// MARK: set VC screen
 	
-	func partnerStatusChanged(_: NSNotification) {
+	func partnerInfoChanged(_: NSNotification) {
 		setScreen()
 	}
 	
@@ -80,11 +79,12 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 	// fills the array 'friendData' with all friends of the user who also have this app
 	func setFriendData() {
 		friendData.removeAll()
+		self.tableView.reloadData()
 
 		let graphRequest : FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me/friends", parameters: ["fields" : "name, first_name, id, picture.width(200).height(200)"])
 		
 		// get partner statuses of user
-		let myPartnerRequestsRef = FIRDatabase.database().reference().child("Partner-Requests/\(AppState.sharedInstance.userID)")
+		let myPartnerRequestsRef = FIRDatabase.database().reference().child("Partner-Requests").child(AppState.sharedInstance.userID)
 		myPartnerRequestsRef.observeEventType(.Value, withBlock: { snapshot in
 			if let partnerStatus = snapshot.value as? [String : AnyObject] {
 				self.requests = partnerStatus
@@ -183,10 +183,11 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 			friendData[sender.tag!].whoAsked = AppState.sharedInstance.userID
 			
 			FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
-				let id = snapshot.value as! String
-				// send a notification to requested partner
-				let msg = AppState.sharedInstance.firstName + " would like to be your partner"
-				sendNotification(msg, id: id)
+				if let id = snapshot.value as? String {
+					// send a notification to requested partner
+					let msg = AppState.sharedInstance.firstName + " would like to be your partner"
+					sendNotification(msg, id: id)
+				}
 			}
 		} else { // user pressed "cancel" button
 			setFriendInfoRef.removeValue()

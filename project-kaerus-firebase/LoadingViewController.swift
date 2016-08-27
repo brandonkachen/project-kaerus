@@ -41,6 +41,7 @@ class LoadingViewController: UIViewController {
 		dispatch_group_notify(group, dispatch_get_main_queue()) {
 			self.isStartingUp = false
 			let tabBarController = self.storyboard!.instantiateViewControllerWithIdentifier("tabBarController") as! UITabBarController
+//			tabBarController.selectedIndex = 1
 			self.presentViewController(tabBarController, animated: false, completion: nil)
 		}
 	}
@@ -60,7 +61,7 @@ class LoadingViewController: UIViewController {
 			AppState.sharedInstance.firstName = postDict["firstName"]
 			let picName = postDict["photoURL"]!
 			AppState.sharedInstance.photoUrl = NSURL(string: picName)!
-			let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID)
+			let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID).child("profilePic.jpg")
 			profilePicRef.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
 				if (error != nil) {
 					print("Error!", error?.localizedDescription)
@@ -136,27 +137,36 @@ class LoadingViewController: UIViewController {
 									 f_fullName: partnerInfoDict["partner_name"],
 									 f_groupchatId: partnerInfoDict["groupchat_id"])
 				self.partnerOneSignalIdSetup()
+			} else {
+				AppState.sharedInstance.setPartnerState(false,
+				                                        f_firstName: nil,
+				                                        f_id: nil,
+				                                        f_picURL: nil,
+				                                        f_fullName: nil,
+				                                        f_groupchatId: nil)
+				AppState.sharedInstance.f_oneSignalID = nil
 			}
-			NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged", object: nil)
+			// notifies 3 VCs, in case user is looking at any one of them
+			NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Manage", object: nil)
+			NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Deadlines", object: nil)
+			NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Chat", object: nil)
 			if self.isStartingUp { dispatch_group_leave(self.group) }
 		}
 	}
 	
 	// partner OneSignal id is dependant on partner info, so it waits until that finishes loading
 	func partnerOneSignalIdSetup() {
-		if AppState.sharedInstance.f_firID != nil {
-			let oneSignalRef = self.ref.child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
-			if self.isStartingUp { dispatch_group_enter(self.group) }
-			
-			oneSignalRef.observeEventType(.Value) { (idSnapshot: FIRDataSnapshot) in
-				if let id = idSnapshot.value as? String {
-					AppState.sharedInstance.f_oneSignalID = id
+		let oneSignalRef = self.ref.child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
+		if self.isStartingUp { dispatch_group_enter(self.group) }
+		
+		oneSignalRef.observeEventType(.Value) { (idSnapshot: FIRDataSnapshot) in
+			if let id = idSnapshot.value as? String {
+				AppState.sharedInstance.f_oneSignalID = id
 //					NSNotificationCenter.defaultCenter().postNotificationName("PartnerOSChanged", object: nil)
-				} else {
-					AppState.sharedInstance.f_oneSignalID = nil
-				}
-				if self.isStartingUp { dispatch_group_leave(self.group) }
+			} else {
+				AppState.sharedInstance.f_oneSignalID = nil
 			}
-		} 
+			if self.isStartingUp { dispatch_group_leave(self.group) }
+		}
 	}
 }

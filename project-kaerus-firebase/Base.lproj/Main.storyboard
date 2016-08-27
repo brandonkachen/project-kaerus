@@ -58,41 +58,49 @@
                                     <action selector="facebookLogin:" destination="nTh-wV-HoB" eventType="touchUpInside" id="edX-CH-ByK"/>
                                 </connections>
                             </button>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DlB-Km-5tF">
-                                <rect key="frame" x="128" y="384" width="343" height="128"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MWi-4G-PxP">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Getting things ready..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAL-mi-h46">
-                                        <rect key="frame" x="87" y="53" width="169" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenBackground.png" translatesAutoresizingMaskIntoConstraints="NO" id="tCg-nd-w6q">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenIcon.png" translatesAutoresizingMaskIntoConstraints="NO" id="SMu-ox-RQG">
+                                        <rect key="frame" x="112" y="113" width="375" height="375"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="375" id="WK7-He-wmQ"/>
+                                            <constraint firstAttribute="height" constant="375" id="u9W-p2-e34"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="YAL-mi-h46" firstAttribute="centerX" secondItem="DlB-Km-5tF" secondAttribute="centerX" id="ORJ-YT-pQL"/>
-                                    <constraint firstItem="YAL-mi-h46" firstAttribute="centerY" secondItem="DlB-Km-5tF" secondAttribute="centerY" id="e6G-SJ-gec"/>
+                                    <constraint firstItem="tCg-nd-w6q" firstAttribute="centerY" secondItem="SMu-ox-RQG" secondAttribute="centerY" id="BBQ-jI-cZX"/>
+                                    <constraint firstItem="tCg-nd-w6q" firstAttribute="leading" secondItem="MWi-4G-PxP" secondAttribute="leading" id="M4V-IK-BMe"/>
+                                    <constraint firstItem="tCg-nd-w6q" firstAttribute="top" secondItem="MWi-4G-PxP" secondAttribute="top" id="MMc-C7-BuN"/>
+                                    <constraint firstItem="SMu-ox-RQG" firstAttribute="centerY" secondItem="MWi-4G-PxP" secondAttribute="centerY" id="PAd-ZH-mBV"/>
+                                    <constraint firstItem="tCg-nd-w6q" firstAttribute="centerX" secondItem="SMu-ox-RQG" secondAttribute="centerX" id="Yb5-0N-NsA"/>
+                                    <constraint firstItem="SMu-ox-RQG" firstAttribute="centerX" secondItem="MWi-4G-PxP" secondAttribute="centerX" id="tQr-Xe-dPg"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="DlB-Km-5tF" firstAttribute="leading" secondItem="Nhy-ax-Df6" secondAttribute="leadingMargin" constant="108" id="0MD-an-Kv6"/>
                             <constraint firstItem="6Tx-DU-33d" firstAttribute="centerX" secondItem="KQV-em-ZC8" secondAttribute="centerX" id="4ON-07-8rZ"/>
-                            <constraint firstItem="DlB-Km-5tF" firstAttribute="top" secondItem="KQV-em-ZC8" secondAttribute="bottom" constant="73" id="8dS-bL-CrU"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="DlB-Km-5tF" secondAttribute="trailing" constant="109" id="IE8-9e-mYT"/>
                             <constraint firstAttribute="centerX" secondItem="KQV-em-ZC8" secondAttribute="centerX" id="VVz-aE-kmK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="MWi-4G-PxP" secondAttribute="trailing" constant="-20" id="X4U-q9-fu4"/>
                             <constraint firstItem="KQV-em-ZC8" firstAttribute="top" secondItem="vFi-OU-T29" secondAttribute="bottom" constant="92" id="bfb-LM-be1"/>
                             <constraint firstItem="2zl-lB-bqA" firstAttribute="top" secondItem="6Tx-DU-33d" secondAttribute="bottom" constant="122" id="eMb-9a-WZy"/>
-                            <constraint firstItem="2zl-lB-bqA" firstAttribute="top" secondItem="DlB-Km-5tF" secondAttribute="bottom" constant="88" id="zDt-tK-8wc"/>
+                            <constraint firstItem="MWi-4G-PxP" firstAttribute="leading" secondItem="Nhy-ax-Df6" secondAttribute="leadingMargin" constant="-20" id="pqg-e4-DA3"/>
+                            <constraint firstItem="2zl-lB-bqA" firstAttribute="top" secondItem="MWi-4G-PxP" secondAttribute="bottom" id="tjK-Iq-3M1"/>
+                            <constraint firstItem="MWi-4G-PxP" firstAttribute="top" secondItem="Nhy-ax-Df6" secondAttribute="topMargin" id="wbk-d1-k5w"/>
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="loadingView" destination="DlB-Km-5tF" id="TlI-Fz-A5a"/>
+                        <outlet property="loadingView" destination="MWi-4G-PxP" id="TI8-Y6-c2v"/>
                         <outlet property="titleView" destination="Nhy-ax-Df6" id="vej-8e-z2A"/>
-                        <segue destination="ojq-dz-ZAK" kind="presentation" identifier="LoggedIn" id="p6i-gL-rbD"/>
+                        <segue destination="ojq-dz-ZAK" kind="presentation" identifier="LoggedIn" animates="NO" id="p6i-gL-rbD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4QX-10-gld" sceneMemberID="firstResponder"/>
@@ -126,9 +134,9 @@
                         <constraints>
                             <constraint firstItem="CbK-CH-Adb" firstAttribute="leading" secondItem="6Nv-jI-zRT" secondAttribute="leadingMargin" constant="-20" id="16V-s5-uLd"/>
                             <constraint firstItem="CbK-CH-Adb" firstAttribute="centerX" secondItem="sX7-Sj-YSK" secondAttribute="centerX" id="7ZG-aV-jo4"/>
-                            <constraint firstItem="CXb-D5-In0" firstAttribute="top" secondItem="CbK-CH-Adb" secondAttribute="bottom" id="BHK-uE-Se5"/>
                             <constraint firstItem="CbK-CH-Adb" firstAttribute="centerY" secondItem="sX7-Sj-YSK" secondAttribute="centerY" id="Epm-8B-rKc"/>
                             <constraint firstItem="CbK-CH-Adb" firstAttribute="top" secondItem="6Nv-jI-zRT" secondAttribute="topMargin" id="NwW-4p-H5j"/>
+                            <constraint firstItem="CXb-D5-In0" firstAttribute="top" secondItem="CbK-CH-Adb" secondAttribute="bottom" id="t0b-x7-Eda"/>
                             <constraint firstAttribute="trailingMargin" secondItem="CbK-CH-Adb" secondAttribute="trailing" constant="-20" id="vV5-Cf-ond"/>
                         </constraints>
                     </view>

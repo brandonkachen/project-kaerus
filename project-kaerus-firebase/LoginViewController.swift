@@ -50,17 +50,13 @@ class LoginViewController: UIViewController {
 			if facebookError != nil { print("Facebook login failed. Error \(facebookError)")
 			} else if facebookResult.isCancelled { print("Facebook login was cancelled.")
 			} else {
-				
-				
+				self.loadingView.hidden = false
 				let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
 				FIRAuth.auth()?.signInWithCredential(credential) { (user, error) in
 					if let error = error {
 						print(error.localizedDescription)
 						return
 					}
-					self.loadingView.hidden = false
-				self.titleView.backgroundColor = UIColor.blackColor()
-				self.titleView.alpha = 0.8
 					self.signedIn(user!)
 				}
 			}
@@ -154,7 +150,7 @@ extension LoginViewController {
 	}
 	
 	func setFirstTimeLogin() {
-		FIRDatabase.database().reference().child("First-Login").child(AppState.sharedInstance.userID).setValue(true)
+		FIRDatabase.database().reference().child("First-Login").child(AppState.sharedInstance.userID).setValue(false)
 	}
 	
 	func saveFBInfo() {

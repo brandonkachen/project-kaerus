@@ -11,15 +11,21 @@ import Firebase
 import FBSDKCoreKit
 import FBSDKLoginKit
 
+// sends a notification to all of partner's devices
 func sendNotification(text: String) {
-	let osItem = [
-		"contents": ["en": text],
-		"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
-		"content_available": ["true"]
-	]
-	OneSignal.postNotification(osItem)
+	if AppState.sharedInstance.f_oneSignalID == nil {
+		print("Error! Partner f_oneSignalID is nil")
+	} else {
+		let osItem = [
+			"contents": ["en": text],
+			"include_player_ids": [AppState.sharedInstance.f_oneSignalID!],
+			"content_available": ["true"]
+		]
+		OneSignal.postNotification(osItem)
+	}
 }
 
+// sends a notification to a specific device
 func sendNotification(text: String, id: String) {
 	let item = [
 		"contents": ["en": text],

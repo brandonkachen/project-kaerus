@@ -68,7 +68,7 @@ class DeadlinesViewController: UIViewController {
 		paymentCard.layer.shadowOpacity = 0.5
 		
 		setPartnerStuff()
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerStatusChanged(_:)), name: "PartnerInfoChanged", object: nil)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerStatusChanged(_:)), name: "PartnerInfoChanged_Deadlines", object: nil)
 	}
 	
 	func partnerStatusChanged(_: NSNotification) {
@@ -103,6 +103,15 @@ class DeadlinesViewController: UIViewController {
 	
 	func logViewLoaded() {
 		FIRCrashMessage("View loaded")
+	}
+	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
+	}
+	
+	override func viewWillDisappear(animated: Bool) {
+		super.viewWillDisappear(animated)
+//		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 	
 	deinit {
