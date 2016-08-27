@@ -32,19 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			handleNotificationAction: { (result) in self.notifAct(result) },
 			settings: [kOSSettingsKeyAutoPrompt : false, kOSSettingsKeyInAppAlerts : false])
 		
-		let user = FIRAuth.auth()?.currentUser
-		if user != nil { // user is logged in so load their info and go to loadingViewController
-			AppState.sharedInstance.setState(user)
-			MeasurementHelper.sendLoginEvent()
-			NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
-		} else { // not logged in, go to loginViewController
-			let loginStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-			let loginVC : UIViewController = loginStoryboard.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
-			self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-			self.window?.rootViewController = loginVC
-			self.window?.makeKeyAndVisible()
-		}
-		
 		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 	}
 	
