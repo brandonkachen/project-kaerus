@@ -77,7 +77,6 @@ class ChatViewController: JSQMessagesViewController {
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		//TODO: refresh Appstate
 	}
 	
 	override func viewWillDisappear(animated: Bool) {

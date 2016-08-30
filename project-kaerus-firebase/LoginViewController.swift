@@ -21,26 +21,11 @@
 */
 
 import UIKit
-import Firebase
 import FBSDKCoreKit
 import FBSDKLoginKit
 
 class LoginViewController: UIViewController {
-
-	// MARK: Constants
-	let LoggedIn = "LoggedIn"
-	let group = dispatch_group_create()
 	
-	// MARK: Outlets
-//	@IBOutlet weak var textFieldLoginEmail: UITextField!
-//	@IBOutlet weak var textFieldLoginPassword: UITextField!
-	@IBOutlet var titleView: UIView!
-	@IBOutlet weak var loadingView: UIView!
-	
-	// MARK: Properties
-	let ref = FIRDatabase.database().reference()
-	var storageRef: FIRStorageReference!
-
 	// MARK: UIViewController Lifecycle
 	@IBAction func facebookLogin (sender: AnyObject){
 		let facebookLogin = FBSDKLoginManager()
@@ -49,23 +34,12 @@ class LoginViewController: UIViewController {
 		facebookLogin.logInWithReadPermissions(["email", "user_friends"], fromViewController: self, handler:{(facebookResult, facebookError) -> Void in
 			if facebookError != nil { print("Facebook login failed. Error \(facebookError)")
 			} else if facebookResult.isCancelled { print("Facebook login was cancelled.")
-			} else {
-				self.loadingView.hidden = false
-				let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
-				FIRAuth.auth()?.signInWithCredential(credential) { (user, error) in
-					if let error = error {
-						print(error.localizedDescription)
-						return
-					}
-					self.signedIn(user!)
-				}
-			}
+			} else { self.performSegueWithIdentifier("LoggedIn", sender: nil) }
 		})
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		storageRef = FIRStorage.storage().referenceForURL("gs://project-kaerus.appspot.com")
 	}
 	// MARK: Actions
 //	@IBAction func loginDidTouch(sender: AnyObject) {
@@ -92,39 +66,21 @@ class LoginViewController: UIViewController {
 //			self.setDisplayName(user!)
 //		}
 //	}
-	
-	func setDisplayName(user: FIRUser) {
-		let changeRequest = user.profileChangeRequest()
-		changeRequest.displayName = user.email!.componentsSeparatedByString("@")[0]
-		changeRequest.commitChangesWithCompletion(){ (error) in
-			if let error = error {
-				print(error.localizedDescription)
-				return
-			}
-			self.signedIn(FIRAuth.auth()?.currentUser)
-		}
-	}
-	
-	func signedIn(user: FIRUser?) {
-		MeasurementHelper.sendLoginEvent()
-		AppState.sharedInstance.setState(user)
-		NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
-		
-		// set up firebase for user, if they're new
-		isFirstTimeLogin(user!.uid) { (result) -> () in
-			result ?
-				self.setupForFirstTime() :
-				self.performSegueWithIdentifier(self.LoggedIn, sender: nil)
-		}
-	}
-	
-	func isFirstTimeLogin(uid: String, completion: (res: Bool)->()) {
-		FIRDatabase.database().reference().child("First-Login").child(uid).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
-			completion(res: (snapshot.exists() ? false : true)) // if snapshot exists, user is NOT a first timer
-		}
-	}
+//	
+//	func setDisplayName(user: FIRUser) {
+//		let changeRequest = user.profileChangeRequest()
+//		changeRequest.displayName = user.email!.componentsSeparatedByString("@")[0]
+//		changeRequest.commitChangesWithCompletion(){ (error) in
+//			if let error = error {
+//				print(error.localizedDescription)
+//				return
+//			}
+//			self.signedIn(FIRAuth.auth()?.currentUser)
+//		}
+//	}
 }
 
+/*
 // all the stuff needed to set up a first-time user
 extension LoginViewController {
 	func setupForFirstTime() {
@@ -257,4 +213,5 @@ extension LoginViewController {
 		partnerStatusRef.setValue(false)
 	}
 }
+*/
 

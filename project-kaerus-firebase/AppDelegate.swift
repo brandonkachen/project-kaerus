@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override init() {
 		FIRApp.configure()
-		FIRDatabase.database().persistenceEnabled = true
+//		FIRDatabase.database().persistenceEnabled = true
 	}
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
@@ -28,15 +28,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		OneSignal.registerForPushNotifications()
 		
 		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00",
-		                                handleNotificationReceived: nil, //{ (notification) in  self.notifRcv },
+		                                handleNotificationReceived: { (notification) in self.notifRcv(notification) },
 			handleNotificationAction: { (result) in self.notifAct(result) },
 			settings: [kOSSettingsKeyAutoPrompt : false, kOSSettingsKeyInAppAlerts : false])
 		
 		let user = FIRAuth.auth()?.currentUser
 		if user != nil { // user is logged in so load their info and go to loadingViewController
-			AppState.sharedInstance.setState(user)
-			MeasurementHelper.sendLoginEvent()
-			NSNotificationCenter.defaultCenter().postNotificationName(Constants.NotificationKeys.SignedIn, object: nil, userInfo: nil)
+			let loadVC = self.window?.rootViewController as! LoadingViewController
+			loadVC.user = user
 		} else { // not logged in, go to loginViewController
 			let loginStoryboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 			let loginVC : UIViewController = loginStoryboard.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
@@ -49,31 +48,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	// called when user is in app and receives a notification
-	func notifRcv() {
+	func notifRcv(notification: OSNotification!) {
 		print("notification received while user was in app")
 	}
 	
 	// called when user opens notification
 	func notifAct(result: OSNotificationResult!) {
 		print("notification opened")
-//		let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-//		let tabBarVC = storyBoard.instantiateViewControllerWithIdentifier("tabBarControl")
-//		self.window?.rootViewController = tabBarVC
-//		let tabBarController = self.window!.rootViewController as? UITabBarController
-//
-//		if tabBarController != nil && tabBarController?.selectedIndex != 1 {
-//			tabBarController!.selectedIndex = 1
-//		}
-//
-//		// This block gets called when the user reacts to a notification received
-//		let payload = result.notification.payload
-//		var fullMessage = payload.title
-//
-//		// Try to fetch the action selected
-//		if let additionalData = payload.additionalData, actionSelected = additionalData["actionSelected"] as? String {
-//			fullMessage =  fullMessage + "\nPressed ButtonId:\(actionSelected)"
-//		}
-//		print(fullMessage)
+//		let loadVC = self.window?.rootViewController as! LoadingViewController
+//		print("did")
+////		if result.notification.
+//		loadVC.selectedIndex = 2
+//		print("leaving")
 	}
  
 	func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
