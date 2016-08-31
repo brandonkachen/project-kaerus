@@ -31,7 +31,7 @@ class DeadlinesViewController: UIViewController {
 	
 	var userDeadlines = [Deadline]()
 	var partnerDeadlines = [Deadline]()
-	var ref, userRef, userDeadlinesRef, partnerRef, partnerDeadlineRef, owesRef, dayUserLastSawRef, lastDatePaidRef: FIRDatabaseReference!
+	var ref, userRef, userDeadlinesRef, partnerRef, partnerDeadlineRef, paymentsHistoryRef, dayUserLastSawRef, lastDatePaidRef: FIRDatabaseReference!
 	private var _userDeadlinesRefHandle, _partnerDeadlinesRefHandle: FIRDatabaseHandle!
 	var dayUserIsLookingAt: String! // set by the 'day' variable in User-Deadlines
 	var userTotal: Double = 0
@@ -109,43 +109,56 @@ class DeadlinesViewController: UIViewController {
 			// set partner refs that don't rely on dayUserIsLookingAt
 			partnerRef = ref.child("User-Deadlines").child(AppState.sharedInstance.f_firID!)
 //			partnerDeadlineRef = partnerRef.child("Deadlines").child(self.dayUserIsLookingAt)
-			owesRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("History")
+			paymentsHistoryRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("History")
 			lastDatePaidRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid")
 			setupPaymentTracking()
 		}
 	}
 	
 	func setupPaymentTracking() {
-		lastDatePaidRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-			let str_lpd = snapshot.value as! String
-			self.owesRef.queryOrderedByKey().queryStartingAtValue(str_lpd).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-				var userTotal: Double = 0
-				var partnerTotal: Double = 0
-				for item in snapshot.children {
-					if let userAmt = item.childSnapshotForPath(AppState.sharedInstance.userID).value as? Double {
-						userTotal += userAmt
-					}
-					
-					if let partnerAmt = item.childSnapshotForPath(AppState.sharedInstance.f_firID!).value as? Double {
-						partnerTotal += partnerAmt
-					}
+		func queryHistory(lpd: String, user: String) {
+			self.paymentsHistoryRef.child(user).queryOrderedByKey().queryStartingAtValue(lpd).observeEventType(.Value)
+			{ (snapshot: FIRDataSnapshot) in
+				let total = calculateTotal(snapshot)
+				if user == AppState.sharedInstance.userID {
+					self.userTotal = total
+				} else {
+					self.partnerTotal = total
 				}
 				
-				let diff = partnerTotal - userTotal
+				let diff = self.partnerTotal - self.userTotal
 				let absDiff = String(format: "%.2f", fabs(diff))
 				if diff < 0 {
 					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ?
-						"-$\(absDiff)" :
-						"+$\(absDiff)"
+						"- $\(absDiff)" :
+						"+ $\(absDiff)"
 				} else if diff == 0 {
 					self.amtOwedLabel.text =
-						"$0"
+					"$0"
 				} else {
 					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ?
-						"+$\(absDiff)" :
-						"-$\(absDiff)"
+						"+ $\(absDiff)" :
+						"- $\(absDiff)"
 				}
 			}
+		}
+		
+		func calculateTotal(snapshot: FIRDataSnapshot) -> Double {
+			var total: Double = 0
+			if let items = snapshot.value as? [String : Double] {
+				for item in items { total += item.1 }
+			}
+			return total
+		}
+		
+		lastDatePaidRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+			let str_lpd = snapshot.value as! String
+			
+			// check for changes in user history
+			queryHistory(str_lpd, user: AppState.sharedInstance.userID)
+			
+			// check for changes in partner history
+			queryHistory(str_lpd, user: AppState.sharedInstance.f_firID!)
 		}
 	}
 	
@@ -185,7 +198,7 @@ class DeadlinesViewController: UIViewController {
 	
 	// determine how much the user owes for this particular day
 	func determineOwedBalance(totalCount: Int) {
-		let userOwesRef = self.owesRef.child(self.dayUserIsLookingAt).child(AppState.sharedInstance.userID)
+		let userOwesRef = self.paymentsHistoryRef.child(self.dayUserIsLookingAt).child(AppState.sharedInstance.userID)
 		let missedCount = getMissedDeadlineCount()
 		// if deadline count <= 5, every missed deadline costs $2.50/(deadline count).
 		// otherwise, missed deadlines are charged at a flat rate of $0.50 each.
