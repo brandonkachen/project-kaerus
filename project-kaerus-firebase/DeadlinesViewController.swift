@@ -153,7 +153,6 @@ class DeadlinesViewController: UIViewController {
 		
 		lastDatePaidRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 			let str_lpd = snapshot.value as! String
-			
 			// check for changes in user history
 			queryHistory(str_lpd, user: AppState.sharedInstance.userID)
 			
@@ -198,7 +197,7 @@ class DeadlinesViewController: UIViewController {
 	
 	// determine how much the user owes for this particular day
 	func determineOwedBalance(totalCount: Int) {
-		let userOwesRef = self.paymentsHistoryRef.child(self.dayUserIsLookingAt).child(AppState.sharedInstance.userID)
+		let userOwesRef = self.paymentsHistoryRef.child(AppState.sharedInstance.userID).child(self.dayUserIsLookingAt)
 		let missedCount = getMissedDeadlineCount()
 		// if deadline count <= 5, every missed deadline costs $2.50/(deadline count).
 		// otherwise, missed deadlines are charged at a flat rate of $0.50 each.
