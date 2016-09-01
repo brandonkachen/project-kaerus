@@ -110,6 +110,8 @@
                             <constraint firstAttribute="trailingMargin" secondItem="CbK-CH-Adb" secondAttribute="trailing" constant="-20" id="vV5-Cf-ond"/>
                         </constraints>
                     </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="krJ-mD-vK1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

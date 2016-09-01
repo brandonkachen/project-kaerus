@@ -72,8 +72,6 @@ class DeadlinesViewController: UIViewController {
 		paymentCard.layer.shadowOpacity = 0.5
 		
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerStatusChanged(_:)), name: "PartnerInfoChanged_Deadlines", object: nil)
-		
-//		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerStatusChanged(_:)), name: "lastPaidDateChanged", object: nil)
 	}
 	
 	deinit {
@@ -110,7 +108,6 @@ class DeadlinesViewController: UIViewController {
 			segControl.setEnabled(true, forSegmentAtIndex: 1)
 			// set partner refs that don't rely on dayUserIsLookingAt
 			partnerRef = ref.child("User-Deadlines").child(AppState.sharedInstance.f_firID!)
-//			partnerDeadlineRef = partnerRef.child("Deadlines").child(self.dayUserIsLookingAt)
 			paymentsHistoryRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("History")
 			lastDatePaidRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid")
 			setupPaymentTracking()
@@ -118,53 +115,6 @@ class DeadlinesViewController: UIViewController {
 	}
 	
 	func setupPaymentTracking() {
-		func queryHistory(lpd: String, user: String) {
-			self.paymentsHistoryRef.child(user).queryOrderedByKey().queryStartingAtValue(lpd).observeEventType(.Value)
-			{ (snapshot: FIRDataSnapshot) in
-				let total = calculateTotal(snapshot)
-				if user == AppState.sharedInstance.userID {
-					self.userTotal = total
-				} else {
-					self.partnerTotal = total
-				}
-				
-				let diff = self.partnerTotal - self.userTotal
-				let absDiff = String(format: "%.2f", fabs(diff))
-				
-				if self.lastDayUserSetDeadlinesRef != nil {
-					self.lastDayUserSetDeadlinesRef.removeAllObservers()
-				}
-				
-				// janky way of getting the last date user has set deadlines and locking
-				self.lastDayUserSetDeadlinesRef = self.ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines")
-				self.lastDayUserSetDeadlinesRef.queryOrderedByKey().queryLimitedToLast(1).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-					print("hi", user)
-					for item in snapshot.children {
-						self.lockDate = item.key!
-					}
-					
-					if diff <= -10 && self.segControl.selectedSegmentIndex == 0 {
-						self.amtOwedLabel.text = "- "
-						self.shouldLock = true
-						if self.dayUserIsLookingAt > self.lockDate {
-							self.lock()
-						}
-					} else {
-						self.shouldLock = false
-						self.lockDate = self.dateFormatter.stringFromDate(NSDate.distantFuture())
-						if diff < 0 {
-							self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "- " : "+ "
-						} else if diff > 0 {
-							self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "+ " : "- "
-						} else {
-							self.amtOwedLabel.text = ""
-						}
-					}
-					self.amtOwedLabel.text! += "$" + absDiff
-				}
-			}
-		}
-		
 		func calculateTotal(snapshot: FIRDataSnapshot) -> Double {
 			var total: Double = 0
 			if let items = snapshot.value as? [String : Double] {
@@ -173,37 +123,95 @@ class DeadlinesViewController: UIViewController {
 			return total
 		}
 		
+		func lockIfUserNeedsToPay() {
+			let diff = self.partnerTotal - self.userTotal
+			let absDiff = String(format: "%.2f", fabs(diff))
+			
+			if diff <= -10 && self.segControl.selectedSegmentIndex == 0 {
+				self.amtOwedLabel.text = "- "
+				self.shouldLock = true
+				if self.lockDate.isEmpty == false && self.dayUserIsLookingAt > self.lockDate {
+					self.lock()
+					self.editButton.enabled = false
+				}
+			} else {
+				self.shouldLock = false
+				self.unlock()
+				self.editButton.enabled = true
+				if diff < 0 {
+					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "- " : "+ "
+				} else if diff > 0 {
+					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "+ " : "- "
+				} else {
+					self.amtOwedLabel.text = ""
+				}
+			}
+			self.amtOwedLabel.text! += "$" + absDiff
+		}
+		
 		lastDatePaidRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 			let str_lpd = snapshot.value as! String
-			// check for changes in user history
-			queryHistory(str_lpd, user: AppState.sharedInstance.userID)
 			
-			// check for changes in partner history
-			queryHistory(str_lpd, user: AppState.sharedInstance.f_firID!)
+			// detect changes in user history
+			self.paymentsHistoryRef.child(AppState.sharedInstance.userID).queryOrderedByKey().queryStartingAtValue(str_lpd).observeEventType(.Value)
+			{ (snapshot: FIRDataSnapshot) in
+				self.userTotal = calculateTotal(snapshot)
+				self.ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Owed-Totals").child(AppState.sharedInstance.userID).setValue(self.userTotal)
+				
+				// janky way of getting the last date user has set deadlines and locking
+				self.lastDayUserSetDeadlinesRef = self.ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines")
+				self.lastDayUserSetDeadlinesRef.queryOrderedByKey().queryLimitedToLast(1).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
+					for item in snapshot.children {
+						self.lockDate = item.key!
+					}
+					lockIfUserNeedsToPay()
+				}
+			}
+			
+			// check for updated partner owed amounts
+			self.ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Owed-Totals").child(AppState.sharedInstance.f_firID!).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+				self.partnerTotal = snapshot.value as! Double
+				lockIfUserNeedsToPay()
+			}
 		}
+	}
+	
+	// hide deadlines and prompt user to pay
+	func lock() {
+		self.blurView.hidden = false
+		self.paymentCard.hidden = false
+	}
+	
+	// hide payment stuff; show deadlines
+	func unlock() {
+		self.blurView.hidden = true
+		self.paymentCard.hidden = true
 	}
 	
 	// MARK: Set up user deadlines
 	
 	// set up the whole view, usually after a date change in calendar
 	func setupUserView() {
-		getDeadlinesForDay()
+		userDeadlinesRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines").child(self.dayUserIsLookingAt)
+		getDeadlinesForDay(userDeadlinesRef)
 	}
 	
+//	func setupPartnerView() {
+//		partnerDeadlineRef = partnerRef.child("Deadlines").child(self.dayUserIsLookingAt)
+//		getDeadlinesForDay(partnerDeadlineRef)
+//	}
+	
 	// load table with deadlines for the day user is looking at
-	func getDeadlinesForDay() {
-		getDeadlines() { (result) -> () in
+	func getDeadlinesForDay(ref: FIRDatabaseReference) {
+		getDeadlines(ref) { (result) -> () in
 			self.determineOwedBalance(result)
 		}
 	}
 	
 	// get the deadlines
-	func getDeadlines(completion: (result: Int)->()) {
-		// (re)set ref that rely on dayUserIsLookingAt
-		userDeadlinesRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines").child(self.dayUserIsLookingAt)
-		
+	func getDeadlines(ref: FIRDatabaseReference, completion: (result: Int)->()) {
 		// query by the "timeDue" property
-		_userDeadlinesRefHandle = self.userDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+		/*_userDeadlinesRefHandle = */ ref.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 			var newItems = [Deadline]()
 			for item in snapshot.children {
 				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
@@ -212,7 +220,7 @@ class DeadlinesViewController: UIViewController {
 			self.userDeadlines = newItems
 			self.deadlineTable.reloadData()
 			self.editButton.title = newItems.isEmpty ? "New" : "Edit"
-			completion(result: self.userDeadlines.count)
+			completion(result: newItems.count)
 		}
 	}
 	
@@ -245,18 +253,6 @@ class DeadlinesViewController: UIViewController {
 			}
 		}
 		return missedCount
-	}
-	
-	// hide deadlines and prompt user to pay
-	func lock() {
-		self.blurView.hidden = false
-		self.paymentCard.hidden = false
-	}
-	
-	// hide payment stuff; show deadlines
-	func unlock() {
-		self.blurView.hidden = true
-		self.paymentCard.hidden = true
 	}
 
 	// MARK: calendar setup
@@ -295,8 +291,10 @@ extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalenda
 		setupUserView()
 		if segControl.selectedSegmentIndex == 0 && shouldLock == true && self.dayUserIsLookingAt > self.lockDate  {
 			lock()
+			self.editButton.enabled = false
 		} else {
 			unlock()
+			self.editButton.enabled = true
 		}
 		(cell as? CellView)?.cellSelectionChanged(cellState)
 	}
@@ -367,7 +365,8 @@ extension DeadlinesViewController {
 	}
 	
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		if segControl.selectedSegmentIndex == 1 { // use not allowed to mark off partner's deadlines
+		// use not allowed to mark off partner's deadlines
+		if segControl.selectedSegmentIndex == 1 { 
 			return
 		}
 		
@@ -394,14 +393,10 @@ extension DeadlinesViewController {
 			// show edit and pay buttons
 			self.editButton.tintColor = self.navigationController?.navigationBar.tintColor
 			self.editButton.enabled = true
-			self.payButton.tintColor = self.navigationController?.navigationBar.tintColor
-			self.payButton.enabled = true
 		} else { // user looking at partner's deadlines
 			// jank way of hiding edit and pay buttons
 			self.editButton.tintColor = UIColor.clearColor()
 			self.editButton.enabled = false
-			self.payButton.tintColor = UIColor.clearColor()
-			self.payButton.enabled = false
 		}
 	}
 	

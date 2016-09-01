@@ -60,7 +60,6 @@ class LoadingViewController: UIViewController {
 		startDateSetup()
 		
 		// keep observers on these, in case they change
-//		lastPaidDaySetup()
 		partnerStatusSetup()
 		partnerInfoSetup()
 		
@@ -208,26 +207,6 @@ extension LoadingViewController {
 			dispatch_group_leave(self.group)
 		}
 	}
-	
-//	func lastPaidDaySetup() {
-//		let dateFormatter = NSDateFormatter()
-//		dateFormatter.dateFormat = "yyyy-MM-dd Z"
-//		
-//		dispatch_group_enter(self.group)
-//		let dateRef = ref.child("Payments").child(AppState.sharedInstance.userID)
-//		let lastPaidDayRef = dateRef.child("Last-Date-Paid")
-//		lastPaidDayRef.observeEventType(.Value) { (lastPaidDateSnap: FIRDataSnapshot) in
-//			if let lastPaidDate = lastPaidDateSnap.value as? String {
-//				AppState.sharedInstance.lastPaidDate = dateFormatter.dateFromString(lastPaidDate)
-//				NSNotificationCenter.defaultCenter().postNotificationName("lastPaidDateChanged", object: nil)
-//			} else {
-//				let distantPast = NSDate.distantPast()
-//				lastPaidDayRef.setValue(dateFormatter.stringFromDate(distantPast))
-//				AppState.sharedInstance.lastPaidDate = distantPast
-//			}
-//			self.leaveGroup()
-//		}
-//	}
 	
 	// get partner status
 	func partnerStatusSetup() {
