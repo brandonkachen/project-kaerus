@@ -802,7 +802,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="133"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mkt-JO-2gT">
-                                        <rect key="frame" x="300" y="116.5" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="300" y="116" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -918,17 +918,22 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w1V-ZK-pdr">
-                                <rect key="frame" x="20" y="356" width="560" height="131"/>
+                                <rect key="frame" x="20" y="321" width="560" height="166"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oxh-ya-HC8">
-                                        <rect key="frame" x="265" y="85" width="30" height="30"/>
+                                        <rect key="frame" x="265" y="120" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="qtS-QP-KaU"/>
                                         </constraints>
                                         <state key="normal" title="Pay"/>
+                                        <connections>
+                                            <action selector="didPressPayButton:" destination="OJt-7a-W1m" eventType="touchUpInside" id="6FL-8f-rph"/>
+                                        </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can't access this day until you pay _name_" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PI9-d3-D7N">
-                                        <rect key="frame" x="32" y="20" width="496" height="57"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PI9-d3-D7N">
+                                        <rect key="frame" x="37" y="30" width="487" height="82"/>
+                                        <string key="text">You owe more than your limit allows! 
+You must pay your partner before you can access this day.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -938,10 +943,10 @@
                                 <constraints>
                                     <constraint firstItem="oxh-ya-HC8" firstAttribute="top" secondItem="PI9-d3-D7N" secondAttribute="bottom" constant="8" id="6SX-I1-XyX"/>
                                     <constraint firstAttribute="bottom" secondItem="oxh-ya-HC8" secondAttribute="bottom" constant="16" id="IxR-bG-VIl"/>
-                                    <constraint firstItem="PI9-d3-D7N" firstAttribute="leading" secondItem="w1V-ZK-pdr" secondAttribute="leading" constant="32" id="Nhd-fI-cOH"/>
-                                    <constraint firstAttribute="trailing" secondItem="PI9-d3-D7N" secondAttribute="trailing" constant="32" id="ZVQ-ce-hag"/>
-                                    <constraint firstItem="PI9-d3-D7N" firstAttribute="top" secondItem="w1V-ZK-pdr" secondAttribute="top" constant="20" id="cbR-BA-sTJ"/>
-                                    <constraint firstAttribute="height" constant="131" id="pg6-gD-KFD"/>
+                                    <constraint firstItem="PI9-d3-D7N" firstAttribute="leading" secondItem="w1V-ZK-pdr" secondAttribute="leading" constant="37" id="Nhd-fI-cOH"/>
+                                    <constraint firstAttribute="trailing" secondItem="PI9-d3-D7N" secondAttribute="trailing" constant="36" id="ZVQ-ce-hag"/>
+                                    <constraint firstItem="PI9-d3-D7N" firstAttribute="top" secondItem="w1V-ZK-pdr" secondAttribute="top" constant="30" id="cbR-BA-sTJ"/>
+                                    <constraint firstAttribute="height" constant="166" id="pg6-gD-KFD"/>
                                     <constraint firstItem="oxh-ya-HC8" firstAttribute="centerX" secondItem="PI9-d3-D7N" secondAttribute="centerX" id="zmL-pF-Tei"/>
                                 </constraints>
                             </view>
@@ -984,11 +989,6 @@
                                 <action selector="didChangeSegment:" destination="OJt-7a-W1m" eventType="valueChanged" id="2HJ-00-BrI"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" title="Pay" id="hrB-W6-jMw">
-                            <connections>
-                                <action selector="didPressPayButton:" destination="OJt-7a-W1m" id="b0x-ow-bTI"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="amtOwedLabel" destination="mkt-JO-2gT" id="i6d-kn-92M"/>
@@ -999,7 +999,6 @@
                         <outlet property="editButton" destination="Pgh-dX-rNa" id="cBq-wc-8Zi"/>
                         <outlet property="fullCalendarView" destination="nuP-6r-VJr" id="xUE-hA-cfi"/>
                         <outlet property="monthLabel" destination="uJy-vN-uon" id="ff4-gF-311"/>
-                        <outlet property="payButton" destination="hrB-W6-jMw" id="T11-we-YiV"/>
                         <outlet property="paymentCard" destination="w1V-ZK-pdr" id="WNX-l3-bGD"/>
                         <outlet property="paymentCardLabel" destination="PI9-d3-D7N" id="Cvf-06-Ajv"/>
                         <outlet property="segControl" destination="ih5-ND-VR3" id="aDl-AH-hc5"/>
