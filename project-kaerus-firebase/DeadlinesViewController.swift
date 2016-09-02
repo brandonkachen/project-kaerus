@@ -109,9 +109,15 @@ class DeadlinesViewController: UIViewController {
 			segControl.setTitle("Partner", forSegmentAtIndex: 1)
 			segControl.setEnabled(false, forSegmentAtIndex: 1)
 			segControl.selectedSegmentIndex = 0
+			partnerDeadlines.removeAll()
+			amtOwedLabel.text = "you don't have a partner!"
+			
 			if partnerDeadlinesRef != nil {
 				self.partnerDeadlinesRef.removeObserverWithHandle(_partnerDeadlinesRefHandle)
 			}
+			
+			// get rid of other refs here
+			
 			partnerDeadlinesRef = nil
 			partnerRef = nil
 		} else { // user has partner - load their data separately from user's
@@ -205,20 +211,26 @@ class DeadlinesViewController: UIViewController {
 	// set up the whole view, usually after a date change in calendar
 	func setupUserView() {
 		getDeadlines() { (result) -> () in
-			self.determineOwedBalance(result)
+			if AppState.sharedInstance.partnerStatus == true {
+				self.determineOwedBalance(result)
+			}
 		}
+	}
+	
+	func getNewItems(snap: FIRDataSnapshot) -> [Deadline] {
+		var newItems = [Deadline]()
+		for item in snap.children {
+			let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
+			newItems.append(deadlineItem)
+		}
+		return newItems
 	}
 	
 	func setupPartnerView() {
 		partnerDeadlinesRef = partnerRef.child("Deadlines").child(self.dateUserIsLookingAt)
 		// query by the "timeDue" property
-		_userDeadlinesRefHandle = partnerDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-			var newItems = [Deadline]()
-			for item in snapshot.children {
-				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
-				newItems.append(deadlineItem)
-			}
-			self.partnerDeadlines = newItems
+		_partnerDeadlinesRefHandle = partnerDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+			self.partnerDeadlines = self.getNewItems(snapshot)
 			if self.segControl.selectedSegmentIndex == 1 { self.deadlineTable.reloadData() }
 		}
 	}
@@ -228,15 +240,10 @@ class DeadlinesViewController: UIViewController {
 		userDeadlinesRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines").child(self.dateUserIsLookingAt)
 		// query by the "timeDue" property
 		_userDeadlinesRefHandle = userDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-			var newItems = [Deadline]()
-			for item in snapshot.children {
-				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
-				newItems.append(deadlineItem)
-			}
-			self.userDeadlines = newItems
+			self.userDeadlines = self.getNewItems(snapshot)
 			self.deadlineTable.reloadData()
-			self.editButton.title = newItems.isEmpty ? "New" : "Edit"
-			completion(result: newItems.count)
+			self.editButton.title = self.userDeadlines.isEmpty ? "New" : "Edit"
+			completion(result: self.userDeadlines.count)
 		}
 	}
 	
@@ -410,10 +417,12 @@ extension DeadlinesViewController {
 			// show edit and pay buttons
 			self.editButton.tintColor = self.navigationController?.navigationBar.tintColor
 			self.editButton.enabled = true
+			self.setupUserView()
 		} else { // user looking at partner's deadlines
 			// jank way of hiding edit and pay buttons
 			self.editButton.tintColor = UIColor.clearColor()
 			self.editButton.enabled = false
+			self.setupPartnerView()
 		}
 		self.deadlineTable.reloadData()
 	}
