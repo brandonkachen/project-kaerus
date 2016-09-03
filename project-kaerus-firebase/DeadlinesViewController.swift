@@ -432,7 +432,7 @@ extension DeadlinesViewController {
 		let navController = segue.destinationViewController as! UINavigationController
 		let editDeadlinesVC = navController.topViewController as! EditDeadlinesViewController
 		editDeadlinesVC.deadlines = userDeadlines
-		editDeadlinesVC.date = dateUserIsLookingAt
+		editDeadlinesVC.startDate = self.dateFormatter.dateFromString(dateUserIsLookingAt)
 		editDeadlinesVC.explanationEnabled = !userDeadlines.isEmpty
 		editDeadlinesVC.title = (self.navigationItem.leftBarButtonItem?.title == "New") ? "New Schedule" : "Edit Schedule"
 	}

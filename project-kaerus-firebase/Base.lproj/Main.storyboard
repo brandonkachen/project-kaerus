@@ -147,7 +147,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="exP-19-Inf">
-                            <rect key="frame" x="0.0" y="677.5" width="600" height="44"/>
+                            <rect key="frame" x="0.0" y="501.5" width="600" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="1" green="0.063567913899999995" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="Log Out">
@@ -182,36 +182,16 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="PAYMENTS" id="6MH-GP-1fT">
+                            <tableViewSection headerTitle="PAYMENT" id="6MH-GP-1fT">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="k9T-Np-aJq" style="IBUITableViewCellStyleDefault" id="50y-Bc-yPB">
-                                        <rect key="frame" x="0.0" y="207.5" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="50y-Bc-yPB" id="w34-Cz-HR7">
-                                            <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Balance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="k9T-Np-aJq">
-                                                    <rect key="frame" x="15" y="0.0" width="550" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="cUt-kl-WIg" kind="show" id="dNu-ea-2ZD"/>
-                                        </connections>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="mcb-NK-zKS" style="IBUITableViewCellStyleDefault" id="H1z-Yz-6hf">
-                                        <rect key="frame" x="0.0" y="251.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="207.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H1z-Yz-6hf" id="QMR-KO-80y">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Stats" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mcb-NK-zKS">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Info and Stats" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mcb-NK-zKS">
                                                     <rect key="frame" x="15" y="0.0" width="550" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -226,13 +206,13 @@
                             <tableViewSection headerTitle="CUSTOMIZE" id="SWR-BM-HJk">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="uz1-RN-cgh" style="IBUITableViewCellStyleDefault" id="4zp-85-gqY">
-                                        <rect key="frame" x="0.0" y="345.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="301.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4zp-85-gqY" id="BEh-LF-LeC">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Amount Owed Per Day" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uz1-RN-cgh">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Payments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uz1-RN-cgh">
                                                     <rect key="frame" x="15" y="0.0" width="550" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -241,64 +221,16 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="vd0-De-EqG" style="IBUITableViewCellStyleDefault" id="Qxn-Og-lIY">
-                                        <rect key="frame" x="0.0" y="389.5" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Qxn-Og-lIY" id="nQa-k4-ZYT">
-                                            <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="How Often You Need To Pay" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vd0-De-EqG">
-                                                    <rect key="frame" x="15" y="0.0" width="550" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="CO4-fb-vUr" style="IBUITableViewCellStyleDefault" id="mD7-4t-Gul">
-                                        <rect key="frame" x="0.0" y="433.5" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mD7-4t-Gul" id="9si-bJ-ShH">
-                                            <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Beginning of the Week" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CO4-fb-vUr">
-                                                    <rect key="frame" x="15" y="0.0" width="550" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="t18-2s-mME" kind="show" id="xxU-SS-0qc"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="HELP" id="qeN-jQ-LyG">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="gqK-DZ-SUK" style="IBUITableViewCellStyleDefault" id="E0V-57-WdM">
-                                        <rect key="frame" x="0.0" y="527.5" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E0V-57-WdM" id="3Bh-3z-Uxb">
-                                            <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="FAQ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gqK-DZ-SUK">
-                                                    <rect key="frame" x="15" y="0.0" width="550" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="OCr-wd-KZl" style="IBUITableViewCellStyleDefault" id="FbG-hX-I7V">
-                                        <rect key="frame" x="0.0" y="571.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="395.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FbG-hX-I7V" id="3Er-qU-PBT">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
@@ -315,7 +247,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="muY-bc-s06" style="IBUITableViewCellStyleDefault" id="J61-SU-Qee">
-                                        <rect key="frame" x="0.0" y="615.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="439.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="J61-SU-Qee" id="SAf-MK-wh2">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="44"/>
@@ -342,23 +274,6 @@
                     <navigationItem key="navigationItem" title="Settings" id="aGN-cX-ioh"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ZC-he-CEx" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="OyN-ab-kqu" style="IBUITableViewCellStyleDefault" id="6X3-xd-6c6">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6X3-xd-6c6" id="lK6-eI-LBP">
-                        <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Beginning of the Week" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OyN-ab-kqu">
-                                <rect key="frame" x="15" y="0.0" width="550" height="43.5"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                    </tableViewCellContentView>
-                </tableViewCell>
             </objects>
             <point key="canvasLocation" x="1889" y="1213"/>
         </scene>
@@ -581,11 +496,16 @@
             </objects>
             <point key="canvasLocation" x="2646" y="479"/>
         </scene>
-        <!--Settings-->
+        <!--Navigation Controller-->
         <scene sceneID="bbo-V0-INZ">
             <objects>
                 <navigationController id="lqS-Oe-W5X" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" id="vwd-aB-3GB"/>
+                    <tabBarItem key="tabBarItem" image="SettingsUnfilled" id="vwd-aB-3GB">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="SettingsFilled"/>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0L5-tO-YL4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -598,11 +518,16 @@
             </objects>
             <point key="canvasLocation" x="1131" y="1213"/>
         </scene>
-        <!--Deadlines-->
+        <!--Navigation Controller-->
         <scene sceneID="3Fs-0U-3Dw">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LAK-b1-NOB" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Deadlines" id="pa6-Wu-67m"/>
+                    <tabBarItem key="tabBarItem" title="" image="DeadlinesUnfilled" id="pa6-Wu-67m">
+                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="-5"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="DeadlinesFilled"/>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="nPc-ON-YoL">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -722,7 +647,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="uNp-Zp-hVE">
                             <connections>
-                                <segue destination="dMN-vT-uzh" kind="presentation" id="ohk-Bx-HN0"/>
+                                <segue destination="dMN-vT-uzh" kind="presentation" identifier="addItem" id="ohk-Bx-HN0"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1019,7 +944,7 @@ You must pay your partner before you can access this day.</string>
                         <viewControllerLayoutGuide type="bottom" id="qtd-3Q-hZE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7NH-6y-ZGE">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1029,7 +954,7 @@ You must pay your partner before you can access this day.</string>
             </objects>
             <point key="canvasLocation" x="1889" y="374"/>
         </scene>
-        <!--Balance-->
+        <!--Payment Info-->
         <scene sceneID="wOx-KA-hrs">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="cUt-kl-WIg" customClass="PaymentsViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
@@ -1038,11 +963,11 @@ You must pay your partner before you can access this day.</string>
                         <viewControllerLayoutGuide type="bottom" id="gIl-Vs-bVb"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="iKG-yT-nWH">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UtF-bl-G53">
-                                <rect key="frame" x="126" y="89" width="123" height="123"/>
+                                <rect key="frame" x="126" y="45" width="123" height="123"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MH6-Ye-MKi">
                                         <rect key="frame" x="34" y="78" width="54" height="18"/>
@@ -1078,7 +1003,7 @@ You must pay your partner before you can access this day.</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cbN-gU-Cs5">
-                                <rect key="frame" x="351" y="89" width="123" height="123"/>
+                                <rect key="frame" x="351" y="45" width="123" height="123"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SHE-my-0gQ">
                                         <rect key="frame" x="34" y="78" width="54" height="18"/>
@@ -1114,17 +1039,17 @@ You must pay your partner before you can access this day.</string>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="2U2-mQ-WNV">
-                                <rect key="frame" x="0.0" y="237" width="600" height="314"/>
+                                <rect key="frame" x="0.0" y="193" width="600" height="407"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PaymentHistoryTableViewCell" textLabel="bNH-Np-d83" style="IBUITableViewCellStyleDefault" id="0dY-Cr-xea" customClass="PaymentHistoryTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PaymentHistoryTableViewCell" textLabel="Dy2-ZH-nBW" style="IBUITableViewCellStyleDefault" id="T25-Gl-sCU" customClass="PaymentHistoryTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="49.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0dY-Cr-xea" id="pqe-Y7-PFk">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T25-Gl-sCU" id="gVM-Om-Dxp">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bNH-Np-d83">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Dy2-ZH-nBW">
                                                     <rect key="frame" x="15" y="0.0" width="570" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -1134,10 +1059,11 @@ You must pay your partner before you can access this day.</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="paymentLabel" destination="bNH-Np-d83" id="iLQ-SI-WHy"/>
+                                            <outlet property="paymentLabel" destination="Dy2-ZH-nBW" id="j72-Rz-HcV"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <sections/>
                                 <connections>
                                     <outlet property="dataSource" destination="cUt-kl-WIg" id="NX8-J8-pzT"/>
                                     <outlet property="delegate" destination="cUt-kl-WIg" id="cet-ak-AO4"/>
@@ -1158,7 +1084,7 @@ You must pay your partner before you can access this day.</string>
                             <constraint firstItem="cbN-gU-Cs5" firstAttribute="top" secondItem="UtF-bl-G53" secondAttribute="top" id="yb7-K9-HYN"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Balance" id="iBr-eR-PHL"/>
+                    <navigationItem key="navigationItem" title="Payment Info" id="iBr-eR-PHL"/>
                     <connections>
                         <outlet property="friendBalance" destination="VBG-LU-fsd" id="skr-cs-iqi"/>
                         <outlet property="friendName" destination="SHE-my-0gQ" id="33M-fc-uco"/>
@@ -1171,18 +1097,80 @@ You must pay your partner before you can access this day.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xpv-tZ-LVA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2646" y="1213"/>
+            <point key="canvasLocation" x="3370" y="479"/>
         </scene>
-        <!--Messages-->
+        <!--View Controller-->
+        <scene sceneID="1MG-Nj-MXX">
+            <objects>
+                <viewController id="t18-2s-mME" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="W7X-3m-ohe"/>
+                        <viewControllerLayoutGuide type="bottom" id="yrt-M6-ZdA"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4Xd-Kx-wmw">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="How much will each day cost?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibn-js-S4t">
+                                <rect key="frame" x="119" y="109" width="239" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="$" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9pu-5s-2ny">
+                                <rect key="frame" x="385" y="105" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Stg-ZY-34N">
+                                <rect key="frame" x="47" y="154" width="403" height="105"/>
+                                <string key="text">Do you want to split the cost over all deadlines set that day?
+
+ex: You set 5 deadlines, and miss 3. 
+If this is on, you'll be charged 3/5 of the total cost.
+If this is off, you'll be charged the entire cost. </string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U4B-NG-crq">
+                                <rect key="frame" x="504" y="191" width="51" height="31"/>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This encourages you to set more deadlines, but can make it tempting to set too many &quot;easy&quot; deadlines" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VQh-7I-giW">
+                                <rect key="frame" x="47" y="258" width="403" height="35"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="flat rate for more than _ deadlines?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jXt-h2-p0Q">
+                                <rect key="frame" x="47" y="319" width="403" height="56"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fn7-IA-mx4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2646" y="1239"/>
+        </scene>
+        <!--Navigation Controller-->
         <scene sceneID="NNj-0C-fAA">
             <objects>
                 <navigationController storyboardIdentifier="chatNavControl" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="i8p-Bc-gsN" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Messages" id="tMa-f1-OmX"/>
+                    <tabBarItem key="tabBarItem" title="" image="MessagesUnfilled" id="tMa-f1-OmX">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="MessagesFilled"/>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="knB-SN-9X7">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="knB-SN-9X7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.99870008230209351" green="0.30273252725601196" blue="0.28837943077087402" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.99838238954544067" green="0.36485135555267334" blue="0.22643762826919556" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         </textAttributes>
@@ -1295,7 +1283,7 @@ You must pay your partner before you can access this day.</string>
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.99854069948196411" green="0.42281177978646972" blue="0.3271031374545964" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.99887043237686157" green="0.26049619913101196" blue="0.32454478740692139" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         </textAttributes>
@@ -1311,10 +1299,16 @@ You must pay your partner before you can access this day.</string>
         </scene>
     </scenes>
     <resources>
+        <image name="DeadlinesFilled" width="27" height="27"/>
+        <image name="DeadlinesUnfilled" width="27" height="27"/>
         <image name="LaunchScreenBackground.png" width="1024" height="1024"/>
         <image name="LaunchScreenIcon.png" width="1024" height="1024"/>
+        <image name="MessagesFilled" width="30" height="30"/>
+        <image name="MessagesUnfilled" width="30" height="30"/>
+        <image name="SettingsFilled" width="30" height="30"/>
+        <image name="SettingsUnfilled" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QKo-Je-SUv"/>
+        <segue reference="gmK-EO-hz5"/>
     </inferredMetricsTieBreakers>
 </document>

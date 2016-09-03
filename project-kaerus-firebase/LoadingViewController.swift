@@ -68,6 +68,12 @@ class LoadingViewController: UIViewController {
 			self.isStartingUp = false
 			let tabBarController = self.storyboard!.instantiateViewControllerWithIdentifier("tabBarController") as! UITabBarController
 			tabBarController.selectedIndex = self.selectedIndex
+//			var deadlinesTabBarItem: UITabBarItem = UITabBarItem(title: "Deadlines", image: UIImage(named: "Overtime-50.png")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal), selectedImage: UIImage(named: "YOUR_IMAGE_NAME"))
+
+			
+//			let tabItems = tabBarController.tabBar.items! as [UITabBarItem]
+//			tabItems[0].selectedImage = UIImage(named: "Overtime-50.png")
+//			tabItems[1].selectedImage = UIImage(named: "Chat Filled-50.png")
 			self.presentViewController(tabBarController, animated: false, completion: nil)
 		}
 	}
