@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	// called when user opens notification
-	func notifAct(result: OSNotificationResult!) {
+	func notifAct(result: OSNotificationOpenedResult!) {
 		print("notification opened")
 //		let loadVC = self.window?.rootViewController as! LoadingViewController
 //		print("did")

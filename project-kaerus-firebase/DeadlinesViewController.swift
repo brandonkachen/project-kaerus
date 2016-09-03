@@ -147,6 +147,7 @@ class DeadlinesViewController: UIViewController {
 			
 			if diff <= -10 && self.segControl.selectedSegmentIndex == 0 {
 				self.amtOwedLabel.text = "- "
+				self.amtOwedLabel.textColor = UIColor.redColor()
 				self.shouldLock = true
 				if self.lockDate.isEmpty == false && self.dateUserIsLookingAt > self.lockDate {
 					self.lock()

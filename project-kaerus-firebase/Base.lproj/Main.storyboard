@@ -509,6 +509,10 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0L5-tO-YL4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.58244335651397705" green="0.64726376533508301" blue="0.65174925327301025" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="Xuc-dL-X0K" kind="relationship" relationship="rootViewController" id="szA-oB-gn2"/>
@@ -910,7 +914,7 @@ You must pay your partner before you can access this day.</string>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="Me"/>
-                                <segment title=""/>
+                                <segment title="Partner"/>
                             </segments>
                             <connections>
                                 <action selector="didChangeSegment:" destination="OJt-7a-W1m" eventType="valueChanged" id="2HJ-00-BrI"/>
