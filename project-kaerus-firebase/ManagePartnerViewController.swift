@@ -224,6 +224,10 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		let myInfoDict = setFriendInfoDict(friend.id, name: friend.name, firstName: friend.first_name, picString: friend.picURL.absoluteString)
 		let setMyInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		setMyInfoRef.setValue(myInfoDict)
+		
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd Z"
+		ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid").setValue(dateFormatter.stringFromDate(NSDate.distantPast()))
 
 		// change view
 		setPartnerScreen()

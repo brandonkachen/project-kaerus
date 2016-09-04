@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override init() {
 		FIRApp.configure()
-//		FIRDatabase.database().persistenceEnabled = true
+		FIRDatabase.database().persistenceEnabled = true
 	}
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	// called when user is in app and receives a notification
 	func notifRcv(notification: OSNotification!) {
-		print("notification received while user was in app")
+		print("notification received")
 	}
 	
 	// called when user opens notification

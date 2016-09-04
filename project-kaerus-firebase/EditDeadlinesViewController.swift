@@ -69,12 +69,12 @@ class EditDeadlinesViewController: UIViewController {
 			if let selectedIndexPath = editDeadlineTable.indexPathForSelectedRow { // Update current item
 				deadlines[selectedIndexPath.row] = deadline
 				editDeadlineTable.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)
+				hasBeenEdited = true
 			} else { // Add a new item to the list
 				let newIndexPath = NSIndexPath(forRow: deadlines.count, inSection: 0)
 				deadlines.append(deadline)
 				editDeadlineTable.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Bottom)
 			}
-			hasBeenEdited = true
 			deadlines.sortInPlace() { $0.timeDue < $1.timeDue }
 			reloadData()
 		}

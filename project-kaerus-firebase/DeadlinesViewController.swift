@@ -156,6 +156,7 @@ class DeadlinesViewController: UIViewController {
 			} else {
 				self.shouldLock = false
 				self.unlock()
+				self.amtOwedLabel.textColor = UIColor.blackColor()
 				self.editButton.enabled = true
 				if diff < 0 {
 					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "- " : "+ "
@@ -189,8 +190,10 @@ class DeadlinesViewController: UIViewController {
 			
 			// check for updated partner owed amounts
 			self.ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Owed-Totals").child(AppState.sharedInstance.f_firID!).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-				self.partnerTotal = snapshot.value as! Double
-				lockIfUserNeedsToPay()
+				if let tot = snapshot.value as? Double {
+					self.partnerTotal = tot
+					lockIfUserNeedsToPay()
+				}
 			}
 		}
 	}
