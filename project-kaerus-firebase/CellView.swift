@@ -50,12 +50,12 @@ class CellView: JTAppleDayCellView {
 //		self.statusIndicator.hidden = date.timeIntervalSinceNow > 0 ? true : false
 //		self.statusIndicator.textColor = date.timeIntervalSinceNow > 0 ? UIColor.blackColor() : UIColor.cyanColor()
 		
-		// Configure Selectability
-		configureSelectability(cellState)
+		// Configure Visibility
+		configureVisibility(cellState)
 	}
 	
-	func configureSelectability(cellState: CellState) {
-		self.userInteractionEnabled = cellState.dateBelongsTo == .FollowingMonthOutsideBoundary ? false : true
+	func configureVisibility(cellState: CellState) {
+		self.hidden = (cellState.dateBelongsTo == .ThisMonth) ? false : true
 	}
 	
 	func configureTextColor(cellState: CellState) {

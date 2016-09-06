@@ -17,7 +17,7 @@ import FBSDKLoginKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var window: UIWindow?
-	
+
 	override init() {
 		FIRApp.configure()
 		FIRDatabase.database().persistenceEnabled = true
@@ -28,39 +28,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		OneSignal.registerForPushNotifications()
 		
 		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00",
-		                                handleNotificationReceived: nil, //{ (notification) in  self.notifRcv },
+		                                handleNotificationReceived: { (notification) in self.notifRcv(notification) },
 			handleNotificationAction: { (result) in self.notifAct(result) },
 			settings: [kOSSettingsKeyAutoPrompt : false, kOSSettingsKeyInAppAlerts : false])
 		
 		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 	}
 	
-	// called when user is in app and receives a notification
-	func notifRcv() {
-		print("notification received while user was in app")
+	// called when user receives a notification
+	func notifRcv(notification: OSNotification!) {
+		if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+			while let presentedViewController = topController.presentedViewController {
+				topController = presentedViewController
+			}
+			if let tabBarVC = topController as? UITabBarController where tabBarVC.selectedIndex != 1 {
+				AppState.sharedInstance.unseenMessagesCount += 1
+				tabBarVC.tabBar.items![1].badgeValue = String(AppState.sharedInstance.unseenMessagesCount)
+			}
+		}
 	}
 	
 	// called when user opens notification
-	func notifAct(result: OSNotificationResult!) {
-		print("notification opened")
-//		let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-//		let tabBarVC = storyBoard.instantiateViewControllerWithIdentifier("tabBarControl")
-//		self.window?.rootViewController = tabBarVC
-//		let tabBarController = self.window!.rootViewController as? UITabBarController
-//
-//		if tabBarController != nil && tabBarController?.selectedIndex != 1 {
-//			tabBarController!.selectedIndex = 1
-//		}
-//
-//		// This block gets called when the user reacts to a notification received
-//		let payload = result.notification.payload
-//		var fullMessage = payload.title
-//
-//		// Try to fetch the action selected
-//		if let additionalData = payload.additionalData, actionSelected = additionalData["actionSelected"] as? String {
-//			fullMessage =  fullMessage + "\nPressed ButtonId:\(actionSelected)"
-//		}
-//		print(fullMessage)
+	func notifAct(result: OSNotificationOpenedResult!) {
+		if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+			while let presentedViewController = topController.presentedViewController {
+				topController = presentedViewController
+			}
+			if let tabBarVC = topController as? UITabBarController {
+				tabBarVC.selectedIndex = 1
+				tabBarVC.tabBar.items![1].badgeValue = nil
+				AppState.sharedInstance.unseenMessagesCount = 0
+			}
+		}
 	}
  
 	func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
@@ -93,4 +92,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
 	}
 }
-

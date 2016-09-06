@@ -27,27 +27,32 @@ class DeadlinesViewController: UIViewController {
 	@IBOutlet weak var paymentCardLabel: UILabel!
 	@IBOutlet weak var amtOwedLabel: UILabel!
 	@IBOutlet weak var amtOwedView: UIView!
-	@IBOutlet weak var payButton: UIBarButtonItem!
+	@IBOutlet weak var payButton: UIButton!
 	
 	var userDeadlines = [Deadline]()
 	var partnerDeadlines = [Deadline]()
-	var userRef, userDeadlinesRef, partnerRef, partnerDeadlineRef, dayUserLastSawRef, amtOwedEachDayRef, lastDatePaidRef: FIRDatabaseReference!
-	private var _userDeadlinesRefHandle, _partnerDeadlinesRefHandle: FIRDatabaseHandle!
-	var dayUserIsLookingAt: String! // set by the 'day' variable in User-Deadlines
-	var total: Double = 0
+	var ref, dateRef, userRef, userDeadlinesRef, partnerRef, partnerDeadlinesRef, paymentsHistoryRef, lastDayUserSetDeadlinesRef, dayUserLastSawRef, confirmedLastDayPaidRef, unconfirmedLastDayPaidRef, owedTotalsRef: FIRDatabaseReference!
+	private var _userDeadlinesRefHandle, _partnerDeadlinesRefHandle, _lastDayUserSetDeadlinesRefHandle: FIRDatabaseHandle!
+	var dateUserIsLookingAt: String! // set by the 'day' variable in User-Deadlines
+	var userTotal: Double = 0
+	var partnerTotal: Double = 0
+	var shouldLock = false
+	var lockDate: String! = ""
+	var str_lastDatePaid: String! = ""
 	
-	var storageRef: FIRStorageReference!
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		configureStorage()
+		// set up refs that don't rely on dayUserIsLookingAt for user
+		ref = FIRDatabase.database().reference()
+		setPartnerStuff()
+
 //		fetchConfig()
 		logViewLoaded()
 		
 		// get today's deadlines on initial load
 		dateFormatter.dateFormat = "yyyy-MM-dd Z"
-		dayUserIsLookingAt = dateFormatter.stringFromDate(NSDate())
+		dateUserIsLookingAt = dateFormatter.stringFromDate(NSDate())
 		
 		// used for timestamps or where time precision is needed
 		detailedDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
@@ -56,8 +61,20 @@ class DeadlinesViewController: UIViewController {
 		calendarView.dataSource = self
 		calendarView.delegate = self
 		calendarView.registerCellViewXib(fileName: "CellView")
-		calendarView.selectDates([NSDate()])
-		calendarView.scrollToDate(NSDate())
+		
+		dateRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Date-User-Is-Looking-At")
+		dateRef.observeSingleEventOfType(.Value) { (startDateSnap: FIRDataSnapshot) in
+			if let date = startDateSnap.value as? String {
+				self.dateUserIsLookingAt = date
+			} else {
+				let dateToAdd = self.dateFormatter.stringFromDate(NSDate())
+				self.dateRef.setValue(dateToAdd)
+				self.dateUserIsLookingAt = dateToAdd
+			}
+			let dateToShow = self.dateFormatter.dateFromString(self.dateUserIsLookingAt)!
+			self.calendarView.selectDates([dateToShow])
+			self.calendarView.scrollToDate(dateToShow)
+		}
 		
 		amtOwedView.layer.shadowOffset = CGSizeMake(1, 1)
 		amtOwedView.layer.shadowColor = UIColor.lightGrayColor().CGColor
@@ -67,177 +84,247 @@ class DeadlinesViewController: UIViewController {
 		paymentCard.layer.shadowColor = UIColor.lightGrayColor().CGColor
 		paymentCard.layer.shadowOpacity = 0.5
 		
-		setPartnerStuff()
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerStatusChanged(_:)), name: "PartnerInfoChanged_Deadlines", object: nil)
+	}
+	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
+		self.tabBarController?.tabBar.items![1].badgeValue = nil
+		AppState.sharedInstance.numOfUnseenPartnerDeadlineChanges = 0
+	}
+	
+	deinit {
+		self.userDeadlinesRef.removeObserverWithHandle(_userDeadlinesRefHandle)
+		if partnerDeadlinesRef != nil {
+			self.partnerDeadlinesRef.removeObserverWithHandle(_partnerDeadlinesRefHandle)
+		}
+		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 	
 	func partnerStatusChanged(_: NSNotification) {
 		setPartnerStuff()
 	}
 	
+	func logViewLoaded() {
+		FIRCrashMessage("DeadlineVC loaded")
+	}
+	
+	// MARK: Set up partner's deadline stuff
+	
 	func setPartnerStuff() {
-		// set segControl
-		if AppState.sharedInstance.f_firstName != nil {
-			segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
-			segControl.setEnabled(true, forSegmentAtIndex: 1)
-			// set partner ref
-			partnerRef = FIRDatabase.database().reference().child("User-Deadlines").child(AppState.sharedInstance.f_firID!)
-			partnerDeadlineRef = partnerRef.child("Deadlines").child(self.dayUserIsLookingAt)
-			_partnerDeadlinesRefHandle = partnerDeadlineRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-				var newItems = [Deadline]()
-				for item in snapshot.children {
-					let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
-					newItems.append(deadlineItem)
-				}
-				self.partnerDeadlines = newItems
-			}
-		} else { // no partner, so disable partner button in segControl and remove observer if possible
+		if AppState.sharedInstance.f_firstName == nil {	// no partner, so disable partner button in segControl and remove observer if possible
 			segControl.setTitle("Partner", forSegmentAtIndex: 1)
 			segControl.setEnabled(false, forSegmentAtIndex: 1)
 			segControl.selectedSegmentIndex = 0
-			if partnerDeadlineRef != nil {
-				self.partnerDeadlineRef.removeObserverWithHandle(_partnerDeadlinesRefHandle)
-			}
-		}
-	}
-	
-	func logViewLoaded() {
-		FIRCrashMessage("View loaded")
-	}
-	
-	override func viewWillAppear(animated: Bool) {
-		super.viewWillAppear(animated)
-	}
-	
-	override func viewWillDisappear(animated: Bool) {
-		super.viewWillDisappear(animated)
-//		NSNotificationCenter.defaultCenter().removeObserver(self)
-	}
-	
-	deinit {
-		self.userDeadlinesRef.removeObserverWithHandle(_userDeadlinesRefHandle)
-		if partnerDeadlineRef != nil {
-			self.partnerDeadlineRef.removeObserverWithHandle(_partnerDeadlinesRefHandle)
-		}
-		NSNotificationCenter.defaultCenter().removeObserver(self)
-	}
-	
-	func configureStorage() {
-		storageRef = FIRStorage.storage().referenceForURL("gs://project-kaerus.appspot.com")
-	}
-	
-	// MARK:- Set up deadlines
-	// set up the whole view
-	func setUserStuff() {
-		// this will be the ref upon which all other refs base themselves
-		userRef = FIRDatabase.database().reference().child("User-Deadlines").child(AppState.sharedInstance.userID)
-		self.userDeadlinesRef = self.userRef.child("Deadlines").child(self.dayUserIsLookingAt)
-		self.amtOwedEachDayRef = self.userRef.child("Owed").child(self.dayUserIsLookingAt)
-		lastDatePaidRef = userRef.child("Last-Date-Paid")
-		self.getDeadlinesForDay()
-//		self.checkIfUserNeedsToPay()
-	}
-	
-	func checkIfUserNeedsToPay() {
-		self.lastDatePaidRef.observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
-			// get lastPaidDate and add one second to it, for firebase query's starting point
-			let str_ld = snapshot.value as! String
-			let lastDateUserPaid = self.detailedDateFormatter.dateFromString(str_ld)!
-			// add one seccond to lastPaidDate
-			let nextSecond = NSCalendar.currentCalendar().dateByAddingUnit(.Second, value: 1, toDate: lastDateUserPaid, options: [])!
-			let str_nd = self.dateFormatter.stringFromDate(nextSecond)
+			partnerDeadlines.removeAll()
+			amtOwedLabel.text = "you don't have a partner!"
 			
-			// get all dates after lastPaidDate
-			self.userRef.child("Owed").queryOrderedByKey().queryStartingAtValue(str_nd).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
-				var tot: Double = 0
-				var lastMissedDate = ""
-				if let items = snapshot.value as? [String : String] {
-					for item in items { tot += Double(item.1)! }
-					lastMissedDate = items.keys.maxElement()!
-//					print(lastMissedDate)
-				}
-				self.total = tot
+			if partnerDeadlinesRef != nil {
+				self.partnerDeadlinesRef.removeObserverWithHandle(_partnerDeadlinesRefHandle)
+			}
+			
+			// get rid of other refs here
+			
+			partnerDeadlinesRef = nil
+			partnerRef = nil
+		} else { // user has partner - load their data separately from user's
+			// set segControl
+			segControl.setTitle(AppState.sharedInstance.f_firstName, forSegmentAtIndex: 1)
+			segControl.setEnabled(true, forSegmentAtIndex: 1)
+			// set partner refs that don't rely on dayUserIsLookingAt
+			partnerRef = ref.child("User-Deadlines").child(AppState.sharedInstance.f_firID!)
+			paymentsHistoryRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("History")
+			confirmedLastDayPaidRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid-Confirmed")
+			unconfirmedLastDayPaidRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid-Unconfirmed").child(AppState.sharedInstance.f_firID!) // check if partner has made a claim about payments
+			owedTotalsRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Owed-Totals")
+			checkIfUserNeedsToConfirmPayment()
+			setupPaymentTracking()
+		}
+	}
+	
+	func checkIfUserNeedsToConfirmPayment() {
+		unconfirmedLastDayPaidRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
+			if let unconfirmedPaymentDate = snapshot.value as? String {
+				let messageTitle = "Payment Confirmation"
+				let messageStr = "Has your partner paid you for exceeding the money limit?"
+				let alert = UIAlertController(title: messageTitle, message: messageStr, preferredStyle: UIAlertControllerStyle.Alert)
 				
-				if tot == 0 {
-					self.amtOwedLabel.text! = "nothing owed :)"
-					self.payButton.enabled = false
-					self.blurView.hidden = true
-					self.paymentCard.hidden = true
-				} else { // user needs to pay
-					self.amtOwedLabel.text! = "total owed: $\(String(format: "%.2f", tot))"
-					self.payButton.enabled = true
-					
-					// lock deadlines table if user is looking at a date after the missed deadline
-					if lastMissedDate < self.dayUserIsLookingAt {
-						self.blurView.hidden = false
-						self.paymentCard.hidden = false
-						self.paymentCardLabel.text = "You have missed deadlines!\nYou can't continue on until you pay \(AppState.sharedInstance.f_firstName!)!"
+				let backButton = UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: { (_) -> Void in
+					self.resignFirstResponder()
+					self.unconfirmedLastDayPaidRef.removeValue()
+				})
+				
+				let saveButton = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { (_) -> Void in
+					self.resignFirstResponder()
+					self.unconfirmedLastDayPaidRef.removeValue()
+					self.confirmedLastDayPaidRef.setValue(unconfirmedPaymentDate)
+					self.owedTotalsRef.child(AppState.sharedInstance.userID).setValue(0)
+					self.owedTotalsRef.child(AppState.sharedInstance.f_firID!).setValue(0)
+				})
+				
+				alert.addAction(backButton)
+				alert.addAction(saveButton)
+				
+				self.presentViewController(alert, animated: true, completion: nil)
+			}
+		}
+	}
+	
+	func setupPaymentTracking() {
+		func calculateTotal(snapshot: FIRDataSnapshot) -> Double {
+			var total: Double = 0
+			if let items = snapshot.value as? [String : Double] {
+				for item in items { total += item.1 }
+			}
+			return total
+		}
+		
+		func lockIfUserNeedsToPay() {
+			let diff = self.partnerTotal - self.userTotal
+			let absDiff = String(format: "%.2f", fabs(diff))
+			
+			if diff <= -10 && self.segControl.selectedSegmentIndex == 0 {
+				self.amtOwedLabel.text = "- "
+				self.amtOwedLabel.textColor = UIColor.redColor()
+				self.shouldLock = true
+				if self.lockDate.isEmpty == false && self.dateUserIsLookingAt > self.lockDate {
+					self.lock()
+					self.editButton.enabled = false
+				}
+			} else {
+				self.shouldLock = false
+				self.unlock()
+				self.amtOwedLabel.textColor = UIColor.blackColor()
+				self.editButton.enabled = true
+				if diff < 0 {
+					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "- " : "+ "
+				} else if diff > 0 {
+					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "+ " : "- "
+				} else {
+					self.amtOwedLabel.text = ""
+				}
+			}
+			self.amtOwedLabel.text! += "$" + absDiff
+		}
+		
+		confirmedLastDayPaidRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+			self.str_lastDatePaid = snapshot.value as! String
+			
+			// get the day after last paid date, so query can start there
+			let lastPaidDate = self.dateFormatter.dateFromString(self.str_lastDatePaid)!
+			let nextDay = lastPaidDate.nextDay()
+			let str_nextDay = self.dateFormatter.stringFromDate(nextDay)
+			
+			// detect changes in user history from str_nextDay onwards
+			self.paymentsHistoryRef.child(AppState.sharedInstance.userID).queryOrderedByKey().queryStartingAtValue(str_nextDay).observeEventType(.Value)
+			{ (snapshot: FIRDataSnapshot) in
+				self.userTotal = calculateTotal(snapshot)
+				self.owedTotalsRef.child(AppState.sharedInstance.userID).setValue(self.userTotal)
+				
+				// janky way of getting the last date user has set deadlines and locking
+				self.lastDayUserSetDeadlinesRef = self.ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines")
+				self.lastDayUserSetDeadlinesRef.queryOrderedByKey().queryLimitedToLast(1).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
+					for item in snapshot.children {
+						self.lockDate = item.key!
 					}
+					lockIfUserNeedsToPay()
+				}
+			}
+			
+			// check for updated partner owed amounts
+			self.owedTotalsRef.child(AppState.sharedInstance.f_firID!).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+				if let tot = snapshot.value as? Double {
+					self.partnerTotal = tot
+					lockIfUserNeedsToPay()
 				}
 			}
 		}
 	}
 	
-	// load table with deadlines for the day user is looking at
-	func getDeadlinesForDay() {
+	// hide deadlines and prompt user to pay
+	func lock() {
+		self.blurView.hidden = false
+		self.paymentCard.hidden = false
+	}
+	
+	// hide payment stuff; show deadlines
+	func unlock() {
+		self.blurView.hidden = true
+		self.paymentCard.hidden = true
+	}
+	
+	// MARK: Set up user deadlines
+	
+	// set up the whole view, usually after a date change in calendar
+	func setupUserView() {
 		getDeadlines() { (result) -> () in
-			self.determineOwedBalance(result)
+			if AppState.sharedInstance.partnerStatus == true {
+				self.determineOwedBalance(result)
+			}
+		}
+	}
+	
+	func getNewItems(snap: FIRDataSnapshot) -> [Deadline] {
+		var newItems = [Deadline]()
+		for item in snap.children {
+			let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
+			newItems.append(deadlineItem)
+		}
+		return newItems
+	}
+	
+	func setupPartnerView() {
+		partnerDeadlinesRef = partnerRef.child("Deadlines").child(self.dateUserIsLookingAt)
+		// query by the "timeDue" property
+		_partnerDeadlinesRefHandle = partnerDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+			self.partnerDeadlines = self.getNewItems(snapshot)
+			if self.segControl.selectedSegmentIndex == 1 { self.deadlineTable.reloadData() }
 		}
 	}
 	
 	// get the deadlines
 	func getDeadlines(completion: (result: Int)->()) {
-		// return a reference that queries by the "timeDue" property
-		_userDeadlinesRefHandle = self.userDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-			var newItems = [Deadline]()
-			for item in snapshot.children {
-				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
-				newItems.append(deadlineItem)
-			}
-			
-			self.editButton.title = newItems.isEmpty ? "New" : "Edit"
-
-			self.userDeadlines = newItems
+		userDeadlinesRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines").child(self.dateUserIsLookingAt)
+		// query by the "timeDue" property
+		_userDeadlinesRefHandle = userDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+			self.userDeadlines = self.getNewItems(snapshot)
 			self.deadlineTable.reloadData()
+			self.editButton.title = self.userDeadlines.isEmpty ? "New" : "Edit"
 			completion(result: self.userDeadlines.count)
 		}
 	}
 	
 	// determine how much the user owes for this particular day
 	func determineOwedBalance(totalCount: Int) {
-		getMissedDeadlineCount() { (missedCount) -> () in
-			let strAmt: String
-			if missedCount > 0 { // if deadline count <= 5, every missed deadline costs $(2.50/deadline count). otherwise, missed deadlines are charged at a flat rate of $0.50 each.
-				var amt = Double(missedCount)
-				amt *= totalCount >= 5 ? 0.5 : (2.5/Double(totalCount))
-				amt = Double(round(100*amt)/100)
-				strAmt = String(format: "%.2f", amt)
-				self.amtOwedEachDayRef.setValue(strAmt)
-			} else {
-				self.amtOwedEachDayRef.removeValue()
-			}
+		let userOwesRef = self.paymentsHistoryRef.child(AppState.sharedInstance.userID).child(self.dateUserIsLookingAt)
+		let missedCount = getMissedDeadlineCount()
+		// if deadline count <= 5, every missed deadline costs $2.50/(deadline count).
+		// otherwise, missed deadlines are charged at a flat rate of $0.50 each.
+		if missedCount > 0 { 
+			var amt = Double(missedCount)
+			amt *= totalCount >= 5 ? 0.5 : (2.5/Double(totalCount))
+			amt = Double(round(100*amt)/100)
+			userOwesRef.setValue(amt)
+		} else {
+			userOwesRef.removeValue()
 		}
 	}
 	
 	// get count of missed deadlines
-	func getMissedDeadlineCount(completion: (result: Int)->()) {
-		self.userDeadlinesRef.queryOrderedByChild("complete").queryEqualToValue(false).observeEventType(.Value, withBlock: { snapshot in
-			var missedCount = 0
-			for item in snapshot.children {
-				let deadlineItem = Deadline(snapshot: item as! FIRDataSnapshot)
-				let formatter = NSDateFormatter()
-				formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
-				let timeDue = formatter.dateFromString(deadlineItem.timeDue!)!
-				
-				if timeDue.timeIntervalSinceNow < 0 {
-					missedCount += 1
-				}
+	func getMissedDeadlineCount() -> Int {
+		var missedCount = 0
+		let formatter = NSDateFormatter()
+		formatter.dateFormat = "yyyy-MM-dd HH:mmZ"
+		for deadline in userDeadlines {
+			let timeDue = formatter.dateFromString(deadline.timeDue!)!
+			// if deadline is not complete, and is in the past
+			if !deadline.complete && timeDue.timeIntervalSinceNow < 0 {
+				missedCount += 1
 			}
-			completion(result: missedCount)
-		})
+		}
+		return missedCount
 	}
-	
-	
+
 	// MARK: calendar setup
 	
 	func setupViewsOfCalendar(startDate: NSDate, endDate: NSDate) {
@@ -258,7 +345,7 @@ extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalenda
 	func configureCalendar(calendar: JTAppleCalendarView) -> (startDate: NSDate, endDate: NSDate, numberOfRows: Int, calendar: NSCalendar) {
 		let firstDate = AppState.sharedInstance.startDate
 		let secondDate = NSDate()
-		let numberOfRows = 1
+		let numberOfRows = 2
 		let aCalendar = NSCalendar.currentCalendar() // Properly configure your calendar to your time zone here
 		
 		return (startDate: firstDate, endDate: secondDate, numberOfRows: numberOfRows, calendar: aCalendar)
@@ -270,8 +357,24 @@ extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalenda
 	
 	func calendar(calendar: JTAppleCalendarView, didSelectDate date: NSDate, cell: JTAppleDayCellView?, cellState: CellState) {
 		let strDay = self.dateFormatter.stringFromDate(date)
-		self.dayUserIsLookingAt = strDay
-		setUserStuff()
+		self.dateUserIsLookingAt = strDay
+		if self.segControl.selectedSegmentIndex == 0 {
+			setupUserView() // show user deadlines
+			self.dateUserIsLookingAt <= self.str_lastDatePaid ? disableEditButton() : enableEditButton() // enable or disable edit button
+
+			// lock or unlock the view
+			if shouldLock == true && self.dateUserIsLookingAt > self.lockDate  {
+				lock()
+				self.editButton.enabled = false
+			} else {
+				unlock()
+				self.editButton.enabled = true
+			}
+		} else {
+			disableEditButton()
+			setupPartnerView()
+		}
+		self.dateRef.setValue(strDay)
 		(cell as? CellView)?.cellSelectionChanged(cellState)
 	}
 	
@@ -341,7 +444,8 @@ extension DeadlinesViewController {
 	}
 	
 	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		if segControl.selectedSegmentIndex == 1 { // use not allowed to mark off partner's deadlines
+		// use not allowed to mark off partner's deadlines
+		if segControl.selectedSegmentIndex == 1 { 
 			return
 		}
 		
@@ -363,20 +467,27 @@ extension DeadlinesViewController {
 		return segControl.selectedSegmentIndex == 0 ? true : false
 	}
 	
+	func enableEditButton() {
+		// show edit and pay buttons
+		self.editButton.tintColor = self.navigationController?.navigationBar.tintColor
+		self.editButton.enabled = true
+	}
+	
+	func disableEditButton() {
+		// jank way of hiding edit and pay buttons
+		self.editButton.tintColor = UIColor.clearColor()
+		self.editButton.enabled = false
+	}
+	
 	@IBAction func didChangeSegment(sender: AnyObject) {
 		if segControl.selectedSegmentIndex == 0 { // user looking at their own deadlines
-			// show edit and pay buttons
-			self.editButton.tintColor = self.navigationController?.navigationBar.tintColor
-			self.editButton.enabled = true
-			self.payButton.tintColor = self.navigationController?.navigationBar.tintColor
-			self.payButton.enabled = true
+			enableEditButton()
+			self.setupUserView()
 		} else { // user looking at partner's deadlines
-			// jank way of hiding edit and pay buttons
-			self.editButton.tintColor = UIColor.clearColor()
-			self.editButton.enabled = false
-			self.payButton.tintColor = UIColor.clearColor()
-			self.payButton.enabled = false
+			disableEditButton()
+			self.setupPartnerView()
 		}
+		self.deadlineTable.reloadData()
 	}
 	
 	// called when starting to change from one screen in storyboard to next
@@ -384,7 +495,7 @@ extension DeadlinesViewController {
 		let navController = segue.destinationViewController as! UINavigationController
 		let editDeadlinesVC = navController.topViewController as! EditDeadlinesViewController
 		editDeadlinesVC.deadlines = userDeadlines
-		editDeadlinesVC.date = dayUserIsLookingAt
+		editDeadlinesVC.startDate = self.dateFormatter.dateFromString(dateUserIsLookingAt)
 		editDeadlinesVC.explanationEnabled = !userDeadlines.isEmpty
 		editDeadlinesVC.title = (self.navigationItem.leftBarButtonItem?.title == "New") ? "New Schedule" : "Edit Schedule"
 	}
@@ -428,10 +539,10 @@ extension DeadlinesViewController {
 	}
 	
 	@IBAction func didPressPayButton(sender: AnyObject) {
-		self.lastDatePaidRef.setValue(self.detailedDateFormatter.stringFromDate(NSDate()))
-		
-		// tell partner you've paid
-		sendNotification(AppState.sharedInstance.firstName + " says they paid you $" + String(format: "%.2f", self.total))
+		sendNotification(AppState.sharedInstance.firstName + " claims to have paid you $" + (userTotal - partnerTotal).description + ". Please confirm this.")
+		ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid-Unconfirmed").child(AppState.sharedInstance.userID).setValue(self.lockDate)
+		self.payButton.hidden = true
+		self.paymentCardLabel.text = "Payment confirmation sent!\n\nYour partner must confirm your payment before you can continue."
 	}
 }
 

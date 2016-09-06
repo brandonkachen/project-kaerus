@@ -27,6 +27,7 @@
 		6973229B1D4C7408000F512D /* Deadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697322991D4C7408000F512D /* Deadline.swift */; };
 		6973229C1D4C7408000F512D /* DeadlinesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6973229A1D4C7408000F512D /* DeadlinesTableViewCell.swift */; };
 		697F5A091D5FB7870062450F /* EditDeadlinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 697F5A081D5FB7870062450F /* EditDeadlinesViewController.swift */; };
+		6982B2E71D7D6B2F00014A42 /* NSDateExtenstion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6982B2E61D7D6B2F00014A42 /* NSDateExtenstion.swift */; };
 		6989E3D11D396703003924EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6989E3D01D396703003924EC /* AppDelegate.swift */; };
 		6989E3D51D396703003924EC /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6989E3D41D396703003924EC /* ChatViewController.swift */; };
 		6989E3D81D396703003924EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6989E3D61D396703003924EC /* Main.storyboard */; };
@@ -77,6 +78,7 @@
 		697322991D4C7408000F512D /* Deadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deadline.swift; sourceTree = "<group>"; };
 		6973229A1D4C7408000F512D /* DeadlinesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesTableViewCell.swift; sourceTree = "<group>"; };
 		697F5A081D5FB7870062450F /* EditDeadlinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDeadlinesViewController.swift; sourceTree = "<group>"; };
+		6982B2E61D7D6B2F00014A42 /* NSDateExtenstion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtenstion.swift; sourceTree = "<group>"; };
 		6989E3CD1D396703003924EC /* project-kaerus-firebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "project-kaerus-firebase.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6989E3D01D396703003924EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6989E3D41D396703003924EC /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -150,9 +152,7 @@
 		690E34411D3972C600C284D5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */,
-				697F5A081D5FB7870062450F /* EditDeadlinesViewController.swift */,
-				697322951D4C7374000F512D /* AddDeadlineViewController.swift */,
+				6982B2E81D7D6EE300014A42 /* Deadline Controllers */,
 				6989E3D41D396703003924EC /* ChatViewController.swift */,
 				692116961D6E1BDF00E5DB8A /* LoadingViewController.swift */,
 				694DB10A1D3976F400570A6B /* LoginViewController.swift */,
@@ -206,6 +206,16 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		6982B2E81D7D6EE300014A42 /* Deadline Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */,
+				697F5A081D5FB7870062450F /* EditDeadlinesViewController.swift */,
+				697322951D4C7374000F512D /* AddDeadlineViewController.swift */,
+			);
+			name = "Deadline Controllers";
+			sourceTree = "<group>";
+		};
 		6989E3C41D396703003924EC = {
 			isa = PBXGroup;
 			children = (
@@ -254,6 +264,7 @@
 		69AA26A41D5470380029773B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				6982B2E61D7D6B2F00014A42 /* NSDateExtenstion.swift */,
 				69629B721D585EF200AD0C67 /* CALayerExtension.swift */,
 				69AA26A21D546FFC0029773B /* UIImageExtension.swift */,
 				69C1359F1D68124800C251A6 /* NSDateExtension.swift */,
@@ -496,6 +507,7 @@
 				69629B731D585EF200AD0C67 /* CALayerExtension.swift in Sources */,
 				6989E3D11D396703003924EC /* AppDelegate.swift in Sources */,
 				6973229C1D4C7408000F512D /* DeadlinesTableViewCell.swift in Sources */,
+				6982B2E71D7D6B2F00014A42 /* NSDateExtenstion.swift in Sources */,
 				697322961D4C7374000F512D /* AddDeadlineViewController.swift in Sources */,
 				692116971D6E1BDF00E5DB8A /* LoadingViewController.swift in Sources */,
 				69AA26A31D546FFC0029773B /* UIImageExtension.swift in Sources */,

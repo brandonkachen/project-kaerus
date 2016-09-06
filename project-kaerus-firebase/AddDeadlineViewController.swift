@@ -33,11 +33,17 @@ class AddDeadlineViewController: UIViewController,  UIBarPositioningDelegate, UI
 	or constructed as part of adding a new meal. */
 	var deadline: Deadline?
 	var deadlineComplete: Bool?
+	var startDate: NSDate!
+	var endDate: NSDate!
+	var dateToShowInitially: NSDate!
 	
 	override func viewDidLoad()	{
 		super.viewDidLoad()
 		
 		self.text.delegate = self
+		
+		UserSetTime.minimumDate = startDate
+		UserSetTime.maximumDate = endDate
 		
 		// user wants to edit a deadline
 		if let _ = deadline {
@@ -53,27 +59,8 @@ class AddDeadlineViewController: UIViewController,  UIBarPositioningDelegate, UI
 			deadlineComplete = deadline?.complete
 		}
 		else { // user wants to add a deadline
-			let now = NSDate()
-			
-			// convert to double, take floor and multiply by 15
-			let minuteFormatter = NSDateFormatter()
-			minuteFormatter.dateFormat = "mm"
-			let minute = (minuteFormatter.stringFromDate(now) as NSString).doubleValue
-			let roundedMinute = floor(minute/15.0) * 15.0
-			
-			// get difference between current and floor'd time for dateByAddingUnit
-			let difference = roundedMinute - minute
-			
-			// add the difference to the current time's minute. Clunky, but the most compact way to do this AFAIK
-			let floorTime = NSCalendar.currentCalendar().dateByAddingUnit(
-				.Minute,
-				value: Int(difference),
-				toDate: now,
-				options: NSCalendarOptions.MatchStrictly)
-			
-			UserSetTime.date = floorTime!
+			UserSetTime.date = dateToShowInitially
 			deadlineComplete = false
-			
 			self.text.becomeFirstResponder()
 		}
 		

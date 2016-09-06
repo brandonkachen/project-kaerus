@@ -15,7 +15,9 @@ class EditDeadlinesViewController: UIViewController {
 	@IBOutlet weak var dateView: UIView!
 
 	var deadlines = [Deadline]()
-	var date : String!
+	var startDate: NSDate!
+	var endDate: NSDate!
+	var dateToInitializeTo: NSDate!
 	var explanation = ""
 	weak var enableSaveButton : UIAlertAction?
 	var hasBeenEdited = false // used to tell if the user has edited any deadlines
@@ -25,16 +27,16 @@ class EditDeadlinesViewController: UIViewController {
         super.viewDidLoad()
 		let formatter = NSDateFormatter()
 		formatter.dateFormat = "yyyy-MM-dd Z"
-		let d = formatter.dateFromString(date)!
 		formatter.dateFormat = "MMMM d"
-		let sd = formatter.stringFromDate(d) + d.daySuffix()
+		let sd = formatter.stringFromDate(startDate) + startDate.daySuffix()
 		dateLabel.text = sd
 		
 		dateView.layer.shadowOffset = CGSizeMake(1, 1)
 		dateView.layer.shadowColor = UIColor.lightGrayColor().CGColor
 		dateView.layer.shadowOpacity = 0.5
+		reloadData()
 	}
-
+	
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -44,12 +46,20 @@ class EditDeadlinesViewController: UIViewController {
 
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
 		if segue.identifier == "editItem" { // Edit item
-			let deadlinesViewController = segue.destinationViewController as! AddDeadlineViewController
+			let editDeadlineVC = segue.destinationViewController as! AddDeadlineViewController
 			if let selectedItemCell = sender as? DeadlinesTableViewCell {
 				let indexPath = editDeadlineTable.indexPathForCell(selectedItemCell)!
 				let selectedDeadline = deadlines[indexPath.row]
-				deadlinesViewController.deadline = selectedDeadline
+				editDeadlineVC.deadline = selectedDeadline
+				editDeadlineVC.startDate = startDate
+				editDeadlineVC.endDate = endDate
 			}
+		} else if segue.identifier == "addItem" {
+			let navController = segue.destinationViewController as! UINavigationController
+			let addDeadlineVC = navController.topViewController as! AddDeadlineViewController
+			addDeadlineVC.startDate = startDate
+			addDeadlineVC.endDate = endDate
+			addDeadlineVC.dateToShowInitially = dateToInitializeTo
 		}
 	}
 	
@@ -58,12 +68,15 @@ class EditDeadlinesViewController: UIViewController {
 		if let sourceViewController = sender.sourceViewController as? AddDeadlineViewController, deadline = sourceViewController.deadline {
 			if let selectedIndexPath = editDeadlineTable.indexPathForSelectedRow { // Update current item
 				deadlines[selectedIndexPath.row] = deadline
+				editDeadlineTable.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)
 			} else { // Add a new item to the list
+				let newIndexPath = NSIndexPath(forRow: deadlines.count, inSection: 0)
 				deadlines.append(deadline)
+				editDeadlineTable.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Bottom)
 			}
 			hasBeenEdited = true
-			deadlines.sortInPlace(){ $0.timeDue < $1.timeDue }
-			editDeadlineTable.reloadData()
+			deadlines.sortInPlace() { $0.timeDue < $1.timeDue }
+			reloadData()
 		}
 	}
 	
@@ -166,8 +179,25 @@ extension EditDeadlinesViewController {
 		let delete_button = UITableViewRowAction(style: .Destructive, title: "delete") { (action, indexPath) in
 			self.hasBeenEdited = true
 			self.deadlines.removeAtIndex(indexPath.row)
-			self.editDeadlineTable.reloadData()
+			self.reloadData()
 		}
 		return [delete_button]
+	}
+	
+	func reloadData() {
+		let timeFormatter = NSDateFormatter()
+		timeFormatter.dateFormat = "yyyy-MM-dd HH:mmZ"
+		var dateToSet: NSDate!
+		dateToSet = deadlines.first == nil ?
+			startDate :
+			timeFormatter.dateFromString((deadlines.first!.timeDue)!)
+		endDate = NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: 1, toDate: dateToSet, options: [])!
+		
+		dateToSet = deadlines.last == nil ?
+			startDate :
+			timeFormatter.dateFromString((deadlines.last!.timeDue)!)
+		dateToInitializeTo = dateToSet
+		
+		self.editDeadlineTable.reloadData()
 	}
 }

@@ -183,10 +183,10 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 			friendData[sender.tag!].whoAsked = AppState.sharedInstance.userID
 			
 			FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
-				if let id = snapshot.value as? String {
-					// send a notification to requested partner
-					let msg = AppState.sharedInstance.firstName + " would like to be your partner"
-					sendNotification(msg, id: id)
+				let msg = AppState.sharedInstance.firstName + " would like to be your partner"
+				// send to every device the user has logged onto
+				for id in snapshot.children {
+					sendNotification(msg, id: id.key!)
 				}
 			}
 		} else { // user pressed "cancel" button
@@ -200,14 +200,10 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 	}
 	
 	@IBAction func didPressAcceptButton(sender: AnyObject) {
-		let friend = friendData[sender.tag]
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerOneSignalChanged(_:)), name: "PartnerOneSignalChanged", object: nil)
 
-		FIRDatabase.database().reference().child("FIR-to-OS").child(friend.id).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
-			AppState.sharedInstance.f_oneSignalID = snapshot.value as? String
-			let acceptMsg = AppState.sharedInstance.firstName + " has accepted your partner request"
-			sendNotification(acceptMsg)
-		}
-		
+		let friend = friendData[sender.tag]
+	
 		// set group_id. to get group id: 1) sort both ids in alphabetical order. 2) put a “.” sign between the two
 		let sortedIds = [AppState.sharedInstance.userID, friend.id].sort()
 		let groupchatId = sortedIds[0] + "+" + sortedIds[1]
@@ -228,9 +224,21 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		let myInfoDict = setFriendInfoDict(friend.id, name: friend.name, firstName: friend.first_name, picString: friend.picURL.absoluteString)
 		let setMyInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		setMyInfoRef.setValue(myInfoDict)
+		
+		// set up Payments stuff for this newly formed group
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd Z"
+		ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid-Confirmed").setValue(dateFormatter.stringFromDate(NSDate.distantPast()))
 
 		// change view
 		setPartnerScreen()
+	}
+	
+	// sends notification(s) of accepted partner request only after AppState has been updated
+	func partnerOneSignalChanged(_: NSNotification) {
+		let acceptMsg = AppState.sharedInstance.firstName + " has accepted your partner request!"
+		sendNotification(acceptMsg)
+		NSNotificationCenter.defaultCenter().removeObserver(self, name: "PartnerOneSignalChanged", object: nil)
 	}
 	
 	func setFriendInfoDict(id: String, name: String, firstName: String, picString: String) -> [String : String] {
@@ -275,8 +283,6 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 
 		// reset AppState friend values
 		AppState.sharedInstance.setPartnerState(false, f_firstName: nil, f_id: nil, f_picURL: nil, f_fullName: nil, f_groupchatId: nil)
-		AppState.sharedInstance.f_oneSignalID = nil
-		
-//		setNoPartnerScreen()
+		AppState.sharedInstance.f_oneSignalID.removeAll()
 	}
 }

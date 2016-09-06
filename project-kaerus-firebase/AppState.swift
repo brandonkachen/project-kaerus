@@ -38,11 +38,15 @@ class AppState: NSObject {
 	var f_firID: String?
 	var f_photoURL: NSURL?
 	var f_photo: UIImage?
-	var f_oneSignalID: String?
+	var f_oneSignalID = [String]()
 	
 	// partner stuff
 	var partnerStatus: Bool!
 	var groupchat_id: String?
+	
+	// notification stuff
+	var unseenMessagesCount = 0
+	var numOfUnseenPartnerDeadlineChanges = 0
 }
 
 // all AppState functions
