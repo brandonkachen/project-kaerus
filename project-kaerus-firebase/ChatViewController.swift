@@ -77,6 +77,8 @@ class ChatViewController: JSQMessagesViewController {
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
+		self.tabBarController?.tabBar.items![1].badgeValue = nil
+		AppState.sharedInstance.unseenMessagesCount = 0
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
@@ -116,10 +118,12 @@ class ChatViewController: JSQMessagesViewController {
 				
 				// add to local messages array
 				self.addMessage(id, name: displayName, date: date,content: text)
+				
 				self.finishReceivingMessage()
 				
 				// set seen to this message
 				self.seenRef.child(AppState.sharedInstance.userID).setValue(strDate)
+				FIRCrashMessage("messagesQuery: finished receiving message")
 			}
 		}
 	}
@@ -135,13 +139,14 @@ class ChatViewController: JSQMessagesViewController {
 			"date" : detailedDateFormatter.stringFromDate(date)
 		]
 		itemRef.setValue(messageItem)
-		
+
 		// finishing touches
-		JSQSystemSoundPlayer.jsq_playMessageSentSound()
 		finishSendingMessage()
-		
+
 		// send a notification to partner
 		sendNotification(AppState.sharedInstance.firstName + ": " + text)
+		
+		FIRCrashMessage("didPressSendButton: finished sending message")
 //		isTyping = false
 	}
 	
@@ -151,9 +156,11 @@ class ChatViewController: JSQMessagesViewController {
 	func observePartnerSeen() {
 		_seenRefHandle = seenRef.child(AppState.sharedInstance.f_firID!).observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
 			if let strDate = snapshot.value as? String {
+				FIRCrashMessage("seenRef: strDate valid")
 				self.lastSeen = self.detailedDateFormatter.dateFromString(strDate)!
 				self.reloadMessagesView()
 			}
+			FIRCrashMessage("seenRef: updated")
 		}
 	}
 
@@ -261,7 +268,6 @@ class ChatViewController: JSQMessagesViewController {
 				return kJSQMessagesCollectionViewCellLabelHeightDefault
 			}
 		}
-		
 		return 0
 	}
 	

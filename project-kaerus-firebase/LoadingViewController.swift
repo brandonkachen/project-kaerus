@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseStorage
 import FBSDKCoreKit
 import FBSDKLoginKit
 
@@ -68,12 +69,6 @@ class LoadingViewController: UIViewController {
 			self.isStartingUp = false
 			let tabBarController = self.storyboard!.instantiateViewControllerWithIdentifier("tabBarController") as! UITabBarController
 			tabBarController.selectedIndex = self.selectedIndex
-//			var deadlinesTabBarItem: UITabBarItem = UITabBarItem(title: "Deadlines", image: UIImage(named: "Overtime-50.png")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal), selectedImage: UIImage(named: "YOUR_IMAGE_NAME"))
-
-			
-//			let tabItems = tabBarController.tabBar.items! as [UITabBarItem]
-//			tabItems[0].selectedImage = UIImage(named: "Overtime-50.png")
-//			tabItems[1].selectedImage = UIImage(named: "Chat Filled-50.png")
 			self.presentViewController(tabBarController, animated: false, completion: nil)
 		}
 	}
@@ -96,12 +91,12 @@ extension LoadingViewController {
 	}
 	
 	func setReturningUserInfo(postDict: [String : String]) {
+		self.enterGroup()
 		AppState.sharedInstance.firstName = postDict["firstName"]
 		let picName = postDict["photoURL"]!
 		AppState.sharedInstance.photoUrl = NSURL(string: picName)!
 		let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID).child("profilePic.jpg")
 		profilePicRef.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
-			if self.isStartingUp { dispatch_group_enter(self.group) }
 			if (error != nil) {
 				print("Error!", error?.localizedDescription)
 			} else {
@@ -242,6 +237,7 @@ extension LoadingViewController {
 				                                        f_fullName: partnerInfoDict["partner_name"],
 				                                        f_groupchatId: partnerInfoDict["groupchat_id"])
 				self.partnerOneSignalIdSetup()
+//				self.badgesSetup()
 			} else {
 				AppState.sharedInstance.setPartnerState(false,
 				                                        f_firstName: nil,
@@ -262,7 +258,6 @@ extension LoadingViewController {
 	// partner OneSignal id is dependant on partner info, so it waits until that finishes loading
 	func partnerOneSignalIdSetup() {
 		self.enterGroup()
-		
 		let oneSignalRef = self.ref.child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
 		oneSignalRef.observeEventType(.Value) { (idSnapshot: FIRDataSnapshot) in
 			var newIds = [String]()
@@ -275,4 +270,17 @@ extension LoadingViewController {
 			self.leaveGroup()
 		}
 	}
+	
+//	func badgesSetup() {
+//		self.enterGroup()
+//		let badgesRef = self.ref.child("Badges").child(AppState.sharedInstance.userID)
+//		badgesRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
+//			if let unseenMessages = snapshot.childSnapshotForPath("Unseen-Messages").value as? Int {
+//				AppState.sharedInstance.unseenMessagesCount = unseenMessages
+//				NSNotificationCenter.defaultCenter().postNotificationName("MyBadgesChanged", object: nil)
+//			} else {
+//				AppState.sharedInstance.unseenMessagesCount = 0
+//			}
+//		}
+//	}
 }

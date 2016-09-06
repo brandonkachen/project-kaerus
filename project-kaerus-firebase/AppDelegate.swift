@@ -17,7 +17,7 @@ import FBSDKLoginKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var window: UIWindow?
-	
+
 	override init() {
 		FIRApp.configure()
 		FIRDatabase.database().persistenceEnabled = true
@@ -32,6 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			handleNotificationAction: { (result) in self.notifAct(result) },
 			settings: [kOSSettingsKeyAutoPrompt : false, kOSSettingsKeyInAppAlerts : false])
 		
+		UIApplication.sharedApplication().applicationIconBadgeNumber = 1
+		UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+		
+		checkIfUserLoggedIn()
+		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+	}
+	
+	func checkIfUserLoggedIn() {
 		let user = FIRAuth.auth()?.currentUser
 		if user != nil { // user is logged in so load their info and go to loadingViewController
 			let loadVC = self.window?.rootViewController as! LoadingViewController
@@ -43,23 +51,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			self.window?.rootViewController = loginVC
 			self.window?.makeKeyAndVisible()
 		}
-		
-		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 	}
 	
-	// called when user is in app and receives a notification
+	// called when user receives a notification
 	func notifRcv(notification: OSNotification!) {
-		print("notification received")
+		if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+			while let presentedViewController = topController.presentedViewController {
+				topController = presentedViewController
+			}
+			if let tabBarVC = topController as? UITabBarController where tabBarVC.selectedIndex != 1 {
+				AppState.sharedInstance.unseenMessagesCount += 1
+				tabBarVC.tabBar.items![1].badgeValue = String(AppState.sharedInstance.unseenMessagesCount)
+			}
+		}
 	}
 	
 	// called when user opens notification
 	func notifAct(result: OSNotificationOpenedResult!) {
-		print("notification opened")
-//		let loadVC = self.window?.rootViewController as! LoadingViewController
-//		print("did")
-////		if result.notification.
-//		loadVC.selectedIndex = 2
-//		print("leaving")
+		if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
+			while let presentedViewController = topController.presentedViewController {
+				topController = presentedViewController
+			}
+			if let tabBarVC = topController as? UITabBarController {
+				tabBarVC.selectedIndex = 1
+				tabBarVC.tabBar.items![1].badgeValue = nil
+				AppState.sharedInstance.unseenMessagesCount = 0
+			}
+		}
 	}
  
 	func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
@@ -92,4 +110,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
 	}
 }
-

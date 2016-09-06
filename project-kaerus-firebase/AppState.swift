@@ -43,6 +43,10 @@ class AppState: NSObject {
 	// partner stuff
 	var partnerStatus: Bool!
 	var groupchat_id: String?
+	
+	// notification stuff
+	var unseenMessagesCount = 0
+	var numOfUnseenPartnerDeadlineChanges = 0
 }
 
 // all AppState functions

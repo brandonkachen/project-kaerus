@@ -225,9 +225,10 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		let setMyInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		setMyInfoRef.setValue(myInfoDict)
 		
+		// set up Payments stuff for this newly formed group
 		let dateFormatter = NSDateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd Z"
-		ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid").setValue(dateFormatter.stringFromDate(NSDate.distantPast()))
+		ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid-Confirmed").setValue(dateFormatter.stringFromDate(NSDate.distantPast()))
 
 		// change view
 		setPartnerScreen()

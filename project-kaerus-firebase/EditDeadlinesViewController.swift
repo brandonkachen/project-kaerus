@@ -17,7 +17,7 @@ class EditDeadlinesViewController: UIViewController {
 	var deadlines = [Deadline]()
 	var startDate: NSDate!
 	var endDate: NSDate!
-	var dateToShowInitially: NSDate!
+	var dateToInitializeTo: NSDate!
 	var explanation = ""
 	weak var enableSaveButton : UIAlertAction?
 	var hasBeenEdited = false // used to tell if the user has edited any deadlines
@@ -59,7 +59,7 @@ class EditDeadlinesViewController: UIViewController {
 			let addDeadlineVC = navController.topViewController as! AddDeadlineViewController
 			addDeadlineVC.startDate = startDate
 			addDeadlineVC.endDate = endDate
-			addDeadlineVC.dateToShowInitially = dateToShowInitially
+			addDeadlineVC.dateToShowInitially = dateToInitializeTo
 		}
 	}
 	
@@ -69,12 +69,12 @@ class EditDeadlinesViewController: UIViewController {
 			if let selectedIndexPath = editDeadlineTable.indexPathForSelectedRow { // Update current item
 				deadlines[selectedIndexPath.row] = deadline
 				editDeadlineTable.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)
-				hasBeenEdited = true
 			} else { // Add a new item to the list
 				let newIndexPath = NSIndexPath(forRow: deadlines.count, inSection: 0)
 				deadlines.append(deadline)
 				editDeadlineTable.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Bottom)
 			}
+			hasBeenEdited = true
 			deadlines.sortInPlace() { $0.timeDue < $1.timeDue }
 			reloadData()
 		}
@@ -187,16 +187,16 @@ extension EditDeadlinesViewController {
 	func reloadData() {
 		let timeFormatter = NSDateFormatter()
 		timeFormatter.dateFormat = "yyyy-MM-dd HH:mmZ"
-		var date: NSDate!
-		date = deadlines.first == nil ?
-			timeFormatter.dateFromString((deadlines.first!.timeDue)!) :
-			startDate
-		endDate = NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: 1, toDate: date, options: [])!
+		var dateToSet: NSDate!
+		dateToSet = deadlines.first == nil ?
+			startDate :
+			timeFormatter.dateFromString((deadlines.first!.timeDue)!)
+		endDate = NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: 1, toDate: dateToSet, options: [])!
 		
-		date = deadlines.last == nil ?
-			timeFormatter.dateFromString((deadlines.last!.timeDue)!) :
-			startDate
-		dateToShowInitially = date
+		dateToSet = deadlines.last == nil ?
+			startDate :
+			timeFormatter.dateFromString((deadlines.last!.timeDue)!)
+		dateToInitializeTo = dateToSet
 		
 		self.editDeadlineTable.reloadData()
 	}
