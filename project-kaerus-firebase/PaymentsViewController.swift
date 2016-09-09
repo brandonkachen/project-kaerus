@@ -13,32 +13,46 @@ class PaymentsViewController: UIViewController {
 	@IBOutlet weak var userProfilePic: UIImageView!
 	@IBOutlet weak var username: UILabel!
 	@IBOutlet weak var userBalance: UILabel!
-	@IBOutlet weak var friendProfilePic: UIImageView!
-	@IBOutlet weak var friendName: UILabel!
-	@IBOutlet weak var friendBalance: UILabel!
-	@IBOutlet weak var paymentsTable: UITableView!
+	@IBOutlet weak var partnerProfilePic: UIImageView!
+	@IBOutlet weak var partnerName: UILabel!
+	@IBOutlet weak var partnerBalance: UILabel!
+	
+	var ref, userBalanceRef, partnerBalanceRef: FIRDatabaseReference!
 	
 	// MARK: Properties
 	var payments = [(String, Double)]()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		loadPaymentHistory()
-
+		
 		username.text = AppState.sharedInstance.firstName
 		userProfilePic.image = AppState.sharedInstance.photo
 		userBalance.text = "$0"
 		
 		// load partner data
-		if let status = AppState.sharedInstance.partnerStatus where status == true {
-			friendProfilePic.image = AppState.sharedInstance.f_photo
-			friendName.text = AppState.sharedInstance.f_firstName
-			friendBalance.text = "$0"
+		if AppState.sharedInstance.groupchat_id != nil {
+			partnerProfilePic.image = AppState.sharedInstance.f_photo
+			partnerName.text = AppState.sharedInstance.f_firstName
+			ref = FIRDatabase.database().reference().child("Payments").child(AppState.sharedInstance.groupchat_id!).child("History")
+			userBalanceRef = ref.child(AppState.sharedInstance.userID)
+			partnerBalanceRef = ref.child(AppState.sharedInstance.f_firID!)
+			
+			userBalanceRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
+				self.userBalance.text = "$" + self.calculateTotal(snapshot).description
+			}
+			
+			partnerBalanceRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
+				self.partnerBalance.text = "$" + self.calculateTotal(snapshot).description
+			}
 		}
     }
 	
-	func loadPaymentHistory() {
-		
+	func calculateTotal(snapshot: FIRDataSnapshot) -> Double {
+		var total: Double = 0
+		if let items = snapshot.value as? [String : Double] {
+			for item in items { total += item.1 }
+		}
+		return total
 	}
 	
     override func didReceiveMemoryWarning() {

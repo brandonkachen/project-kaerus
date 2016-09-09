@@ -52,7 +52,8 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 	}
 	
 	func setScreen() {
-		AppState.sharedInstance.partnerStatus == true ? setPartnerScreen() : setNoPartnerScreen()
+		AppState.sharedInstance.f_photo != nil ?
+			setPartnerScreen() : setNoPartnerScreen()
 	}
 	
 	// set up No Partner screen
@@ -68,10 +69,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		noPartnerScreen.hidden = true
 		partnerScreen.hidden = false
 		self.title = AppState.sharedInstance.f_firstName
-		let friendPhotoData = NSData(contentsOfURL: AppState.sharedInstance.f_photoURL!)!
-		profilePic.image = UIImage(data: friendPhotoData)
-		profilePic.layer.cornerRadius = profilePic.frame.height / 2
-		profilePic.clipsToBounds = true
+		profilePic.image = AppState.sharedInstance.f_photo!
 		partnerLabel.text = "Your partner is:\n\(AppState.sharedInstance.f_name!)"
 		endPartnershipButton.layer.cornerRadius = 7
 	}
@@ -201,27 +199,23 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 	
 	@IBAction func didPressAcceptButton(sender: AnyObject) {
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerOneSignalChanged(_:)), name: "PartnerOneSignalChanged", object: nil)
-
 		let friend = friendData[sender.tag]
 	
 		// set group_id. to get group id: 1) sort both ids in alphabetical order. 2) put a “.” sign between the two
 		let sortedIds = [AppState.sharedInstance.userID, friend.id].sort()
-		let groupchatId = sortedIds[0] + "+" + sortedIds[1]
-		
-		// update AppState with friend info
-		AppState.sharedInstance.setPartnerState(true, f_firstName: friend.first_name, f_id: friend.id, f_picURL: friend.picURL, f_fullName: friend.name, f_groupchatId: groupchatId)
+		AppState.sharedInstance.groupchat_id = sortedIds[0] + "+" + sortedIds[1]
 		
 		// set both partner statuses to true
 		ref.child("Has-Partner").child(friend.id).setValue(true)
 		ref.child("Has-Partner").child(AppState.sharedInstance.userID).setValue(true)
 		
 		// set friend's info dict and send to Firebase
-		let friendInfoDict = setFriendInfoDict(AppState.sharedInstance.userID, name: AppState.sharedInstance.name, firstName: AppState.sharedInstance.firstName, picString: AppState.sharedInstance.photoUrl!.absoluteString)
-		let setFriendInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.f_firID!)
+		let friendInfoDict = setPartnerInfoDict(AppState.sharedInstance.userID, name: AppState.sharedInstance.name, firstName: AppState.sharedInstance.firstName)
+		let setFriendInfoRef = ref.child("Partner-Info").child(friend.id)
 		setFriendInfoRef.setValue(friendInfoDict)
 		
 		// repeat for user
-		let myInfoDict = setFriendInfoDict(friend.id, name: friend.name, firstName: friend.first_name, picString: friend.picURL.absoluteString)
+		let myInfoDict = setPartnerInfoDict(friend.id, name: friend.name, firstName: friend.first_name)
 		let setMyInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		setMyInfoRef.setValue(myInfoDict)
 		
@@ -229,8 +223,11 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		let dateFormatter = NSDateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd Z"
 		ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid-Confirmed").setValue(dateFormatter.stringFromDate(NSDate.distantPast()))
-
-		// change view
+		
+		// update AppState with just enough data to show partner screen immediately
+		AppState.sharedInstance.f_photo = friend.pic
+		AppState.sharedInstance.f_name = friend.name
+		AppState.sharedInstance.f_firstName = friend.first_name
 		setPartnerScreen()
 	}
 	
@@ -241,12 +238,11 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		NSNotificationCenter.defaultCenter().removeObserver(self, name: "PartnerOneSignalChanged", object: nil)
 	}
 	
-	func setFriendInfoDict(id: String, name: String, firstName: String, picString: String) -> [String : String] {
+	func setPartnerInfoDict(id: String, name: String, firstName: String) -> [String : String] {
 		let infoDict = [
 			"partner_id" : id,
 			"partner_name" : name,
 			"partner_firstName" : firstName,
-			"partner_pic" : picString,
 			"groupchat_id" : AppState.sharedInstance.groupchat_id!
 		]
 		return infoDict
@@ -282,7 +278,8 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		myPartnerRequestRef.removeValue()
 
 		// reset AppState friend values
-		AppState.sharedInstance.setPartnerState(false, f_firstName: nil, f_id: nil, f_picURL: nil, f_fullName: nil, f_groupchatId: nil)
+		AppState.sharedInstance.setPartnerState(false, f_firstName: nil, f_id: nil, f_fullName: nil, f_groupchatId: nil)
+		AppState.sharedInstance.f_photo = nil
 		AppState.sharedInstance.f_oneSignalID.removeAll()
 	}
 }

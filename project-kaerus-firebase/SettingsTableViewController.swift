@@ -48,6 +48,14 @@ class SettingsTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		if indexPath.section == 3 {
+			let email = "projectkaerus@gmail.com"
+			let url = NSURL(string: "mailto:\(email)")!
+			UIApplication.sharedApplication().openURL(url)
+		}
+	}
+	
 	
 	// MARK:- sign out
 	
@@ -57,14 +65,12 @@ class SettingsTableViewController: UITableViewController {
 			try firebaseAuth?.signOut()
 			AppState.sharedInstance.signedIn = false
 			// reset AppState's friend data, so if next user doesn't have a partner, they don't get this user's partner info
-			AppState
-				.sharedInstance
-				.setPartnerState(false,
+			AppState.sharedInstance.setPartnerState(false,
 				                f_firstName: nil,
 				                f_id: nil,
-								f_picURL: nil,
 								f_fullName: nil,
 								f_groupchatId: nil)
+			AppState.sharedInstance.f_photo = nil
 			AppState.sharedInstance.f_oneSignalID.removeAll()
 			
 			let group = dispatch_group_create()

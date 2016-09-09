@@ -23,7 +23,6 @@ class AppState: NSObject {
 	// user's info
 	var signedIn = false
 	var name: String!
-	var photoUrl: NSURL!
 	var photo: UIImage!
 	var userID: String!
 	var email: String!
@@ -36,7 +35,6 @@ class AppState: NSObject {
 	var f_firstName: String?
 	var f_name: String?
 	var f_firID: String?
-	var f_photoURL: NSURL?
 	var f_photo: UIImage?
 	var f_oneSignalID = [String]()
 	
@@ -61,14 +59,11 @@ extension AppState {
 	func setPartnerState(status: Bool,
 	                    f_firstName: String?,
 	                    f_id: String?,
-	                    f_picURL: NSURL?,
 	                    f_fullName: String?,
 	                    f_groupchatId: String?) {
 		self.partnerStatus = status
 		self.f_firstName = f_firstName
 		self.f_firID = f_id
-		self.f_photoURL = f_picURL
-		self.f_photo = (f_picURL == nil) ? nil : UIImage(data: NSData(contentsOfURL: self.f_photoURL!)!)!.circle
 		self.f_name = f_fullName
 		self.groupchat_id = f_groupchatId
 	}

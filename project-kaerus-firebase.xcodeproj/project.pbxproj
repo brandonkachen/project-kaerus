@@ -14,6 +14,7 @@
 		692116971D6E1BDF00E5DB8A /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692116961D6E1BDF00E5DB8A /* LoadingViewController.swift */; };
 		69253B1E1D6AD459009297E4 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69253B1D1D6AD459009297E4 /* Utilities.swift */; };
 		693684581D5AF1D70077F88C /* PaymentHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693684571D5AF1D70077F88C /* PaymentHistoryTableViewCell.swift */; };
+		694399E21D7F7EFC000DC631 /* PaymentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694399E11D7F7EFC000DC631 /* PaymentsViewController.swift */; };
 		694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB10A1D3976F400570A6B /* LoginViewController.swift */; };
 		694DB1161D39775B00570A6B /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1131D39775B00570A6B /* AppState.swift */; };
 		694DB1171D39775B00570A6B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694DB1141D39775B00570A6B /* Constants.swift */; };
@@ -65,6 +66,7 @@
 		692116961D6E1BDF00E5DB8A /* LoadingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		69253B1D1D6AD459009297E4 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		693684571D5AF1D70077F88C /* PaymentHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentHistoryTableViewCell.swift; sourceTree = "<group>"; };
+		694399E11D7F7EFC000DC631 /* PaymentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsViewController.swift; sourceTree = "<group>"; };
 		694DB10A1D3976F400570A6B /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		694DB1131D39775B00570A6B /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		694DB1141D39775B00570A6B /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				694DB10A1D3976F400570A6B /* LoginViewController.swift */,
 				69629B741D599BD800AD0C67 /* ManagePartnerViewController.swift */,
 				696287B11D3AED33000F94F2 /* SettingsTableViewController.swift */,
+				694399E11D7F7EFC000DC631 /* PaymentsViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -512,6 +515,7 @@
 				692116971D6E1BDF00E5DB8A /* LoadingViewController.swift in Sources */,
 				69AA26A31D546FFC0029773B /* UIImageExtension.swift in Sources */,
 				694DB10E1D3976F400570A6B /* LoginViewController.swift in Sources */,
+				694399E21D7F7EFC000DC631 /* PaymentsViewController.swift in Sources */,
 				694DB1181D39775B00570A6B /* MeasurementHelper.swift in Sources */,
 				694DB1171D39775B00570A6B /* Constants.swift in Sources */,
 				69B3C1021D582EA8007F5FE6 /* CellView.swift in Sources */,

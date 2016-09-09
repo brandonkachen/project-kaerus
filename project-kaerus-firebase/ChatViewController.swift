@@ -51,7 +51,7 @@ class ChatViewController: JSQMessagesViewController {
 	}
 	
 	func chatSetup() {
-		// set up Firebase branch where messages will be stored
+		// set up Firebase branch where messages will be stored)
 		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
 			// add user and partner icons
 			avatars[senderId] = JSQMessagesAvatarImage.avatarWithImage(AppState.sharedInstance.photo)

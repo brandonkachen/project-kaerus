@@ -93,8 +93,6 @@ extension LoadingViewController {
 	func setReturningUserInfo(postDict: [String : String]) {
 		self.enterGroup()
 		AppState.sharedInstance.firstName = postDict["firstName"]
-		let picName = postDict["photoURL"]!
-		AppState.sharedInstance.photoUrl = NSURL(string: picName)!
 		let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID).child("profilePic.jpg")
 		profilePicRef.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
 			if (error != nil) {
@@ -123,15 +121,11 @@ extension LoadingViewController {
 				
 				// default picture is too low quality
 				let picName = result.valueForKey("picture")?.objectForKey("data")?.objectForKey("url") as! String
-				AppState.sharedInstance.photoUrl = NSURL(string: picName)!
-				let picData = NSData(contentsOfURL: AppState.sharedInstance.photoUrl)!
+				let photoUrl = NSURL(string: picName)!
+				let picData = NSData(contentsOfURL: photoUrl)!
 				AppState.sharedInstance.photo = UIImage(data: picData)!.circle
 				
-				let myInfoItem = [
-					"firstName" : AppState.sharedInstance.firstName,
-					"photoURL" : AppState.sharedInstance.photoUrl.absoluteString
-				]
-				self.ref.child("My-Info").child(AppState.sharedInstance.userID).setValue(myInfoItem)
+				self.ref.child("My-Info").child(AppState.sharedInstance.userID).child("firstName").setValue(AppState.sharedInstance.firstName)
 				
 				// upload facebook profile pic to Firebase
 				self.uploadProfilePic(picData)
@@ -227,37 +221,57 @@ extension LoadingViewController {
 	// get partner's info
 	func partnerInfoSetup() {
 		dispatch_group_enter(self.group)
+		
 		let partnerInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		partnerInfoRef.observeEventType(.Value) { (partnerInfoSnapshot: FIRDataSnapshot) in
+			let partnerSetupGroup = dispatch_group_create() // used for functions partnerOneSignalIdSetup and partnerProfilePicSetup
+
 			if let partnerInfoDict = partnerInfoSnapshot.value as? [String : String] {
 				AppState.sharedInstance.setPartnerState(true,
 				                                        f_firstName: partnerInfoDict["partner_firstName"],
 				                                        f_id: partnerInfoDict["partner_id"],
-				                                        f_picURL: NSURL(string: partnerInfoDict["partner_pic"]!),
 				                                        f_fullName: partnerInfoDict["partner_name"],
 				                                        f_groupchatId: partnerInfoDict["groupchat_id"])
-				self.partnerOneSignalIdSetup()
+				
+				self.partnerOneSignalIdSetup(partnerSetupGroup)
+				self.partnerProfilePicSetup(partnerSetupGroup)
 //				self.badgesSetup()
 			} else {
 				AppState.sharedInstance.setPartnerState(false,
 				                                        f_firstName: nil,
 				                                        f_id: nil,
-				                                        f_picURL: nil,
 				                                        f_fullName: nil,
 				                                        f_groupchatId: nil)
+				AppState.sharedInstance.f_photo = nil
 				AppState.sharedInstance.f_oneSignalID.removeAll()
 			}
-			// notifies 3 VCs, in case user is looking at any one of them
-			NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Manage", object: nil)
-			NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Deadlines", object: nil)
-			NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Chat", object: nil)
-			self.leaveGroup()
+			
+			dispatch_group_notify(partnerSetupGroup, dispatch_get_main_queue()) {
+				// notifies 3 VCs, in case user is looking at any one of them
+				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Manage", object: nil)
+				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Deadlines", object: nil)
+				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Chat", object: nil)
+				self.leaveGroup()
+			}
+		}
+	}
+	
+	func partnerProfilePicSetup(group: dispatch_group_t) {
+		dispatch_group_enter(group)
+		let partnerProfilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.f_firID!).child("profilePic.jpg")
+		partnerProfilePicRef.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
+			if (error != nil) {
+				print("Error!", error?.localizedDescription)
+			} else {
+				AppState.sharedInstance.f_photo = UIImage(data: data!)!.circle
+			}
+			dispatch_group_leave(group)
 		}
 	}
 	
 	// partner OneSignal id is dependant on partner info, so it waits until that finishes loading
-	func partnerOneSignalIdSetup() {
-		self.enterGroup()
+	func partnerOneSignalIdSetup(group: dispatch_group_t) {
+		dispatch_group_enter(group)
 		let oneSignalRef = self.ref.child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
 		oneSignalRef.observeEventType(.Value) { (idSnapshot: FIRDataSnapshot) in
 			var newIds = [String]()
@@ -267,7 +281,7 @@ extension LoadingViewController {
 			}
 			AppState.sharedInstance.f_oneSignalID = newIds
 			NSNotificationCenter.defaultCenter().postNotificationName("PartnerOneSignalChanged", object: nil)
-			self.leaveGroup()
+			dispatch_group_leave(group)
 		}
 	}
 	

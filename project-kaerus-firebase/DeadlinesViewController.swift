@@ -183,7 +183,7 @@ class DeadlinesViewController: UIViewController {
 			let diff = self.partnerTotal - self.userTotal
 			let absDiff = String(format: "%.2f", fabs(diff))
 			
-			if diff <= -10 && self.segControl.selectedSegmentIndex == 0 {
+			if diff <= -5 && self.segControl.selectedSegmentIndex == 0 {
 				self.amtOwedLabel.text = "- "
 				self.amtOwedLabel.textColor = UIColor.redColor()
 				self.shouldLock = true
