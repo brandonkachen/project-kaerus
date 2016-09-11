@@ -179,7 +179,7 @@ extension LoadingViewController {
 			if (pushToken != nil) {
 				NSLog("pushToken:%@", pushToken)
 			}
-			oneSignalIdRef.child(userId).setValue(userId)
+			oneSignalIdRef.setValue(userId)
 			dispatch_group_leave(self.group)
 		}
 	}
@@ -224,7 +224,7 @@ extension LoadingViewController {
 		
 		let partnerInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		partnerInfoRef.observeEventType(.Value) { (partnerInfoSnapshot: FIRDataSnapshot) in
-			let partnerSetupGroup = dispatch_group_create() // used for functions partnerOneSignalIdSetup and partnerProfilePicSetup
+			let partnerSetupGroup = dispatch_group_create() // used for functions partnerProfilePicSetup
 
 			if let partnerInfoDict = partnerInfoSnapshot.value as? [String : String] {
 				AppState.sharedInstance.setPartnerState(true,
@@ -233,7 +233,7 @@ extension LoadingViewController {
 				                                        f_fullName: partnerInfoDict["partner_name"],
 				                                        f_groupchatId: partnerInfoDict["groupchat_id"])
 				
-				self.partnerOneSignalIdSetup(partnerSetupGroup)
+				self.partnerOneSignalIdSetup()
 				self.partnerProfilePicSetup(partnerSetupGroup)
 //				self.badgesSetup()
 			} else {
@@ -243,7 +243,7 @@ extension LoadingViewController {
 				                                        f_fullName: nil,
 				                                        f_groupchatId: nil)
 				AppState.sharedInstance.f_photo = nil
-				AppState.sharedInstance.f_oneSignalID.removeAll()
+				AppState.sharedInstance.f_oneSignalID = nil
 			}
 			
 			dispatch_group_notify(partnerSetupGroup, dispatch_get_main_queue()) {
@@ -270,18 +270,11 @@ extension LoadingViewController {
 	}
 	
 	// partner OneSignal id is dependant on partner info, so it waits until that finishes loading
-	func partnerOneSignalIdSetup(group: dispatch_group_t) {
-		dispatch_group_enter(group)
+	func partnerOneSignalIdSetup() {
 		let oneSignalRef = self.ref.child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
 		oneSignalRef.observeEventType(.Value) { (idSnapshot: FIRDataSnapshot) in
-			var newIds = [String]()
-			// add every device partner is logged onto
-			for id in idSnapshot.children {
-				newIds.append(id.key!)
-			}
-			AppState.sharedInstance.f_oneSignalID = newIds
+			AppState.sharedInstance.f_oneSignalID = idSnapshot.value as? String
 			NSNotificationCenter.defaultCenter().postNotificationName("PartnerOneSignalChanged", object: nil)
-			dispatch_group_leave(group)
 		}
 	}
 	

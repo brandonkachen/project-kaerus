@@ -266,10 +266,8 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		sendNotification(endPartnershipMessage)
 		
 		// Remove Partner-Info for both users
-		let setFriendInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.f_firID!)
-		let setMyInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
-		setFriendInfoRef.removeValue()
-		setMyInfoRef.removeValue()
+		ref.child("Partner-Info").child(AppState.sharedInstance.f_firID!).removeValue()
+		ref.child("Partner-Info").child(AppState.sharedInstance.userID).removeValue()
 		
 		// Remove Partner-Requests for both users
 		let friendPartnerRequestRef = ref.child("Partner-Requests").child(AppState.sharedInstance.f_firID!).child(AppState.sharedInstance.userID)
@@ -280,6 +278,6 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		// reset AppState friend values
 		AppState.sharedInstance.setPartnerState(false, f_firstName: nil, f_id: nil, f_fullName: nil, f_groupchatId: nil)
 		AppState.sharedInstance.f_photo = nil
-		AppState.sharedInstance.f_oneSignalID.removeAll()
+		AppState.sharedInstance.f_oneSignalID = nil
 	}
 }

@@ -19,4 +19,8 @@ extension NSDate {
 		default: return "th"
 		}
 	}
+	
+	func nextDay() -> NSDate {
+		return NSCalendar.currentCalendar().dateByAddingUnit(.Day, value: 1, toDate: self, options: [])!
+	}
 }

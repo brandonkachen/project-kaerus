@@ -36,7 +36,7 @@ class AppState: NSObject {
 	var f_name: String?
 	var f_firID: String?
 	var f_photo: UIImage?
-	var f_oneSignalID = [String]()
+	var f_oneSignalID: String?
 	
 	// partner stuff
 	var partnerStatus: Bool!

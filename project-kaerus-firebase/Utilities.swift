@@ -13,17 +13,15 @@ import FBSDKLoginKit
 
 // sends a notification to all of partner's devices
 func sendNotification(text: String) {
-	if AppState.sharedInstance.f_oneSignalID.isEmpty {
-		print("Partner not logged into any device")
+	if let osId = AppState.sharedInstance.f_oneSignalID {
+		let osItem = [
+			"contents": ["en": text],
+			"include_player_ids": [osId],
+			"content_available": ["true"]
+		]
+		OneSignal.postNotification(osItem)
 	} else {
-		for id in AppState.sharedInstance.f_oneSignalID {
-			let osItem = [
-				"contents": ["en": text],
-				"include_player_ids": [id],
-				"content_available": ["true"]
-			]
-			OneSignal.postNotification(osItem)
-		}
+		print("Partner not logged into any device")
 	}
 }
 

@@ -71,7 +71,7 @@ class SettingsTableViewController: UITableViewController {
 								f_fullName: nil,
 								f_groupchatId: nil)
 			AppState.sharedInstance.f_photo = nil
-			AppState.sharedInstance.f_oneSignalID.removeAll()
+			AppState.sharedInstance.f_oneSignalID = nil
 			
 			let group = dispatch_group_create()
 			var osId: String!
