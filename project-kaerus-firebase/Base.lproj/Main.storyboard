@@ -225,7 +225,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="MdB-RX-6th" kind="show" id="vh0-4I-Z7L"/>
+                                            <segue destination="dTH-OZ-I8l" kind="show" id="9lN-Fp-5QE"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1055,170 +1055,177 @@ You must pay your partner before you can access this day.</string>
             <point key="canvasLocation" x="2646" y="1238"/>
         </scene>
         <!--Customize Payments-->
-        <scene sceneID="hWo-ea-RkT">
+        <scene sceneID="zFI-4x-Frj">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="MdB-RX-6th" customClass="CustomizePaymentsPageViewController" customModule="project_kaerus_firebase" customModuleProvider="target" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" title="Customize Payments" id="OlC-Go-vvm"/>
-                </pageViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1TW-YV-4zr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2646" y="2030"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="uKu-Ec-v7U">
-            <objects>
-                <viewController storyboardIdentifier="EachDayCostViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="B1h-XU-bJJ" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="tp1-ft-UQS"/>
-                        <viewControllerLayoutGuide type="bottom" id="6iY-z1-846"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="r9G-TA-Pup">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3cK-L2-hot" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="dTH-OZ-I8l" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Mvt-GQ-Jz3">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How much do you want each day to cost?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y77-EB-uer">
-                                <rect key="frame" x="158" y="263" width="285" height="18"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="$" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p8z-7s-9mL">
-                                <rect key="frame" x="256" y="311" width="80" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="decimalPad" enablesReturnKeyAutomatically="YES"/>
-                            </textField>
-                        </subviews>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="Y77-EB-uer" firstAttribute="centerX" secondItem="r9G-TA-Pup" secondAttribute="centerX" id="AO3-CE-wAV"/>
-                            <constraint firstItem="p8z-7s-9mL" firstAttribute="leading" secondItem="Y77-EB-uer" secondAttribute="centerX" constant="-44.5" id="L4V-Iv-aGP"/>
-                            <constraint firstItem="Y77-EB-uer" firstAttribute="top" secondItem="tp1-ft-UQS" secondAttribute="bottom" constant="243" id="mTE-oQ-Ha2"/>
-                            <constraint firstItem="p8z-7s-9mL" firstAttribute="top" secondItem="Y77-EB-uer" secondAttribute="top" constant="48" id="pUx-T3-nTs"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8oi-07-lbg" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2217" y="2750"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="iJB-xd-0AZ">
-            <objects>
-                <viewController storyboardIdentifier="MaxLimitBeforeLockingViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="E7R-yt-vLh" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="REn-6W-mMj"/>
-                        <viewControllerLayoutGuide type="bottom" id="BuF-Ae-6bh"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="SOx-bI-qD4">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is the maximum amount of money owed that's allowed before you or your partner is required to pay?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E2H-xG-6i5">
-                                <rect key="frame" x="50" y="202" width="500" height="101"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="101" id="lZG-bh-Tp9"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Be sure to choose an amout that won't demotivate you if you had to pay it, but won't make you pay all the time!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vg2-Jr-6aY">
-                                <rect key="frame" x="50" y="302" width="500" height="29"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="$" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P3t-sQ-rbl">
-                                <rect key="frame" x="273" y="368" width="55" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="55" id="XA7-1V-tyi"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="decimalPad" enablesReturnKeyAutomatically="YES"/>
-                            </textField>
-                        </subviews>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="Vg2-Jr-6aY" firstAttribute="top" secondItem="REn-6W-mMj" secondAttribute="bottom" constant="282" id="1aE-zJ-hb6"/>
-                            <constraint firstItem="E2H-xG-6i5" firstAttribute="centerX" secondItem="SOx-bI-qD4" secondAttribute="centerX" id="6o2-a4-QZg"/>
-                            <constraint firstItem="Vg2-Jr-6aY" firstAttribute="centerX" secondItem="P3t-sQ-rbl" secondAttribute="centerX" id="Gv9-RQ-vhq"/>
-                            <constraint firstItem="E2H-xG-6i5" firstAttribute="trailing" secondItem="Vg2-Jr-6aY" secondAttribute="trailing" id="H7g-zm-ZTL"/>
-                            <constraint firstItem="E2H-xG-6i5" firstAttribute="leading" secondItem="SOx-bI-qD4" secondAttribute="leadingMargin" constant="30" id="OUm-DR-j57"/>
-                            <constraint firstItem="P3t-sQ-rbl" firstAttribute="top" secondItem="Vg2-Jr-6aY" secondAttribute="bottom" constant="37" id="VBH-KG-gH4"/>
-                            <constraint firstItem="E2H-xG-6i5" firstAttribute="top" secondItem="REn-6W-mMj" secondAttribute="bottom" constant="182" id="feE-gE-Gp9"/>
-                            <constraint firstItem="E2H-xG-6i5" firstAttribute="leading" secondItem="Vg2-Jr-6aY" secondAttribute="leading" id="oqD-Fj-wuv"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3NG-tP-SZj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2917" y="2750"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="jku-F7-4hR">
-            <objects>
-                <viewController storyboardIdentifier="SplitDeadlinesCostViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="QoL-fE-PRG" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="75g-h8-xQd"/>
-                        <viewControllerLayoutGuide type="bottom" id="McE-Jb-iSK"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="taQ-Vr-oyc">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dRH-Ln-bmK">
-                                <rect key="frame" x="50" y="161" width="396" height="84"/>
-                                <string key="text">Do you want to split the cost over all deadlines set that day?
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <sections>
+                            <tableViewSection id="8gE-iZ-EcQ">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="56" id="rig-wI-sOV">
+                                        <rect key="frame" x="0.0" y="64" width="600" height="56"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rig-wI-sOV" id="vzc-Ya-vO9">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="56"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How much will each day to cost?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgV-cQ-ZDm">
+                                                    <rect key="frame" x="21" y="13" width="411" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="$" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tZh-ZU-KxR">
+                                                    <rect key="frame" x="532" y="13" width="60" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="60" id="wuu-Jg-99i"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad" enablesReturnKeyAutomatically="YES"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="tZh-ZU-KxR" firstAttribute="leading" secondItem="fgV-cQ-ZDm" secondAttribute="trailing" constant="100" id="BC4-6c-vuV"/>
+                                                <constraint firstItem="fgV-cQ-ZDm" firstAttribute="top" secondItem="vzc-Ya-vO9" secondAttribute="topMargin" constant="5" id="BvG-Va-ORJ"/>
+                                                <constraint firstItem="fgV-cQ-ZDm" firstAttribute="bottom" secondItem="tZh-ZU-KxR" secondAttribute="bottom" id="NGZ-od-L6t"/>
+                                                <constraint firstItem="fgV-cQ-ZDm" firstAttribute="leading" secondItem="vzc-Ya-vO9" secondAttribute="leadingMargin" constant="13" id="Pnp-4e-kgs"/>
+                                                <constraint firstItem="fgV-cQ-ZDm" firstAttribute="top" secondItem="tZh-ZU-KxR" secondAttribute="top" id="k89-l5-ljT"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="tZh-ZU-KxR" secondAttribute="trailing" id="zba-e6-RyN"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="118" id="TCR-Qs-Mu0">
+                                        <rect key="frame" x="0.0" y="120" width="600" height="118"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TCR-Qs-Mu0" id="BOf-gJ-GaN">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="118"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is the maximum limit you or your partner can owe before you or they are required to pay?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ttl-Kg-WgC">
+                                                    <rect key="frame" x="22" y="15" width="410" height="60"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Be sure to choose an amout that won't demotivate you if you had to pay it, but won't make you pay all the time!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rSC-mW-J6Z">
+                                                    <rect key="frame" x="22" y="74" width="410" height="29"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="$" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bA3-Jp-LsG">
+                                                    <rect key="frame" x="532" y="44" width="60" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="60" id="VIP-as-QBU"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad" enablesReturnKeyAutomatically="YES"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="bA3-Jp-LsG" firstAttribute="leading" secondItem="ttl-Kg-WgC" secondAttribute="trailing" constant="100" id="Hkv-0A-OOT"/>
+                                                <constraint firstItem="ttl-Kg-WgC" firstAttribute="trailing" secondItem="rSC-mW-J6Z" secondAttribute="trailing" id="Kny-QH-6RR"/>
+                                                <constraint firstItem="ttl-Kg-WgC" firstAttribute="top" secondItem="BOf-gJ-GaN" secondAttribute="topMargin" constant="7" id="MvW-OV-xl5"/>
+                                                <constraint firstItem="bA3-Jp-LsG" firstAttribute="centerY" secondItem="BOf-gJ-GaN" secondAttribute="centerY" constant="0.75" id="bdw-Od-6XX"/>
+                                                <constraint firstItem="ttl-Kg-WgC" firstAttribute="leading" secondItem="BOf-gJ-GaN" secondAttribute="leadingMargin" constant="14" id="c4e-4f-6Ks"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="bA3-Jp-LsG" secondAttribute="trailing" id="eNP-t8-OzB"/>
+                                                <constraint firstItem="rSC-mW-J6Z" firstAttribute="top" secondItem="BOf-gJ-GaN" secondAttribute="topMargin" constant="66" id="lgU-5M-ST3"/>
+                                                <constraint firstItem="ttl-Kg-WgC" firstAttribute="leading" secondItem="rSC-mW-J6Z" secondAttribute="leading" id="t3x-nU-UUR"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="ttl-Kg-WgC" secondAttribute="bottom" constant="35" id="t9D-Ah-q5X"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="216" id="Wgp-yS-37a">
+                                        <rect key="frame" x="0.0" y="238" width="600" height="216"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wgp-yS-37a" id="Iss-iy-ovK">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="216"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cyh-WM-yMb">
+                                                    <rect key="frame" x="20" y="15" width="423" height="140"/>
+                                                    <string key="text">Do you want to split the cost over all deadlines set that day?
 
-ex: You set 5 deadlines, and miss 3. 
+ex: You set 5 deadlines for one day, and miss 3. 
 If this is on, you'll be charged 3/5 of the total cost.
 If this is off, you'll be charged the entire cost. </string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DaF-EO-bnx">
-                                <rect key="frame" x="501" y="216" width="51" height="31"/>
-                            </switch>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B1c-jJ-eR8">
-                                <rect key="frame" x="501" y="332" width="51" height="31"/>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="flat rate for more than _ deadlines?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iui-pC-yxA">
-                                <rect key="frame" x="50" y="335" width="396" height="25"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This encourages you to set more deadlines, but can make it tempting to set too many &quot;easy&quot; deadlines" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tuI-hN-0RP">
-                                <rect key="frame" x="50" y="245" width="396" height="55"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="McE-Jb-iSK" firstAttribute="top" secondItem="Iui-pC-yxA" secondAttribute="bottom" constant="240" id="0Ts-Tz-OB8"/>
-                            <constraint firstItem="DaF-EO-bnx" firstAttribute="leading" secondItem="dRH-Ln-bmK" secondAttribute="trailing" constant="55" id="0ba-BI-3mn"/>
-                            <constraint firstItem="Iui-pC-yxA" firstAttribute="centerY" secondItem="B1c-jJ-eR8" secondAttribute="centerY" id="1w1-bx-W6h"/>
-                            <constraint firstItem="dRH-Ln-bmK" firstAttribute="trailing" secondItem="tuI-hN-0RP" secondAttribute="trailing" id="7hx-i7-Rvl"/>
-                            <constraint firstItem="Iui-pC-yxA" firstAttribute="top" secondItem="dRH-Ln-bmK" secondAttribute="bottom" constant="90" id="Kto-rH-oov"/>
-                            <constraint firstItem="tuI-hN-0RP" firstAttribute="leading" secondItem="Iui-pC-yxA" secondAttribute="leading" id="NlL-Ej-pmc"/>
-                            <constraint firstItem="dRH-Ln-bmK" firstAttribute="leading" secondItem="taQ-Vr-oyc" secondAttribute="leadingMargin" constant="30" id="S3B-3d-T2H"/>
-                            <constraint firstItem="DaF-EO-bnx" firstAttribute="top" secondItem="75g-h8-xQd" secondAttribute="bottom" constant="196" id="a2s-lu-x8e"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="DaF-EO-bnx" secondAttribute="trailing" constant="30" id="eyH-pL-PJa"/>
-                            <constraint firstItem="B1c-jJ-eR8" firstAttribute="top" secondItem="DaF-EO-bnx" secondAttribute="bottom" constant="85" id="fVW-Po-IG0"/>
-                            <constraint firstItem="dRH-Ln-bmK" firstAttribute="leading" secondItem="tuI-hN-0RP" secondAttribute="leading" id="olv-qu-euI"/>
-                            <constraint firstItem="Iui-pC-yxA" firstAttribute="top" secondItem="tuI-hN-0RP" secondAttribute="bottom" constant="35" id="uTU-3N-vIR"/>
-                            <constraint firstItem="DaF-EO-bnx" firstAttribute="leading" secondItem="B1c-jJ-eR8" secondAttribute="leading" id="uwx-TR-aOY"/>
-                            <constraint firstItem="tuI-hN-0RP" firstAttribute="trailing" secondItem="Iui-pC-yxA" secondAttribute="trailing" id="uy0-Vu-Jit"/>
-                            <constraint firstItem="tuI-hN-0RP" firstAttribute="top" secondItem="dRH-Ln-bmK" secondAttribute="bottom" id="wSw-RD-xfU"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sqL-Aw-8r2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This encourages you to set more deadlines, but can make it tempting to set too many &quot;easy&quot; deadlines" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hI7-hg-djQ">
+                                                    <rect key="frame" x="20" y="153" width="423" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="mfa-BH-xBb"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C2i-Wx-1Vh">
+                                                    <rect key="frame" x="543" y="96" width="51" height="31"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="31" id="DkE-WN-yo9"/>
+                                                        <constraint firstAttribute="width" constant="49" id="rGt-Tq-X3p"/>
+                                                    </constraints>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="C2i-Wx-1Vh" secondAttribute="trailing" id="7U6-Bq-oMO"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="hI7-hg-djQ" secondAttribute="bottom" constant="5" id="Dpw-LX-Zr2"/>
+                                                <constraint firstItem="cyh-WM-yMb" firstAttribute="top" secondItem="Iss-iy-ovK" secondAttribute="topMargin" constant="7" id="GZZ-DM-0al"/>
+                                                <constraint firstItem="cyh-WM-yMb" firstAttribute="leading" secondItem="hI7-hg-djQ" secondAttribute="leading" id="JMh-nn-XMj"/>
+                                                <constraint firstItem="cyh-WM-yMb" firstAttribute="trailing" secondItem="hI7-hg-djQ" secondAttribute="trailing" id="Vwc-ge-te8"/>
+                                                <constraint firstItem="cyh-WM-yMb" firstAttribute="leading" secondItem="Iss-iy-ovK" secondAttribute="leadingMargin" constant="12" id="aU4-Vw-pCA"/>
+                                                <constraint firstItem="C2i-Wx-1Vh" firstAttribute="centerY" secondItem="Iss-iy-ovK" secondAttribute="centerY" constant="3.5" id="e5R-iV-0lm"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="cyh-WM-yMb" secondAttribute="bottom" constant="53" id="gDM-pa-cig"/>
+                                                <constraint firstItem="C2i-Wx-1Vh" firstAttribute="leading" secondItem="cyh-WM-yMb" secondAttribute="trailing" constant="100" id="wCC-uq-v2U"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="69" id="uQ7-Xx-4Gr">
+                                        <rect key="frame" x="0.0" y="454" width="600" height="69"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uQ7-Xx-4Gr" id="Iq6-PO-y1h">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="69"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Do you want to set a flat rate after you or your partner sets more than a certain number of deadlines?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ucT-7o-9TQ">
+                                                    <rect key="frame" x="21" y="17" width="422" height="35"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N55-Hu-v4C">
+                                                    <rect key="frame" x="543" y="19" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ucT-7o-9TQ" firstAttribute="top" secondItem="Iq6-PO-y1h" secondAttribute="topMargin" constant="9" id="F7R-mN-IdA"/>
+                                                <constraint firstItem="N55-Hu-v4C" firstAttribute="trailing" secondItem="Iq6-PO-y1h" secondAttribute="trailingMargin" id="bjE-Vh-LSZ"/>
+                                                <constraint firstItem="ucT-7o-9TQ" firstAttribute="leading" secondItem="Iq6-PO-y1h" secondAttribute="leadingMargin" constant="13" id="epg-gR-lpw"/>
+                                                <constraint firstItem="N55-Hu-v4C" firstAttribute="leading" secondItem="ucT-7o-9TQ" secondAttribute="trailing" constant="100" id="kbv-Hm-42i"/>
+                                                <constraint firstItem="ucT-7o-9TQ" firstAttribute="centerY" secondItem="Iq6-PO-y1h" secondAttribute="centerY" id="oX7-4I-uT0"/>
+                                                <constraint firstItem="ucT-7o-9TQ" firstAttribute="centerY" secondItem="N55-Hu-v4C" secondAttribute="centerY" id="r5p-L9-9eO"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="dTH-OZ-I8l" id="q2w-NC-lGa"/>
+                            <outlet property="delegate" destination="dTH-OZ-I8l" id="rko-Zd-fOy"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Customize Payments" id="e3f-KY-4gS"/>
+                </tableViewController>
             </objects>
-            <point key="canvasLocation" x="3626" y="2750"/>
+            <point key="canvasLocation" x="2646" y="2008"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="NNj-0C-fAA">

@@ -91,6 +91,7 @@ class DeadlinesViewController: UIViewController {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.items![1].badgeValue = nil
 		AppState.sharedInstance.numOfUnseenPartnerDeadlineChanges = 0
+		self.deadlineTable.reloadData()
 	}
 	
 	deinit {
