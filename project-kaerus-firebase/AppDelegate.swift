@@ -24,9 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
-		// Override point for customization after application launch.
-		OneSignal.registerForPushNotifications()
-		
 		OneSignal.initWithLaunchOptions(launchOptions, appId: "da90c42a-5313-4857-94cd-f323c2261a00",
 		                                handleNotificationReceived: { (notification) in self.notifRcv(notification) },
 			handleNotificationAction: { (result) in self.notifAct(result) },
