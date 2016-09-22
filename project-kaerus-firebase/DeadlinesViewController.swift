@@ -85,6 +85,10 @@ class DeadlinesViewController: UIViewController {
 		paymentCard.layer.shadowOpacity = 0.5
 		
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerStatusChanged(_:)), name: "PartnerInfoChanged_Deadlines", object: nil)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.paymentSettingsChanged(_:)), name: "PaymentSettingsChanged", object: nil)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(self.reloadData(_:)), name:
+			UIApplicationWillEnterForegroundNotification, object: nil)
+
 	}
 	
 	override func viewWillAppear(animated: Bool) {
@@ -104,6 +108,15 @@ class DeadlinesViewController: UIViewController {
 	
 	func partnerStatusChanged(_: NSNotification) {
 		setPartnerStuff()
+	}
+	
+	func paymentSettingsChanged(_: NSNotification) {
+		lockIfUserNeedsToPay()
+		setupUserView()
+	}
+	
+	func reloadData(_: NSNotification) {
+		self.deadlineTable.reloadData()
 	}
 	
 	func logViewLoaded() {
@@ -171,6 +184,34 @@ class DeadlinesViewController: UIViewController {
 		}
 	}
 	
+	func lockIfUserNeedsToPay() {
+		let diff = self.partnerTotal - self.userTotal
+		let absDiff = String(format: "%.2f", fabs(diff))
+		
+		if diff <= -AppState.sharedInstance.maxLimit && self.segControl.selectedSegmentIndex == 0 {
+			self.amtOwedLabel.text = "- "
+			self.amtOwedLabel.textColor = UIColor.redColor()
+			self.shouldLock = true
+			if self.lockDate.isEmpty == false && self.dateUserIsLookingAt > self.lockDate {
+				self.lock()
+				self.editButton.enabled = false
+			}
+		} else {
+			self.shouldLock = false
+			self.unlock()
+			self.amtOwedLabel.textColor = UIColor.blackColor()
+			self.editButton.enabled = true
+			if diff < 0 {
+				self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "- " : "+ "
+			} else if diff > 0 {
+				self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "+ " : "- "
+			} else {
+				self.amtOwedLabel.text = ""
+			}
+		}
+		self.amtOwedLabel.text! += "$" + absDiff
+	}
+	
 	func setupPaymentTracking() {
 		func calculateTotal(snapshot: FIRDataSnapshot) -> Double {
 			var total: Double = 0
@@ -178,34 +219,6 @@ class DeadlinesViewController: UIViewController {
 				for item in items { total += item.1 }
 			}
 			return total
-		}
-		
-		func lockIfUserNeedsToPay() {
-			let diff = self.partnerTotal - self.userTotal
-			let absDiff = String(format: "%.2f", fabs(diff))
-			
-			if diff <= -5 && self.segControl.selectedSegmentIndex == 0 {
-				self.amtOwedLabel.text = "- "
-				self.amtOwedLabel.textColor = UIColor.redColor()
-				self.shouldLock = true
-				if self.lockDate.isEmpty == false && self.dateUserIsLookingAt > self.lockDate {
-					self.lock()
-					self.editButton.enabled = false
-				}
-			} else {
-				self.shouldLock = false
-				self.unlock()
-				self.amtOwedLabel.textColor = UIColor.blackColor()
-				self.editButton.enabled = true
-				if diff < 0 {
-					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "- " : "+ "
-				} else if diff > 0 {
-					self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "+ " : "- "
-				} else {
-					self.amtOwedLabel.text = ""
-				}
-			}
-			self.amtOwedLabel.text! += "$" + absDiff
 		}
 		
 		confirmedLastDayPaidRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
@@ -228,7 +241,7 @@ class DeadlinesViewController: UIViewController {
 					for item in snapshot.children {
 						self.lockDate = item.key!
 					}
-					lockIfUserNeedsToPay()
+					self.lockIfUserNeedsToPay()
 				}
 			}
 			
@@ -236,7 +249,7 @@ class DeadlinesViewController: UIViewController {
 			self.owedTotalsRef.child(AppState.sharedInstance.f_firID!).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 				if let tot = snapshot.value as? Double {
 					self.partnerTotal = tot
-					lockIfUserNeedsToPay()
+					self.lockIfUserNeedsToPay()
 				}
 			}
 		}
@@ -256,7 +269,7 @@ class DeadlinesViewController: UIViewController {
 	
 	// MARK: Set up user deadlines
 	
-	// set up the whole view, usually after a date change in calendar
+	// set up the user's view, usually after a date change in calendar
 	func setupUserView() {
 		getDeadlines() { (result) -> () in
 			if AppState.sharedInstance.partnerStatus == true {
@@ -275,6 +288,9 @@ class DeadlinesViewController: UIViewController {
 	}
 	
 	func setupPartnerView() {
+		if partnerDeadlinesRef != nil {
+			self.partnerDeadlinesRef.removeObserverWithHandle(_partnerDeadlinesRefHandle)
+		}
 		partnerDeadlinesRef = partnerRef.child("Deadlines").child(self.dateUserIsLookingAt)
 		// query by the "timeDue" property
 		_partnerDeadlinesRefHandle = partnerDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
@@ -285,8 +301,13 @@ class DeadlinesViewController: UIViewController {
 	
 	// get the deadlines
 	func getDeadlines(completion: (result: Int)->()) {
+		if _userDeadlinesRefHandle != nil {
+			self.userDeadlinesRef.removeObserverWithHandle(_userDeadlinesRefHandle)
+		}
+		
 		userDeadlinesRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines").child(self.dateUserIsLookingAt)
 		// query by the "timeDue" property
+		
 		_userDeadlinesRefHandle = userDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 			self.userDeadlines = self.getNewItems(snapshot)
 			self.deadlineTable.reloadData()
@@ -299,12 +320,20 @@ class DeadlinesViewController: UIViewController {
 	func determineOwedBalance(totalCount: Int) {
 		let userOwesRef = self.paymentsHistoryRef.child(AppState.sharedInstance.userID).child(self.dateUserIsLookingAt)
 		let missedCount = getMissedDeadlineCount()
-		// if deadline count <= 5, every missed deadline costs $2.50/(deadline count).
-		// otherwise, missed deadlines are charged at a flat rate of $0.50 each.
+		
 		if missedCount > 0 { 
 			var amt = Double(missedCount)
-			amt *= totalCount >= 5 ? 0.5 : (2.5/Double(totalCount))
-			amt = Double(round(100*amt)/100)
+			if AppState.sharedInstance.splitCost && AppState.sharedInstance.flatRate {
+				if totalCount <= AppState.sharedInstance.flatRate_AfterNumDeadlines {
+					// every missed deadline costs: $(costOfEachDay)/(total deadline count)
+					amt *= (AppState.sharedInstance.costOfEachDay/Double(totalCount))
+				} else { // otherwise, missed deadlines are charged at a flat rate of $(flatRate_EachDeadlineCost) each.
+					amt *= AppState.sharedInstance.flatRate_EachDeadlineCost
+				}
+			} else { // if any deadline was missed, the entire day's money is lost
+				amt = AppState.sharedInstance.costOfEachDay
+			}
+			amt = Double(round(100*amt)/100) // round value to the nearest cent
 			userOwesRef.setValue(amt)
 		} else {
 			userOwesRef.removeValue()

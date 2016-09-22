@@ -143,7 +143,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="exP-19-Inf">
-                            <rect key="frame" x="0.0" y="481.5" width="375" height="44"/>
+                            <rect key="frame" x="0.0" y="485" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="1" green="0.063567913899999995" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <state key="normal" title="Log Out">
@@ -157,7 +157,7 @@
                             <tableViewSection headerTitle="PARTNER" id="LfC-jm-csO">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="QXw-WW-HKq" style="IBUITableViewCellStyleDefault" id="7HG-Wf-UQu">
-                                        <rect key="frame" x="0.0" y="119.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="120" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7HG-Wf-UQu" id="Ydq-wR-1CW">
                                             <frame key="frameInset" width="342" height="44"/>
@@ -181,7 +181,7 @@
                             <tableViewSection headerTitle="PAYMENT" id="6MH-GP-1fT">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="mcb-NK-zKS" style="IBUITableViewCellStyleDefault" id="H1z-Yz-6hf">
-                                        <rect key="frame" x="0.0" y="219.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="221" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H1z-Yz-6hf" id="QMR-KO-80y">
                                             <frame key="frameInset" width="342" height="44"/>
@@ -205,7 +205,7 @@
                             <tableViewSection headerTitle="CUSTOMIZE" id="SWR-BM-HJk">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="uz1-RN-cgh" style="IBUITableViewCellStyleDefault" id="4zp-85-gqY">
-                                        <rect key="frame" x="0.0" y="319.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="322" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4zp-85-gqY" id="BEh-LF-LeC">
                                             <frame key="frameInset" width="342" height="44"/>
@@ -221,7 +221,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="dTH-OZ-I8l" kind="show" id="9lN-Fp-5QE"/>
+                                            <segue destination="dTH-OZ-I8l" kind="show" id="Pdg-IV-YuV"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -229,13 +229,13 @@
                             <tableViewSection headerTitle="HELP" id="qeN-jQ-LyG">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SettingTableViewCell" textLabel="OCr-wd-KZl" style="IBUITableViewCellStyleDefault" id="FbG-hX-I7V">
-                                        <rect key="frame" x="0.0" y="419.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="423" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FbG-hX-I7V" id="3Er-qU-PBT">
                                             <frame key="frameInset" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Report Problems or Give Feedback" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OCr-wd-KZl">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Help or Feedback" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OCr-wd-KZl">
                                                     <frame key="frameInset" minX="15" width="345" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -548,7 +548,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cay-gW-awB">
-                                                    <frame key="frameInset" minX="25" minY="4" width="61" height="20.5"/>
+                                                    <frame key="frameInset" minX="25" minY="3" width="61" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="deadline">
@@ -562,7 +562,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pfv-lJ-fsS">
-                                                    <frame key="frameInset" minX="25" minY="24.5" width="27" height="16.5"/>
+                                                    <frame key="frameInset" minX="25" minY="24" width="27" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Italic" family="Avenir Next" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -662,7 +662,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kcB-MH-NmD">
-                                                    <frame key="frameInset" minX="25" minY="4" width="61" height="20.5"/>
+                                                    <frame key="frameInset" minX="25" minY="3" width="61" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="deadline">
@@ -676,7 +676,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KZS-lP-RbM">
-                                                    <frame key="frameInset" minX="25" minY="24.5" width="27" height="16.5"/>
+                                                    <frame key="frameInset" minX="25" minY="24" width="27" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Italic" family="Avenir Next" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1013,7 +1013,7 @@ You must pay your partner before you can access this day.</string>
         <!--Customize Payments-->
         <scene sceneID="zFI-4x-Frj">
             <objects>
-                <tableViewController id="dTH-OZ-I8l" sceneMemberID="viewController">
+                <tableViewController id="dTH-OZ-I8l" customClass="CostOfEachDayTableViewController" customModule="project_kaerus_firebase" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Mvt-GQ-Jz3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1039,6 +1039,9 @@ You must pay your partner before you can access this day.</string>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="decimalPad" enablesReturnKeyAutomatically="YES"/>
+                                                    <connections>
+                                                        <action selector="didChangeCostOfEachDay:" destination="dTH-OZ-I8l" eventType="editingDidEnd" id="ibP-yi-ins"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -1051,11 +1054,11 @@ You must pay your partner before you can access this day.</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="182" id="TCR-Qs-Mu0">
-                                        <rect key="frame" x="0.0" y="120" width="375" height="182"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="170" id="TCR-Qs-Mu0">
+                                        <rect key="frame" x="0.0" y="120" width="375" height="170"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TCR-Qs-Mu0" id="BOf-gJ-GaN">
-                                            <frame key="frameInset" width="375" height="182"/>
+                                            <frame key="frameInset" width="375" height="170"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is the maximum limit you or your partner can owe before you or they are required to pay?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ttl-Kg-WgC">
@@ -1083,14 +1086,14 @@ You must pay your partner before you can access this day.</string>
                                                 <constraint firstItem="bA3-Jp-LsG" firstAttribute="centerY" secondItem="BOf-gJ-GaN" secondAttribute="centerY" constant="0.75" id="bdw-Od-6XX"/>
                                                 <constraint firstItem="ttl-Kg-WgC" firstAttribute="leading" secondItem="BOf-gJ-GaN" secondAttribute="leadingMargin" constant="14" id="c4e-4f-6Ks"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="bA3-Jp-LsG" secondAttribute="trailing" id="eNP-t8-OzB"/>
-                                                <constraint firstItem="rSC-mW-J6Z" firstAttribute="top" secondItem="BOf-gJ-GaN" secondAttribute="topMargin" constant="82" id="lgU-5M-ST3"/>
+                                                <constraint firstItem="rSC-mW-J6Z" firstAttribute="top" secondItem="BOf-gJ-GaN" secondAttribute="topMargin" constant="84" id="lgU-5M-ST3"/>
                                                 <constraint firstItem="ttl-Kg-WgC" firstAttribute="leading" secondItem="rSC-mW-J6Z" secondAttribute="leading" id="t3x-nU-UUR"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="ttl-Kg-WgC" secondAttribute="bottom" constant="45" id="t9D-Ah-q5X"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="ttl-Kg-WgC" secondAttribute="bottom" constant="67" id="t9D-Ah-q5X"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="268" id="Wgp-yS-37a">
-                                        <rect key="frame" x="0.0" y="302" width="375" height="268"/>
+                                        <rect key="frame" x="0.0" y="290" width="375" height="268"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wgp-yS-37a" id="Iss-iy-ovK">
                                             <frame key="frameInset" width="375" height="268"/>
@@ -1106,7 +1109,7 @@ If this is off, you'll be charged the entire cost. </string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C2i-Wx-1Vh">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="C2i-Wx-1Vh">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="31" id="DkE-WN-yo9"/>
                                                         <constraint firstAttribute="width" constant="49" id="rGt-Tq-X3p"/>
@@ -1134,27 +1137,80 @@ If this is off, you'll be charged the entire cost. </string>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="145" id="uQ7-Xx-4Gr">
-                                        <rect key="frame" x="0.0" y="570" width="375" height="145"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="299" id="hZ9-lg-AIO">
+                                        <rect key="frame" x="0.0" y="558" width="375" height="299"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uQ7-Xx-4Gr" id="Iq6-PO-y1h">
-                                            <frame key="frameInset" width="375" height="145"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hZ9-lg-AIO" id="sqZ-RY-zma">
+                                            <frame key="frameInset" width="375" height="299"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Do you want to set a flat rate after you or your partner sets more than a certain number of deadlines?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ucT-7o-9TQ">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Do you want to set a flat charge after creating a certain number of deadlines?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zvW-gX-r3s">
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N55-Hu-v4C"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This helps you avoid setting a ton of unnecessary deadlines, because each added on will add a preset amount to your total cost" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLs-hN-jRf">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="69" id="cfv-SZ-n04"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YOc-N3-39J">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="49" id="jeP-U6-ezi"/>
+                                                        <constraint firstAttribute="height" constant="31" id="vd2-3j-htx"/>
+                                                    </constraints>
+                                                </switch>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How much will each deadline cost?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y3X-EF-7Zs">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="After how many deadlines do you want to set the flat charge?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jin-UH-Eea">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="$" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mNO-Z2-xJZ">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="60" id="IkE-EW-G4i"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad" enablesReturnKeyAutomatically="YES"/>
+                                                </textField>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xJq-TQ-om2">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="60" id="aKd-Mc-Vs3"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad" enablesReturnKeyAutomatically="YES"/>
+                                                </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ucT-7o-9TQ" firstAttribute="top" secondItem="Iq6-PO-y1h" secondAttribute="topMargin" constant="9" id="F7R-mN-IdA"/>
-                                                <constraint firstItem="N55-Hu-v4C" firstAttribute="trailing" secondItem="Iq6-PO-y1h" secondAttribute="trailingMargin" id="bjE-Vh-LSZ"/>
-                                                <constraint firstItem="ucT-7o-9TQ" firstAttribute="leading" secondItem="Iq6-PO-y1h" secondAttribute="leadingMargin" constant="13" id="epg-gR-lpw"/>
-                                                <constraint firstItem="N55-Hu-v4C" firstAttribute="leading" secondItem="ucT-7o-9TQ" secondAttribute="trailing" constant="100" id="kbv-Hm-42i"/>
-                                                <constraint firstItem="ucT-7o-9TQ" firstAttribute="centerY" secondItem="Iq6-PO-y1h" secondAttribute="centerY" id="oX7-4I-uT0"/>
-                                                <constraint firstItem="ucT-7o-9TQ" firstAttribute="centerY" secondItem="N55-Hu-v4C" secondAttribute="centerY" id="r5p-L9-9eO"/>
+                                                <constraint firstItem="zvW-gX-r3s" firstAttribute="trailing" secondItem="zLs-hN-jRf" secondAttribute="trailing" id="2VR-G0-G6H"/>
+                                                <constraint firstItem="zLs-hN-jRf" firstAttribute="top" secondItem="sqZ-RY-zma" secondAttribute="topMargin" constant="79" id="7Mt-PU-68b"/>
+                                                <constraint firstItem="jin-UH-Eea" firstAttribute="trailing" secondItem="Y3X-EF-7Zs" secondAttribute="trailing" id="DDQ-7k-vmM"/>
+                                                <constraint firstItem="mNO-Z2-xJZ" firstAttribute="trailing" secondItem="YOc-N3-39J" secondAttribute="trailing" id="EZQ-QN-OiN"/>
+                                                <constraint firstItem="xJq-TQ-om2" firstAttribute="centerY" secondItem="Y3X-EF-7Zs" secondAttribute="centerY" constant="48" id="FgX-3z-RJ7"/>
+                                                <constraint firstItem="jin-UH-Eea" firstAttribute="centerY" secondItem="mNO-Z2-xJZ" secondAttribute="centerY" constant="55" id="GGs-RH-05z"/>
+                                                <constraint firstItem="jin-UH-Eea" firstAttribute="top" secondItem="zLs-hN-jRf" secondAttribute="bottom" constant="51" id="JTa-oC-7Uj"/>
+                                                <constraint firstItem="YOc-N3-39J" firstAttribute="leading" secondItem="zvW-gX-r3s" secondAttribute="trailing" constant="100" id="LL8-lS-V7I"/>
+                                                <constraint firstItem="YOc-N3-39J" firstAttribute="top" secondItem="sqZ-RY-zma" secondAttribute="topMargin" constant="57" id="N7L-i1-Z7M"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="YOc-N3-39J" secondAttribute="trailing" id="O0A-Nh-lue"/>
+                                                <constraint firstItem="xJq-TQ-om2" firstAttribute="leading" secondItem="Y3X-EF-7Zs" secondAttribute="trailing" constant="89" id="SAA-RO-yLF"/>
+                                                <constraint firstItem="zvW-gX-r3s" firstAttribute="leading" secondItem="sqZ-RY-zma" secondAttribute="leadingMargin" constant="12" id="b5d-qF-BEb"/>
+                                                <constraint firstItem="zvW-gX-r3s" firstAttribute="centerY" secondItem="YOc-N3-39J" secondAttribute="centerY" constant="-29" id="cWV-0G-3aX"/>
+                                                <constraint firstItem="mNO-Z2-xJZ" firstAttribute="top" secondItem="YOc-N3-39J" secondAttribute="bottom" constant="68" id="edL-ue-4hs"/>
+                                                <constraint firstItem="xJq-TQ-om2" firstAttribute="leading" secondItem="mNO-Z2-xJZ" secondAttribute="leading" id="ged-pW-27L"/>
+                                                <constraint firstItem="Y3X-EF-7Zs" firstAttribute="top" secondItem="jin-UH-Eea" secondAttribute="bottom" constant="-105" id="hAt-8c-MUV"/>
+                                                <constraint firstItem="zvW-gX-r3s" firstAttribute="leading" secondItem="zLs-hN-jRf" secondAttribute="leading" id="hNg-B4-MC2"/>
+                                                <constraint firstItem="jin-UH-Eea" firstAttribute="leading" secondItem="zLs-hN-jRf" secondAttribute="leading" id="lz5-QU-Q6d"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="zLs-hN-jRf" secondAttribute="bottom" constant="135" id="r7E-Ps-jXk"/>
+                                                <constraint firstItem="zvW-gX-r3s" firstAttribute="top" secondItem="sqZ-RY-zma" secondAttribute="topMargin" constant="7" id="t0r-XX-b7L"/>
+                                                <constraint firstItem="xJq-TQ-om2" firstAttribute="top" secondItem="mNO-Z2-xJZ" secondAttribute="bottom" constant="21" id="tAx-Ga-mfX"/>
+                                                <constraint firstItem="jin-UH-Eea" firstAttribute="leading" secondItem="Y3X-EF-7Zs" secondAttribute="leading" id="v4r-Iq-9Xy"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1167,10 +1223,18 @@ If this is off, you'll be charged the entire cost. </string>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Customize Payments" id="e3f-KY-4gS"/>
+                    <connections>
+                        <outlet property="costOfEachDayTextField" destination="tZh-ZU-KxR" id="jUn-1k-W11"/>
+                        <outlet property="flatRateSwitch" destination="YOc-N3-39J" id="tNI-NY-Qvp"/>
+                        <outlet property="flatRate_EachDeadlineCost" destination="mNO-Z2-xJZ" id="aKY-jD-PLL"/>
+                        <outlet property="flatRate_NumOfDeadlines" destination="xJq-TQ-om2" id="aKE-fk-biu"/>
+                        <outlet property="maxLimitTextField" destination="bA3-Jp-LsG" id="1Tq-kP-wYf"/>
+                        <outlet property="splitCostSwitch" destination="C2i-Wx-1Vh" id="6ls-5Z-ebj"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3cK-L2-hot" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2645.5999999999999" y="2007.346326836582"/>
+            <point key="canvasLocation" x="2642.4000000000001" y="2005.5472263868066"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="NNj-0C-fAA">

@@ -45,6 +45,14 @@ class AppState: NSObject {
 	// notification stuff
 	var unseenMessagesCount = 0
 	var numOfUnseenPartnerDeadlineChanges = 0
+
+	// cost per day stuff
+	var costOfEachDay: Double = 5.0
+	var maxLimit: Double = 5.0
+	var splitCost: Bool = false
+	var flatRate: Bool = false
+	var flatRate_AfterNumDeadlines: Int = 0
+	var flatRate_EachDeadlineCost: Double = 0.0
 }
 
 // all AppState functions
@@ -66,5 +74,14 @@ extension AppState {
 		self.f_firID = f_id
 		self.f_name = f_fullName
 		self.groupchat_id = f_groupchatId
+	}
+	
+	func setCostData(costOfEachDay: String, maxLimit: String, splitCost: Bool, flatRate: Bool, flatRate_AfterNumDeadlines: String, flatRate_EachDeadlineCost: String) {
+		self.costOfEachDay = Double(costOfEachDay) ?? 0.0
+		self.maxLimit = Double(maxLimit) ?? 0.0
+		self.splitCost = splitCost
+		self.flatRate = flatRate
+		self.flatRate_AfterNumDeadlines = Int(flatRate_AfterNumDeadlines) ?? 0
+		self.flatRate_EachDeadlineCost = Double(flatRate_EachDeadlineCost) ?? 0.0
 	}
 }

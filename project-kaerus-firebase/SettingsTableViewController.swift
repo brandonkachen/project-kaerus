@@ -48,6 +48,14 @@ class SettingsTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 	
+	override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+		if (indexPath.section != 3 || indexPath.section != 0) && AppState.sharedInstance.groupchat_id == nil {
+			return nil
+		} else {
+			return indexPath
+		}
+	}
+	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		if indexPath.section == 3 {
 			let email = "projectkaerus@gmail.com"

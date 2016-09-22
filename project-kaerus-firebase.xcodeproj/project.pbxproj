@@ -33,6 +33,7 @@
 		6989E3D81D396703003924EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6989E3D61D396703003924EC /* Main.storyboard */; };
 		6989E3DA1D396703003924EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6989E3D91D396703003924EC /* Assets.xcassets */; };
 		6989E3E81D396703003924EC /* project_kaerus_firebaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6989E3E71D396703003924EC /* project_kaerus_firebaseTests.swift */; };
+		699AEBDA1D90CC4E00088ECC /* CostOfEachDayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699AEBD91D90CC4E00088ECC /* CostOfEachDayTableViewController.swift */; };
 		69AA26A31D546FFC0029773B /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AA26A21D546FFC0029773B /* UIImageExtension.swift */; };
 		69B3C1021D582EA8007F5FE6 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C1011D582EA8007F5FE6 /* CellView.swift */; };
 		69B3C1061D583130007F5FE6 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B3C1051D583130007F5FE6 /* CalendarView.swift */; };
@@ -88,6 +89,7 @@
 		6989E3E31D396703003924EC /* project-kaerus-firebaseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "project-kaerus-firebaseTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6989E3E71D396703003924EC /* project_kaerus_firebaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = project_kaerus_firebaseTests.swift; sourceTree = "<group>"; };
 		6989E3E91D396703003924EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		699AEBD91D90CC4E00088ECC /* CostOfEachDayTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CostOfEachDayTableViewController.swift; sourceTree = "<group>"; };
 		69AA26A21D546FFC0029773B /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		69B3C1011D582EA8007F5FE6 /* CellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
 		69B3C1051D583130007F5FE6 /* CalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -152,8 +154,9 @@
 		690E34411D3972C600C284D5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				6982B2E81D7D6EE300014A42 /* Deadline Controllers */,
 				6989E3D41D396703003924EC /* ChatViewController.swift */,
+				699AEBD91D90CC4E00088ECC /* CostOfEachDayTableViewController.swift */,
+				6982B2E81D7D6EE300014A42 /* Deadline Controllers */,
 				692116961D6E1BDF00E5DB8A /* LoadingViewController.swift */,
 				694DB10A1D3976F400570A6B /* LoginViewController.swift */,
 				69629B741D599BD800AD0C67 /* ManagePartnerViewController.swift */,
@@ -499,6 +502,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				696287BF1D3C8136000F94F2 /* FindFriendsTableViewCell.swift in Sources */,
+				699AEBDA1D90CC4E00088ECC /* CostOfEachDayTableViewController.swift in Sources */,
 				696287C51D3D4763000F94F2 /* FriendData.swift in Sources */,
 				6989E3D51D396703003924EC /* ChatViewController.swift in Sources */,
 				694DB1161D39775B00570A6B /* AppState.swift in Sources */,

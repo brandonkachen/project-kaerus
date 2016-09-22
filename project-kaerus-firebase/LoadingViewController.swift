@@ -86,6 +86,7 @@ extension LoadingViewController {
 			} else {
 				self.setNewUserInfo()
 			}
+			OneSignal.registerForPushNotifications()
 			self.leaveGroup()
 		}
 	}
@@ -233,8 +234,9 @@ extension LoadingViewController {
 				                                        f_fullName: partnerInfoDict["partner_name"],
 				                                        f_groupchatId: partnerInfoDict["groupchat_id"])
 				
-				self.partnerOneSignalIdSetup()
+				self.partnerOneSignalIdSetup(partnerSetupGroup)
 				self.partnerProfilePicSetup(partnerSetupGroup)
+				self.paymentSettingsSetup(partnerSetupGroup)
 //				self.badgesSetup()
 			} else {
 				AppState.sharedInstance.setPartnerState(false,
@@ -265,16 +267,35 @@ extension LoadingViewController {
 			} else {
 				AppState.sharedInstance.f_photo = UIImage(data: data!)!.circle
 			}
-			dispatch_group_leave(group)
+			if self.isStartingUp { dispatch_group_leave(group) }
 		}
 	}
 	
-	// partner OneSignal id is dependant on partner info, so it waits until that finishes loading
-	func partnerOneSignalIdSetup() {
+	// partner OneSignal id depends on partner info, so it waits until that finishes loading
+	func partnerOneSignalIdSetup(group: dispatch_group_t) {
+		dispatch_group_enter(group)
 		let oneSignalRef = self.ref.child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
 		oneSignalRef.observeEventType(.Value) { (idSnapshot: FIRDataSnapshot) in
 			AppState.sharedInstance.f_oneSignalID = idSnapshot.value as? String
 			NSNotificationCenter.defaultCenter().postNotificationName("PartnerOneSignalChanged", object: nil)
+			if self.isStartingUp { dispatch_group_leave(group) }
+		}
+	}
+	
+	func paymentSettingsSetup(group: dispatch_group_t) {
+		dispatch_group_enter(group)
+		let paymentSettingsRef = self.ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Settings")
+		paymentSettingsRef.observeEventType(.Value) { (paymentSettingsSnapshot: FIRDataSnapshot) in
+			let paymentsDict = paymentSettingsSnapshot.value as! [String : AnyObject]
+			let AS = AppState.sharedInstance
+			AS.costOfEachDay = paymentsDict["Cost-Per-Day"] as! Double
+			AS.maxLimit = paymentsDict["Max-Limit"] as! Double
+			AS.splitCost = paymentsDict["Split-Cost"] as! Bool
+			AS.flatRate = (paymentsDict as NSDictionary).valueForKeyPath("Flat-Rate.Enabled") as! Bool
+			AS.flatRate_EachDeadlineCost = (paymentsDict as NSDictionary).valueForKeyPath("Flat-Rate.Each-Deadline-Cost") as! Double
+			AS.flatRate_AfterNumDeadlines = (paymentsDict as NSDictionary).valueForKeyPath("Flat-Rate.After-Num-Deadlines") as! Int
+			NSNotificationCenter.defaultCenter().postNotificationName("PaymentSettingsChanged", object: nil)
+			if self.isStartingUp { dispatch_group_leave(group) }
 		}
 	}
 	
