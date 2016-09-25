@@ -545,9 +545,23 @@ extension DeadlinesViewController {
 	// saving when adding a new item or finished editing an old one
 	@IBAction func unwindToDeadlinesList(sender: UIStoryboardSegue) {
 		if let sourceViewController = sender.sourceViewController as? EditDeadlinesViewController {
+			var listOfDeadlines = ""
+			let longFormatter = NSDateFormatter()
+			let shortFormatter = NSDateFormatter()
+			longFormatter.dateFormat = "yyyy-MM-dd HH:mmZ"
+			shortFormatter.dateFormat = "h:mm a"
+
 			userDeadlinesRef.removeValue()
 			for deadline in sourceViewController.deadlines {
 				userDeadlinesRef.childByAutoId().setValue(deadline.toAnyObject())
+				
+				// configure the date to show
+				let timeDue = longFormatter.dateFromString(deadline.timeDue!)
+				let timeDueText = shortFormatter.stringFromDate(timeDue!)
+				listOfDeadlines += deadline.text + " - " + timeDueText + "\n"
+			}
+			if !listOfDeadlines.isEmpty {
+				listOfDeadlines.removeAtIndex(listOfDeadlines.endIndex.predecessor()) // get rid of last '\n'
 			}
 			
 			// if user is part of a group chat and hasn't edited their deadlines
@@ -565,6 +579,11 @@ extension DeadlinesViewController {
 					message = status + ". Reason: " + sourceViewController.explanation
 				}
 
+				if !listOfDeadlines.isEmpty {
+					message += "\n\n"
+				}
+				message += listOfDeadlines
+				
 				// create the new entry
 				let messageItem = [
 					"id" : AppState.sharedInstance.userID,
