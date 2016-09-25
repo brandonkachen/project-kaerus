@@ -1,5 +1,5 @@
 //
-//  SecondViewController.swift
+//  ChatViewController.swift
 //  project-kaerus-firebase
 //
 //  Created by Brandon Chen on 7/15/16.
@@ -16,9 +16,9 @@ class ChatViewController: JSQMessagesViewController {
 	var avatars = Dictionary<String, JSQMessagesAvatarImage>()
 	var messagesRef, userIsTypingRef, seenRef: FIRDatabaseReference!
 	let detailedDateFormatter = NSDateFormatter() // for timestamp
-//	var usersTypingQuery: FIRDatabaseQuery!
-
-//	private var localTyping = false
+	//	var usersTypingQuery: FIRDatabaseQuery!
+	
+	//	private var localTyping = false
 	private var lastSeen: NSDate = NSDate.distantPast()
 	private var _chatRefHandle, _seenRefHandle: FIRDatabaseHandle!
 	
@@ -33,12 +33,14 @@ class ChatViewController: JSQMessagesViewController {
 		self.senderDisplayName = AppState.sharedInstance.name
 		self.edgesForExtendedLayout = UIRectEdge.None
 		self.setupBubbles()
-		self.collectionView.collectionViewLayout.springinessEnabled = false
+		self.collectionView.collectionViewLayout.springinessEnabled = true
+		// TODO
+		//		self.collectionView.collectionViewLayout.messageBubbleFont = UIFont.init(name: "Avenir Next", size: 15)
 		
 		// set timestamp formatter
 		detailedDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss:SS"
 		detailedDateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
-
+		
 		avatars["PK"] = JSQMessagesAvatarImageFactory.avatarImageWithUserInitials("PK", backgroundColor: UIColor.lightGrayColor(), textColor: UIColor.whiteColor(), font: UIFont.systemFontOfSize(CGFloat(14)), diameter: UInt(collectionView.collectionViewLayout.outgoingAvatarViewSize.width))
 		
 		chatSetup()
@@ -79,11 +81,15 @@ class ChatViewController: JSQMessagesViewController {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.items![1].badgeValue = nil
 		AppState.sharedInstance.unseenMessagesCount = 0
+		if let lastMessage = messages.last {
+			let lastMessageTimeStamp = self.detailedDateFormatter.stringFromDate(lastMessage.date)
+			self.seenRef.child(AppState.sharedInstance.userID).setValue(lastMessageTimeStamp)
+		}
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
 		super.viewWillDisappear(animated)
-//		NSNotificationCenter.defaultCenter().removeObserver(self)
+		//		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 	
 	func removeRefObservers() {
@@ -122,7 +128,9 @@ class ChatViewController: JSQMessagesViewController {
 				self.finishReceivingMessage()
 				
 				// set seen to this message
-				self.seenRef.child(AppState.sharedInstance.userID).setValue(strDate)
+				if self.tabBarController?.selectedIndex == 1 {
+					self.seenRef.child(AppState.sharedInstance.userID).setValue(strDate)
+				}
 				FIRCrashMessage("messagesQuery: finished receiving message")
 			}
 		}
@@ -139,15 +147,15 @@ class ChatViewController: JSQMessagesViewController {
 			"date" : detailedDateFormatter.stringFromDate(date)
 		]
 		itemRef.setValue(messageItem)
-
+		
 		// finishing touches
 		finishSendingMessage()
-
+		
 		// send a notification to partner
 		sendNotification(AppState.sharedInstance.firstName + ": " + text)
 		
 		FIRCrashMessage("didPressSendButton: finished sending message")
-//		isTyping = false
+		//		isTyping = false
 	}
 	
 	
@@ -163,41 +171,41 @@ class ChatViewController: JSQMessagesViewController {
 			FIRCrashMessage("seenRef: updated")
 		}
 	}
-
+	
 	
 	// MARK: - check if user is typing
 	
-//	var isTyping: Bool {
-//		get {
-//			return localTyping
-//		} set {
-//			localTyping = newValue
-//			userIsTypingRef.setValue(newValue)
-//		}
-//	}
-//
-//	private func observeTyping() {
-//		let typingIndicatorRef = FIRDatabase.database().reference().child("Chat").child(AppState.sharedInstance.groupchat_id!).child("typingIndicator")
-//		userIsTypingRef = typingIndicatorRef.child(senderId)
-//		userIsTypingRef.onDisconnectRemoveValue()
-//		
-//		usersTypingQuery = typingIndicatorRef.queryOrderedByValue().queryEqualToValue(true)
-//		
-//		usersTypingQuery.observeEventType(.Value) { (data: FIRDataSnapshot!) in
-//			if data.childrenCount == 1 && self.isTyping { // You're the only typing, don't show the indicator
-//				return
-//			}
-//			self.showTypingIndicator = data.childrenCount > 0
-//			self.scrollToBottomAnimated(true)
-//		}
-//	}
-//	
-//	override func textViewDidChange(textView: UITextView) {
-//		super.textViewDidChange(textView)
-//		
-//		// If the text is not empty, the user is typing
-//		isTyping = textView.text != ""
-//	}
+	//	var isTyping: Bool {
+	//		get {
+	//			return localTyping
+	//		} set {
+	//			localTyping = newValue
+	//			userIsTypingRef.setValue(newValue)
+	//		}
+	//	}
+	//
+	//	private func observeTyping() {
+	//		let typingIndicatorRef = FIRDatabase.database().reference().child("Chat").child(AppState.sharedInstance.groupchat_id!).child("typingIndicator")
+	//		userIsTypingRef = typingIndicatorRef.child(senderId)
+	//		userIsTypingRef.onDisconnectRemoveValue()
+	//
+	//		usersTypingQuery = typingIndicatorRef.queryOrderedByValue().queryEqualToValue(true)
+	//
+	//		usersTypingQuery.observeEventType(.Value) { (data: FIRDataSnapshot!) in
+	//			if data.childrenCount == 1 && self.isTyping { // You're the only typing, don't show the indicator
+	//				return
+	//			}
+	//			self.showTypingIndicator = data.childrenCount > 0
+	//			self.scrollToBottomAnimated(true)
+	//		}
+	//	}
+	//
+	//	override func textViewDidChange(textView: UITextView) {
+	//		super.textViewDidChange(textView)
+	//
+	//		// If the text is not empty, the user is typing
+	//		isTyping = textView.text != ""
+	//	}
 	
 	
 	// MARK: - Collections
@@ -212,11 +220,7 @@ class ChatViewController: JSQMessagesViewController {
 	
 	override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
 		let message = messages[indexPath.item]
-		if message.senderId == senderId { 
-			return outgoingBubbleImageView
-		} else {
-			return incomingBubbleImageView
-		}
+		return message.senderId == senderId ? outgoingBubbleImageView : incomingBubbleImageView
 	}
 	
 	override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
@@ -225,17 +229,14 @@ class ChatViewController: JSQMessagesViewController {
 	}
 	
 	override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-	  let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath)
-		as! JSQMessagesCollectionViewCell
-			
-	  let message = messages[indexPath.item]
-			
-	  if message.senderId == senderId {
-		cell.textView!.textColor = UIColor.whiteColor()
-      } else {
-		cell.textView!.textColor = UIColor.blackColor()
-	  }
-	  return cell
+		let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath)
+			as! JSQMessagesCollectionViewCell
+		cell.textView.dataDetectorTypes = .None // don't want any data detection
+		
+		let message = messages[indexPath.item]
+		// if cell belongs to sender, use white for the font color. otherwise, black
+		cell.textView!.textColor = message.senderId == senderId ? UIColor.whiteColor() : UIColor.blackColor()
+		return cell
 	}
 	
 	override func collectionView(collectionView: JSQMessagesCollectionView!, attributedTextForCellTopLabelAtIndexPath indexPath: NSIndexPath!) -> NSAttributedString! {
@@ -280,9 +281,6 @@ class ChatViewController: JSQMessagesViewController {
 		if message.date == lastSeen && message.senderId == AppState.sharedInstance.userID {
 			return NSAttributedString(string: "seen ✓")
 		}
-		if indexPath.item == messages.count-1 && message.senderId == AppState.sharedInstance.userID {
-			return NSAttributedString(string: "delivered")
-		}
 		return nil
 	}
 	
@@ -291,18 +289,15 @@ class ChatViewController: JSQMessagesViewController {
 		if message.date == lastSeen && message.senderId == AppState.sharedInstance.userID {
 			return kJSQMessagesCollectionViewCellLabelHeightDefault
 		}
-		if indexPath.item == messages.count-1 && message.senderId == AppState.sharedInstance.userID {
-			return kJSQMessagesCollectionViewCellLabelHeightDefault
-		}
 		return 0.0
 	}
 	
 	// MARK: - Other stuff
 	
 	private func setupBubbles() {
-	  let factory = JSQMessagesBubbleImageFactory()
-	  outgoingBubbleImageView = factory.outgoingMessagesBubbleImageWithColor(UIColor.init(red: 252/255, green: 92/255, blue: 68/255, alpha: 0.85))
-	  incomingBubbleImageView = factory.incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
+		let factory = JSQMessagesBubbleImageFactory()
+		outgoingBubbleImageView = factory.outgoingMessagesBubbleImageWithColor(UIColor.init(red: 252/255, green: 92/255, blue: 68/255, alpha: 0.85))
+		incomingBubbleImageView = factory.incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
 	}
 	
 	override func didReceiveMemoryWarning() {
