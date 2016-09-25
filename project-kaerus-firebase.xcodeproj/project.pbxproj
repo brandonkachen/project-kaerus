@@ -96,6 +96,7 @@
 		69B3C1081D583508007F5FE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = "project-kaerus-firebase/Base.lproj/CellView.xib"; sourceTree = "<group>"; };
 		69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClass.swift; sourceTree = "<group>"; };
 		69B3C10C1D585C43007F5FE6 /* DeadlinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeadlinesViewController.swift; sourceTree = "<group>"; };
+		69B7AED71D97A53600F9985F /* project-kaerus-firebase.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "project-kaerus-firebase.entitlements"; sourceTree = "<group>"; };
 		69C1359F1D68124800C251A6 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		872CD3B5D4DCD3678683729F /* Pods_project_kaerus_firebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9EBD48FA057AD7DFA700BE7 /* Pods_project_kaerus_firebaseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_project_kaerus_firebaseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -243,6 +244,7 @@
 		6989E3CF1D396703003924EC /* project-kaerus-firebase */ = {
 			isa = PBXGroup;
 			children = (
+				69B7AED71D97A53600F9985F /* project-kaerus-firebase.entitlements */,
 				69B3C10A1D5849F4007F5FE6 /* AnimationClass.swift */,
 				696287BD1D3C80C8000F94F2 /* Cells */,
 				694DB1111D39770300570A6B /* Models */,
@@ -673,6 +675,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "project-kaerus-firebase/project-kaerus-firebase.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "project-kaerus-firebase/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -690,6 +693,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "project-kaerus-firebase/project-kaerus-firebase.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "project-kaerus-firebase/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

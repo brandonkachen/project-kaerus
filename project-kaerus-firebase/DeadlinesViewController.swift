@@ -112,7 +112,7 @@ class DeadlinesViewController: UIViewController {
 	
 	func paymentSettingsChanged(_: NSNotification) {
 		lockIfUserNeedsToPay()
-		setupUserView()
+//		setupUserView()
 	}
 	
 	func reloadData(_: NSNotification) {
@@ -184,32 +184,32 @@ class DeadlinesViewController: UIViewController {
 		}
 	}
 	
+	// used only for user, to tell if they must pay
 	func lockIfUserNeedsToPay() {
-		let diff = self.partnerTotal - self.userTotal
-		let absDiff = String(format: "%.2f", fabs(diff))
+//		let totalOwed = self.segControl.selectedSegmentIndex == 0 ? self.userTotal : self.partnerTotal
 		
-		if diff <= -AppState.sharedInstance.maxLimit && self.segControl.selectedSegmentIndex == 0 {
-			self.amtOwedLabel.text = "- "
+		// if user owes more than the limit allows, and is looking at their own tab
+		if self.userTotal >= AppState.sharedInstance.maxLimit && self.segControl.selectedSegmentIndex == 0 {
+			self.amtOwedLabel.text = "you must pay: "
 			self.amtOwedLabel.textColor = UIColor.redColor()
 			self.shouldLock = true
 			if self.lockDate.isEmpty == false && self.dateUserIsLookingAt > self.lockDate {
 				self.lock()
 				self.editButton.enabled = false
 			}
-		} else {
+		} else { // user doesn't need to pay
 			self.shouldLock = false
 			self.unlock()
 			self.amtOwedLabel.textColor = UIColor.blackColor()
 			self.editButton.enabled = true
-			if diff < 0 {
-				self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "- " : "+ "
-			} else if diff > 0 {
-				self.amtOwedLabel.text = self.segControl.selectedSegmentIndex == 0 ? "+ " : "- "
-			} else {
-				self.amtOwedLabel.text = ""
+			if self.userTotal == 0 {
+				self.amtOwedLabel.text = "nothing owed :)"
+				return
 			}
+			self.amtOwedLabel.text = "owed: "
 		}
-		self.amtOwedLabel.text! += "$" + absDiff
+		let formattedTot = String(format: "%.2f", fabs(self.userTotal))
+		self.amtOwedLabel.text! += "$" + formattedTot
 	}
 	
 	func setupPaymentTracking() {
@@ -271,13 +271,35 @@ class DeadlinesViewController: UIViewController {
 	
 	// set up the user's view, usually after a date change in calendar
 	func setupUserView() {
-		getDeadlines() { (result) -> () in
+		if _userDeadlinesRefHandle != nil {
+			self.userDeadlinesRef.removeObserverWithHandle(_userDeadlinesRefHandle)
+		}
+		getUserDeadlines() { (result) -> () in
 			if AppState.sharedInstance.partnerStatus == true {
 				self.determineOwedBalance(result)
+				self.lockIfUserNeedsToPay()
 			}
 		}
 	}
 	
+	// set up the user's view, usually after a date change in calendar
+	func setupPartnerView() {
+		if partnerDeadlinesRef != nil {
+			self.partnerDeadlinesRef.removeObserverWithHandle(_partnerDeadlinesRefHandle)
+		}
+		partnerDeadlinesRef = partnerRef.child("Deadlines").child(self.dateUserIsLookingAt)
+		// query by the "timeDue" property
+		_partnerDeadlinesRefHandle = partnerDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+			self.partnerDeadlines = self.getNewItems(snapshot)
+			if self.segControl.selectedSegmentIndex == 1 {
+				self.deadlineTable.reloadData()
+				let formattedTot = String(format: "%.2f", fabs(self.partnerTotal))
+				self.amtOwedLabel.text! = self.partnerTotal == 0 ? "nothing owed :)" : "owed: $" + formattedTot
+			}
+		}
+	}
+	
+	// returns any new deadlines
 	func getNewItems(snap: FIRDataSnapshot) -> [Deadline] {
 		var newItems = [Deadline]()
 		for item in snap.children {
@@ -287,24 +309,8 @@ class DeadlinesViewController: UIViewController {
 		return newItems
 	}
 	
-	func setupPartnerView() {
-		if partnerDeadlinesRef != nil {
-			self.partnerDeadlinesRef.removeObserverWithHandle(_partnerDeadlinesRefHandle)
-		}
-		partnerDeadlinesRef = partnerRef.child("Deadlines").child(self.dateUserIsLookingAt)
-		// query by the "timeDue" property
-		_partnerDeadlinesRefHandle = partnerDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
-			self.partnerDeadlines = self.getNewItems(snapshot)
-			if self.segControl.selectedSegmentIndex == 1 { self.deadlineTable.reloadData() }
-		}
-	}
-	
 	// get the deadlines
-	func getDeadlines(completion: (result: Int)->()) {
-		if _userDeadlinesRefHandle != nil {
-			self.userDeadlinesRef.removeObserverWithHandle(_userDeadlinesRefHandle)
-		}
-		
+	func getUserDeadlines(completion: (result: Int)->()) {
 		userDeadlinesRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines").child(self.dateUserIsLookingAt)
 		// query by the "timeDue" property
 		
