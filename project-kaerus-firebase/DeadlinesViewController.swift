@@ -380,7 +380,13 @@ class DeadlinesViewController: UIViewController {
 extension DeadlinesViewController: JTAppleCalendarViewDataSource, JTAppleCalendarViewDelegate  {
 	func configureCalendar(calendar: JTAppleCalendarView) -> (startDate: NSDate, endDate: NSDate, numberOfRows: Int, calendar: NSCalendar) {
 		let firstDate = AppState.sharedInstance.startDate
-		let secondDate = NSDate()
+		let secondDate = NSCalendar.currentCalendar()
+			.dateByAddingUnit(
+				.Month,
+				value: 1,
+				toDate: NSDate(),
+				options: []
+		)!
 		let numberOfRows = 2
 		let aCalendar = NSCalendar.currentCalendar() // Properly configure your calendar to your time zone here
 		
