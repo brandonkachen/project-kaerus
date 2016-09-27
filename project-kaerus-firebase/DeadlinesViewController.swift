@@ -111,9 +111,7 @@ class DeadlinesViewController: UIViewController {
 	}
 	
 	func paymentSettingsChanged(_: NSNotification) {
-		if segControl.selectedSegmentIndex == 0 {
-			lockIfUserNeedsToPay()
-		}
+		lockIfUserNeedsToPay()
 	}
 	
 	func reloadData(_: NSNotification) {
@@ -186,9 +184,11 @@ class DeadlinesViewController: UIViewController {
 		}
 	}
 	
-	// used only for user, to tell if they must pay
 	func lockIfUserNeedsToPay() {
-//		let totalOwed = self.segControl.selectedSegmentIndex == 0 ? self.userTotal : self.partnerTotal
+		// only lock if user is looking at their own screen
+		if segControl.selectedSegmentIndex == 1 {
+			return
+		}
 		
 		// if user owes more than the limit allows, and is looking at their own tab
 		if self.userTotal >= AppState.sharedInstance.maxLimit && self.segControl.selectedSegmentIndex == 0 {
@@ -323,7 +323,7 @@ class DeadlinesViewController: UIViewController {
 		_userDeadlinesRefHandle = userDeadlinesRef.queryOrderedByChild("timeDue").observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 			self.userDeadlines = self.getNewItems(snapshot)
 			self.deadlineTable.reloadData()
-			self.editButton.title = self.userDeadlines.isEmpty ? "New" : "Edit"
+			self.editButton.title = self.userDeadlines.isEmpty ? "new" : "edit"
 			completion(result: self.userDeadlines.count)
 		}
 	}
@@ -545,7 +545,7 @@ extension DeadlinesViewController {
 		editDeadlinesVC.deadlines = userDeadlines
 		editDeadlinesVC.startDate = self.dateFormatter.dateFromString(dateUserIsLookingAt)
 		editDeadlinesVC.explanationEnabled = !userDeadlines.isEmpty
-		editDeadlinesVC.title = (self.navigationItem.leftBarButtonItem?.title == "New") ? "New Schedule" : "Edit Schedule"
+		editDeadlinesVC.title = (self.navigationItem.leftBarButtonItem?.title == "new") ? "New Schedule" : "Edit Schedule"
 	}
 	
 	// saving when adding a new item or finished editing an old one
@@ -610,6 +610,11 @@ extension DeadlinesViewController {
 		ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Last-Date-Paid-Unconfirmed").child(AppState.sharedInstance.userID).setValue(self.lockDate)
 		self.payButton.hidden = true
 		self.paymentCardLabel.text = "Payment confirmation sent!\n\nYour partner must confirm your payment before you can continue."
+	}
+	
+	@IBAction func didPressTodayButton(sender: AnyObject) {
+		calendarView.scrollToDate(NSDate())
+		calendarView.selectDates([NSDate()])
 	}
 }
 

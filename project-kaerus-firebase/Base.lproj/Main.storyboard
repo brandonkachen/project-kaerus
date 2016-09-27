@@ -613,7 +613,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Edit Schedule" id="qi4-ir-GB4">
-                        <barButtonItem key="leftBarButtonItem" title="Done" id="j7S-7T-iaF">
+                        <barButtonItem key="leftBarButtonItem" title="done" id="j7S-7T-iaF">
                             <connections>
                                 <action selector="didPressDoneButton:" destination="Qmj-pY-4zO" id="N22-dU-bRH"/>
                             </connections>
@@ -857,7 +857,7 @@ You must pay your partner before you can access this day.</string>
                     </view>
                     <navigationItem key="navigationItem" id="1n3-Tf-Tb1">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" title="Edit" id="Pgh-dX-rNa">
+                        <barButtonItem key="leftBarButtonItem" title="edit" id="Pgh-dX-rNa">
                             <connections>
                                 <segue destination="bXY-95-bgS" kind="presentation" modalTransitionStyle="crossDissolve" id="wiD-ki-LT9"/>
                             </connections>
@@ -873,6 +873,11 @@ You must pay your partner before you can access this day.</string>
                                 <action selector="didChangeSegment:" destination="OJt-7a-W1m" eventType="valueChanged" id="2HJ-00-BrI"/>
                             </connections>
                         </segmentedControl>
+                        <barButtonItem key="rightBarButtonItem" title="today" id="S0S-91-km4">
+                            <connections>
+                                <action selector="didPressTodayButton:" destination="OJt-7a-W1m" id="at4-eZ-7RO"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="amtOwedLabel" destination="mkt-JO-2gT" id="i6d-kn-92M"/>
@@ -1285,7 +1290,7 @@ If this is off, you'll be charged the entire cost. </string>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="71h-Xd-c0a">
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your goal..." minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Iuw-bO-wTt">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="set a deadline..." minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Iuw-bO-wTt">
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -1310,12 +1315,12 @@ If this is off, you'll be charged the entire cost. </string>
                     </view>
                     <navigationItem key="navigationItem" title="Add Deadline" id="h7f-y2-hHI">
                         <barButtonItem key="backBarButtonItem" title="back" id="3tX-ZW-vpE"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="uOP-Uz-Fve">
+                        <barButtonItem key="leftBarButtonItem" title="cancel" id="uOP-Uz-Fve">
                             <connections>
                                 <action selector="cancelPressed:" destination="maN-XY-aAa" id="1Ej-Ly-OMb"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="tsl-Ga-DCM">
+                        <barButtonItem key="rightBarButtonItem" title="save" id="tsl-Ga-DCM">
                             <connections>
                                 <segue destination="gG8-AD-9qT" kind="unwind" unwindAction="unwindToEditDeadlinesList:" id="DLe-FP-jYq"/>
                             </connections>
@@ -1337,7 +1342,7 @@ If this is off, you'll be charged the entire cost. </string>
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dMN-vT-uzh" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="eav-Qw-e10">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="eav-Qw-e10">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1360,7 +1365,7 @@ If this is off, you'll be charged the entire cost. </string>
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bXY-95-bgS" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="sBE-Bd-8GK">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="sBE-Bd-8GK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1390,6 +1395,6 @@ If this is off, you'll be charged the entire cost. </string>
         <image name="SettingsUnfilled" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QKo-Je-SUv"/>
+        <segue reference="gmK-EO-hz5"/>
     </inferredMetricsTieBreakers>
 </document>

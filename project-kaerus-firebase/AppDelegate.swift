@@ -73,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				tabBarVC.selectedIndex = 1
 				tabBarVC.tabBar.items![1].badgeValue = nil
 				AppState.sharedInstance.unseenMessagesCount = 0
+				UIApplication.sharedApplication().cancelAllLocalNotifications()
 			}
 		}
 	}
