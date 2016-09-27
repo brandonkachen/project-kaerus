@@ -223,7 +223,15 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		let dateFormatter = NSDateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd Z"
 		let paymentsRef = ref.child("Payments").child(AppState.sharedInstance.groupchat_id!)
-		paymentsRef.child("Last-Date-Paid-Confirmed").setValue(dateFormatter.stringFromDate(NSDate.distantPast()))
+		
+		// set the last confirmed date for both user and partner
+		let farPast = dateFormatter.stringFromDate(NSDate.distantPast())
+		let paymentItemDict = [
+			AppState.sharedInstance.userID : farPast,
+			friend.id : farPast
+		]
+		paymentsRef.child("Last-Date-Paid-Confirmed").setValue(paymentItemDict)
+		
 		let paymentSettingsDict = [
 			"Cost-Per-Day" : 5.0,
 			"Max-Limit" : 5.0,
@@ -234,10 +242,9 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 				"Each-Deadline-Cost" : 0
 			]
 		]
-		
 		paymentsRef.child("Settings").setValue(paymentSettingsDict)
 		
-		// update AppState with just enough data to show partner screen immediately
+		// update AppState with just enough data to show partner screen immediately. the rest will be loaded later
 		AppState.sharedInstance.f_photo = friend.pic
 		AppState.sharedInstance.f_name = friend.name
 		AppState.sharedInstance.f_firstName = friend.first_name

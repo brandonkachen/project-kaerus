@@ -48,11 +48,11 @@ class ChatViewController: JSQMessagesViewController {
 	}
 	
 	func partnerInfoChanged(_: NSNotification) {
-		messages.removeAll()
 		chatSetup()
 	}
 	
 	func chatSetup() {
+		messages.removeAll()
 		// set up Firebase branch where messages will be stored)
 		if let chat_id = AppState.sharedInstance.groupchat_id where chat_id != "" {
 			// add user and partner icons
@@ -81,7 +81,7 @@ class ChatViewController: JSQMessagesViewController {
 		super.viewWillAppear(animated)
 		self.tabBarController?.tabBar.items![1].badgeValue = nil
 		AppState.sharedInstance.unseenMessagesCount = 0
-		if let lastMessage = messages.last {
+		if let lastMessage = messages.last where AppState.sharedInstance.partnerStatus != false {
 			let lastMessageTimeStamp = self.detailedDateFormatter.stringFromDate(lastMessage.date)
 			self.seenRef.child(AppState.sharedInstance.userID).setValue(lastMessageTimeStamp)
 		}

@@ -27,4 +27,8 @@ target 'project-kaerus-firebase' do
   pod 'FBSDKLoginKit'
 
   pod 'OneSignal'
+
+  pod 'JTAppleCalendar'
+
+  pod 'ReachabilitySwift', '~> 2.4'
 end

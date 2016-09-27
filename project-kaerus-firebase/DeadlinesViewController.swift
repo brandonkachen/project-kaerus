@@ -111,8 +111,9 @@ class DeadlinesViewController: UIViewController {
 	}
 	
 	func paymentSettingsChanged(_: NSNotification) {
-		lockIfUserNeedsToPay()
-//		setupUserView()
+		if segControl.selectedSegmentIndex == 0 {
+			lockIfUserNeedsToPay()
+		}
 	}
 	
 	func reloadData(_: NSNotification) {
@@ -126,7 +127,7 @@ class DeadlinesViewController: UIViewController {
 	// MARK: Set up partner's deadline stuff
 	
 	func setPartnerStuff() {
-		if AppState.sharedInstance.f_firstName == nil {	// no partner, so disable partner button in segControl and remove observer if possible
+		if AppState.sharedInstance.groupchat_id == nil {	// no partner, so disable partner button in segControl and remove observer if possible
 			segControl.setTitle("Partner", forSegmentAtIndex: 1)
 			segControl.setEnabled(false, forSegmentAtIndex: 1)
 			segControl.selectedSegmentIndex = 0
@@ -170,9 +171,10 @@ class DeadlinesViewController: UIViewController {
 				
 				let saveButton = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: { (_) -> Void in
 					self.resignFirstResponder()
+					
+					// update partner's payment confirmation info
 					self.unconfirmedLastDayPaidRef.removeValue()
-					self.confirmedLastDayPaidRef.setValue(unconfirmedPaymentDate)
-					self.owedTotalsRef.child(AppState.sharedInstance.userID).setValue(0)
+					self.confirmedLastDayPaidRef.child(AppState.sharedInstance.f_firID!).setValue(unconfirmedPaymentDate)
 					self.owedTotalsRef.child(AppState.sharedInstance.f_firID!).setValue(0)
 				})
 				
@@ -221,7 +223,7 @@ class DeadlinesViewController: UIViewController {
 			return total
 		}
 		
-		confirmedLastDayPaidRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
+		confirmedLastDayPaidRef.child(AppState.sharedInstance.userID).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 			self.str_lastDatePaid = snapshot.value as! String
 			
 			// get the day after last paid date, so query can start there
@@ -238,6 +240,7 @@ class DeadlinesViewController: UIViewController {
 				// janky way of getting the last date user has set deadlines and locking
 				self.lastDayUserSetDeadlinesRef = self.ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines")
 				self.lastDayUserSetDeadlinesRef.queryOrderedByKey().queryLimitedToLast(1).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
+					// only one item in snapshot.children
 					for item in snapshot.children {
 						self.lockDate = item.key!
 					}
@@ -294,7 +297,10 @@ class DeadlinesViewController: UIViewController {
 			if self.segControl.selectedSegmentIndex == 1 {
 				self.deadlineTable.reloadData()
 				let formattedTot = String(format: "%.2f", fabs(self.partnerTotal))
+				self.amtOwedLabel.textColor = UIColor.blackColor()
 				self.amtOwedLabel.text! = self.partnerTotal == 0 ? "nothing owed :)" : "owed: $" + formattedTot
+				self.shouldLock = false
+				self.unlock()
 			}
 		}
 	}

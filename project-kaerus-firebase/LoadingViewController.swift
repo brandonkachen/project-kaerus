@@ -13,7 +13,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 
 class LoadingViewController: UIViewController {
-	let group = dispatch_group_create()
+	let mainGroup = dispatch_group_create()
 	var ref: FIRDatabaseReference!
 	var storageRef: FIRStorageReference!
 	var user: FIRUser!
@@ -21,8 +21,8 @@ class LoadingViewController: UIViewController {
 	var selectedIndex = 0
 	
 	// Helper functions for entering and leaving dispatch group
-	func enterGroup() { if isStartingUp { dispatch_group_enter(self.group) } }
-	func leaveGroup() { if isStartingUp { dispatch_group_leave(self.group) } }
+	func enterMainGroup() { if isStartingUp { dispatch_group_enter(self.mainGroup) } }
+	func leaveMainGroup() { if isStartingUp { dispatch_group_leave(self.mainGroup) } }
 		
     override func viewDidLoad() {
 		super.viewDidLoad()
@@ -65,7 +65,7 @@ class LoadingViewController: UIViewController {
 		partnerInfoSetup()
 		
 		// when everything is loaded, go to DeadlineViewController
-		dispatch_group_notify(group, dispatch_get_main_queue()) {
+		dispatch_group_notify(mainGroup, dispatch_get_main_queue()) {
 			self.isStartingUp = false
 			let tabBarController = self.storyboard!.instantiateViewControllerWithIdentifier("tabBarController") as! UITabBarController
 			tabBarController.selectedIndex = self.selectedIndex
@@ -79,7 +79,7 @@ extension LoadingViewController {
 	func getUserInfo() {
 		let myInfoRef = ref.child("My-Info").child(AppState.sharedInstance.userID)
 		
-		dispatch_group_enter(self.group)
+		dispatch_group_enter(self.mainGroup)
 		myInfoRef.observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
 			if let postDict = snapshot.value as? [String : String] {
 				self.setReturningUserInfo(postDict)
@@ -87,12 +87,12 @@ extension LoadingViewController {
 				self.setNewUserInfo()
 			}
 			OneSignal.registerForPushNotifications()
-			self.leaveGroup()
+			self.leaveMainGroup()
 		}
 	}
 	
 	func setReturningUserInfo(postDict: [String : String]) {
-		self.enterGroup()
+		self.enterMainGroup()
 		AppState.sharedInstance.firstName = postDict["firstName"]
 		let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID).child("profilePic.jpg")
 		profilePicRef.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
@@ -101,12 +101,12 @@ extension LoadingViewController {
 			} else {
 				AppState.sharedInstance.photo = UIImage(data: data!)!.circle
 			}
-			self.leaveGroup()
+			self.leaveMainGroup()
 		}
 	}
 	
 	func setNewUserInfo() {
-		self.enterGroup()
+		self.enterMainGroup()
 		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name, picture.width(200).height(200)"])
 		graphRequest.startWithCompletionHandler(){ (connection, result, error) -> Void in
 			if (error != nil) {
@@ -131,12 +131,12 @@ extension LoadingViewController {
 				// upload facebook profile pic to Firebase
 				self.uploadProfilePic(picData)
 			}
-			self.leaveGroup()
+			self.leaveMainGroup()
 		}
 	}
 	
 	func uploadProfilePic(picData: NSData) {
-		self.enterGroup()
+		self.enterMainGroup()
 		let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID).child("profilePic.jpg")
 		let uploadProfilePicTask = profilePicRef.putData(picData, metadata: nil)
 		
@@ -144,7 +144,7 @@ extension LoadingViewController {
 		
 		// Upload completed successfully
 		uploadProfilePicTask.observeStatus(.Success) { snapshot in
-			self.leaveGroup()
+			self.leaveMainGroup()
 		}
 		
 		// Upload failed
@@ -168,20 +168,20 @@ extension LoadingViewController {
 			default:
 				break
 			}
-			self.leaveGroup()
+			self.leaveMainGroup()
 		}
 	}
 	
 	// set user's oneSignal Id
 	func oneSignalIdSetup() {
-		dispatch_group_enter(self.group)
+		dispatch_group_enter(self.mainGroup)
 		let oneSignalIdRef = ref.child("FIR-to-OS").child(AppState.sharedInstance.userID)
 		OneSignal.IdsAvailable(){ (userId, pushToken) in
 			if (pushToken != nil) {
 				NSLog("pushToken:%@", pushToken)
 			}
 			oneSignalIdRef.setValue(userId)
-			dispatch_group_leave(self.group)
+			dispatch_group_leave(self.mainGroup)
 		}
 	}
 	
@@ -190,7 +190,7 @@ extension LoadingViewController {
 		let formatter = NSDateFormatter()
 		formatter.dateFormat = "yyyy-MM-dd Z"
 		
-		dispatch_group_enter(group)
+		dispatch_group_enter(mainGroup)
 		let startDateRef = ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Start-Date")
 		startDateRef.observeSingleEventOfType(.Value) { (startDateSnap: FIRDataSnapshot) in
 			if let startDate = startDateSnap.value as? String {
@@ -200,13 +200,13 @@ extension LoadingViewController {
 				startDateRef.setValue(startDate)
 				AppState.sharedInstance.startDate = formatter.dateFromString(startDate)
 			}
-			dispatch_group_leave(self.group)
+			dispatch_group_leave(self.mainGroup)
 		}
 	}
 	
 	// get partner status
 	func partnerStatusSetup() {
-		dispatch_group_enter(self.group)
+		dispatch_group_enter(self.mainGroup)
 		let partnerStatusRef = ref.child("Has-Partner").child(AppState.sharedInstance.userID)
 		partnerStatusRef.observeEventType(.Value) { (partnerStatusSnap: FIRDataSnapshot) in
 			if let status = partnerStatusSnap.value as? Bool {
@@ -215,13 +215,13 @@ extension LoadingViewController {
 			} else {
 				partnerStatusRef.setValue(false)
 			}
-			self.leaveGroup()
+			self.leaveMainGroup()
 		}
 	}
 	
 	// get partner's info
 	func partnerInfoSetup() {
-		dispatch_group_enter(self.group)
+		dispatch_group_enter(self.mainGroup)
 		
 		let partnerInfoRef = ref.child("Partner-Info").child(AppState.sharedInstance.userID)
 		partnerInfoRef.observeEventType(.Value) { (partnerInfoSnapshot: FIRDataSnapshot) in
@@ -253,7 +253,7 @@ extension LoadingViewController {
 				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Manage", object: nil)
 				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Deadlines", object: nil)
 				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Chat", object: nil)
-				self.leaveGroup()
+				self.leaveMainGroup()
 			}
 		}
 	}
@@ -267,23 +267,28 @@ extension LoadingViewController {
 			} else {
 				AppState.sharedInstance.f_photo = UIImage(data: data!)!.circle
 			}
-			if self.isStartingUp { dispatch_group_leave(group) }
+			dispatch_group_leave(group)
 		}
 	}
 	
 	// partner OneSignal id depends on partner info, so it waits until that finishes loading
 	func partnerOneSignalIdSetup(group: dispatch_group_t) {
 		dispatch_group_enter(group)
+		var calledByPartnerInfoSetup = true
 		let oneSignalRef = self.ref.child("FIR-to-OS").child(AppState.sharedInstance.f_firID!)
 		oneSignalRef.observeEventType(.Value) { (idSnapshot: FIRDataSnapshot) in
 			AppState.sharedInstance.f_oneSignalID = idSnapshot.value as? String
 			NSNotificationCenter.defaultCenter().postNotificationName("PartnerOneSignalChanged", object: nil)
-			if self.isStartingUp { dispatch_group_leave(group) }
+			if calledByPartnerInfoSetup {
+				dispatch_group_leave(group)
+				calledByPartnerInfoSetup = false
+			}
 		}
 	}
 	
 	func paymentSettingsSetup(group: dispatch_group_t) {
 		dispatch_group_enter(group)
+		var calledByPartnerInfoSetup = true
 		let paymentSettingsRef = self.ref.child("Payments").child(AppState.sharedInstance.groupchat_id!).child("Settings")
 		paymentSettingsRef.observeEventType(.Value) { (paymentSettingsSnapshot: FIRDataSnapshot) in
 			let paymentsDict = paymentSettingsSnapshot.value as! [String : AnyObject]
@@ -295,7 +300,10 @@ extension LoadingViewController {
 			AS.flatRate_EachDeadlineCost = (paymentsDict as NSDictionary).valueForKeyPath("Flat-Rate.Each-Deadline-Cost") as! Double
 			AS.flatRate_AfterNumDeadlines = (paymentsDict as NSDictionary).valueForKeyPath("Flat-Rate.After-Num-Deadlines") as! Int
 			NSNotificationCenter.defaultCenter().postNotificationName("PaymentSettingsChanged", object: nil)
-			if self.isStartingUp { dispatch_group_leave(group) }
+			if calledByPartnerInfoSetup {
+				dispatch_group_leave(group)
+				calledByPartnerInfoSetup = false
+			}
 		}
 	}
 	

@@ -49,10 +49,10 @@ class SettingsTableViewController: UITableViewController {
     }
 	
 	override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-		if (indexPath.section != 3 || indexPath.section != 0) && AppState.sharedInstance.groupchat_id == nil {
-			return nil
-		} else {
+		if indexPath.section == 0 || indexPath.section == 3 || AppState.sharedInstance.groupchat_id != nil {
 			return indexPath
+		} else {
+			return nil
 		}
 	}
 	
