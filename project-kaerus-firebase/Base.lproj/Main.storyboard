@@ -277,10 +277,10 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FindFriendsTableViewCell" rowHeight="107" id="YJa-DY-NOi" customClass="FindFriendsTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="28" width="367" height="107"/>
+                                                <rect key="frame" x="0.0" y="28" width="1000" height="107"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YJa-DY-NOi" id="mUU-xm-FRn">
-                                                    <frame key="frameInset" width="367" height="107"/>
+                                                    <frame key="frameInset" width="1000" height="107"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lXE-lP-xnm">
@@ -538,19 +538,19 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="T3t-M3-q0T">
                                 <color key="backgroundColor" red="0.94536411762237549" green="0.94533586502075195" blue="0.94535183906555176" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="THN-SX-cTj">
-                                    <rect key="frame" x="0.0" y="0.0" width="383" height="10"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1000" height="10"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationLevel="1" indentationWidth="10" reuseIdentifier="EditDeadlinesTableViewCell" textLabel="cay-gW-awB" detailTextLabel="pfv-lJ-fsS" style="IBUITableViewCellStyleSubtitle" id="WqW-dO-Bbf" customClass="DeadlinesTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="38" width="383" height="44"/>
+                                        <rect key="frame" x="0.0" y="38" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WqW-dO-Bbf" id="Ake-hg-I15">
-                                            <frame key="frameInset" width="383" height="44"/>
+                                            <frame key="frameInset" width="1000" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cay-gW-awB">
-                                                    <frame key="frameInset" minX="25" minY="4" width="61" height="20.5"/>
+                                                    <frame key="frameInset" minX="174" minY="4" width="61" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="deadline">
@@ -564,7 +564,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pfv-lJ-fsS">
-                                                    <frame key="frameInset" minX="25" minY="24.5" width="27" height="16.5"/>
+                                                    <frame key="frameInset" minX="174" minY="24.5" width="27" height="16.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Italic" family="Avenir Next" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -907,11 +907,11 @@ You must pay your partner before you can access this day.</string>
                         <viewControllerLayoutGuide type="bottom" id="qtd-3Q-hZE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="7NH-6y-ZGE">
-                        <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Messages" id="RqE-G8-HE0"/>
+                    <navigationItem key="navigationItem" id="RqE-G8-HE0"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vBW-a0-7Fj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1254,20 +1254,16 @@ If this is off, you'll be charged the entire cost. </string>
                         </userDefinedRuntimeAttributes>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="knB-SN-9X7">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="knB-SN-9X7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="16"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="6Js-AO-KDW">
-                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
                     <connections>
                         <segue destination="5cy-Fl-0KE" kind="relationship" relationship="rootViewController" id="hTU-T8-y9l"/>
                     </connections>
@@ -1342,11 +1338,11 @@ If this is off, you'll be charged the entire cost. </string>
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dMN-vT-uzh" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="eav-Qw-e10">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="eav-Qw-e10">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.98631876707077026" green="0.32817003130912781" blue="0.2608284056186676" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.98528444770000001" green="0.15594200790000001" blue="0.25831398370000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -1358,7 +1354,7 @@ If this is off, you'll be charged the entire cost. </string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JX6-BO-TgE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4292" y="-754"/>
+            <point key="canvasLocation" x="4257" y="-756"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dEf-id-5b9">
@@ -1395,6 +1391,6 @@ If this is off, you'll be charged the entire cost. </string>
         <image name="SettingsUnfilled" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gmK-EO-hz5"/>
+        <segue reference="QKo-Je-SUv"/>
     </inferredMetricsTieBreakers>
 </document>

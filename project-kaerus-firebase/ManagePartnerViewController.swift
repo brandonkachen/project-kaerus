@@ -118,6 +118,7 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 						})
 					})
 				}
+				self.tableView.reloadData()
 			}
 		})
 	}
@@ -281,10 +282,6 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		ref.child("Has-Partner").child(AppState.sharedInstance.f_firID!).setValue(false)
 		ref.child("Has-Partner").child(AppState.sharedInstance.userID).setValue(false)
 		
-		// Inform user's former partner
-		let endPartnershipMessage = AppState.sharedInstance.firstName + " has ended your partnership"
-		sendNotification(endPartnershipMessage)
-		
 		// Remove Partner-Info for both users
 		ref.child("Partner-Info").child(AppState.sharedInstance.f_firID!).removeValue()
 		ref.child("Partner-Info").child(AppState.sharedInstance.userID).removeValue()
@@ -294,6 +291,10 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 		friendPartnerRequestRef.removeValue()
 		let myPartnerRequestRef = ref.child("Partner-Requests").child(AppState.sharedInstance.userID).child(AppState.sharedInstance.f_firID!)
 		myPartnerRequestRef.removeValue()
+
+		// Inform user's former partner
+		let endPartnershipMessage = AppState.sharedInstance.firstName + " has ended your partnership"
+		sendNotification(endPartnershipMessage)
 
 		// reset AppState friend values
 		AppState.sharedInstance.setPartnerState(false, f_firstName: nil, f_id: nil, f_fullName: nil, f_groupchatId: nil)
