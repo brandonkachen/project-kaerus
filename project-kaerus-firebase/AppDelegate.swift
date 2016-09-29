@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		UIApplication.sharedApplication().applicationIconBadgeNumber = 1
 		UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-		
+			
 		checkIfUserLoggedIn()
 		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 	}

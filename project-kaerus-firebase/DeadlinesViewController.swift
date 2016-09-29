@@ -239,7 +239,7 @@ class DeadlinesViewController: UIViewController {
 				
 				// janky way of getting the last date user has set deadlines and locking
 				self.lastDayUserSetDeadlinesRef = self.ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines")
-				self.lastDayUserSetDeadlinesRef.queryOrderedByKey().queryLimitedToLast(1).observeSingleEventOfType(.Value) { (snapshot: FIRDataSnapshot) in
+				self.lastDayUserSetDeadlinesRef.queryOrderedByKey().queryLimitedToLast(1).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 					// only one item in snapshot.children
 					for item in snapshot.children {
 						self.lockDate = item.key!

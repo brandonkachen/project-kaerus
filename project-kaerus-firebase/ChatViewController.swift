@@ -16,11 +16,13 @@ class ChatViewController: JSQMessagesViewController {
 	var avatars = Dictionary<String, JSQMessagesAvatarImage>()
 	var messagesRef, userIsTypingRef, seenRef: FIRDatabaseReference!
 	let detailedDateFormatter = NSDateFormatter() // for timestamp
+	
 	//	var usersTypingQuery: FIRDatabaseQuery!
 	
 	//	private var localTyping = false
 	private var lastSeen: NSDate = NSDate.distantPast()
 	private var _chatRefHandle, _seenRefHandle: FIRDatabaseHandle!
+	var numOfMessagesShown : UInt = 15 // show 15 messages initially
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -33,7 +35,6 @@ class ChatViewController: JSQMessagesViewController {
 		self.senderDisplayName = AppState.sharedInstance.name
 		self.edgesForExtendedLayout = UIRectEdge.None
 		self.setupBubbles()
-		self.collectionView.collectionViewLayout.springinessEnabled = true
 		// TODO
 		//		self.collectionView.collectionViewLayout.messageBubbleFont = UIFont.init(name: "Avenir Next", size: 15)
 		
@@ -45,6 +46,9 @@ class ChatViewController: JSQMessagesViewController {
 		
 		chatSetup()
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerInfoChanged(_:)), name: "PartnerInfoChanged_Chat", object: nil)
+		self.showLoadEarlierMessagesHeader = true
+		self.collectionView.collectionViewLayout.springinessEnabled = true
+
 	}
 	
 	func partnerInfoChanged(_: NSNotification) {
@@ -85,6 +89,11 @@ class ChatViewController: JSQMessagesViewController {
 			let lastMessageTimeStamp = self.detailedDateFormatter.stringFromDate(lastMessage.date)
 			self.seenRef.child(AppState.sharedInstance.userID).setValue(lastMessageTimeStamp)
 		}
+		let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+		let rect = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.size.width, height: statusBarHeight)
+		let statusBarView = UIView.init(frame: rect)
+		statusBarView.backgroundColor = UIColor.init(red: 250/255, green: 117/255, blue: 100/255, alpha: 1)
+		self.view.addSubview(statusBarView)
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
@@ -113,7 +122,14 @@ class ChatViewController: JSQMessagesViewController {
 	}
 	
 	private func observeMessages() {
-		let messagesQuery = messagesRef.queryLimitedToLast(10)
+		let messagesQuery = messagesRef.queryLimitedToLast(numOfMessagesShown)
+		
+		// checks if this function has been called again
+		if _chatRefHandle != nil {
+			messagesQuery.removeAllObservers()
+			messages.removeAll()
+			reloadMessagesView()
+		}
 		_chatRefHandle = messagesQuery.observeEventType(.ChildAdded) { (snapshot: FIRDataSnapshot!) in
 			if snapshot.exists() {
 				let id = snapshot.childSnapshotForPath("id").value as! String
@@ -134,6 +150,12 @@ class ChatViewController: JSQMessagesViewController {
 				FIRCrashMessage("messagesQuery: finished receiving message")
 			}
 		}
+	}
+	
+	override func collectionView(collectionView: JSQMessagesCollectionView!, header headerView: JSQMessagesLoadEarlierHeaderView!, didTapLoadEarlierMessagesButton sender: UIButton!) {
+		numOfMessagesShown += 10
+		observeMessages()
+		automaticallyScrollsToMostRecentMessage = false
 	}
 	
 	override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!,

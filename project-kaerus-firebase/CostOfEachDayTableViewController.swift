@@ -43,7 +43,18 @@ class CostOfEachDayTableViewController: UITableViewController {
 	override func willMoveToParentViewController(parent: UIViewController?) {
 		super.willMoveToParentViewController(parent)
 		if parent == nil {
-			AppState.sharedInstance.setCostData(costOfEachDayTextField.text!, maxLimit: maxLimitTextField.text!, splitCost: splitCostSwitch.on, flatRate: flatRateSwitch.on, flatRate_AfterNumDeadlines: flatRate_NumOfDeadlines.text!, flatRate_EachDeadlineCost: flatRate_EachDeadlineCost.text!)
+			// ugly, but will fix later
+			if costOfEachDayTextField.text == AS.costOfEachDay.description
+			&& maxLimitTextField.text == AS.maxLimit.description
+			&& splitCostSwitch.on == AS.splitCost
+			&& flatRateSwitch.on == AS.flatRate
+			&& flatRate_EachDeadlineCost.text == AS.flatRate_EachDeadlineCost.description
+			&& flatRate_NumOfDeadlines.text == AS.flatRate_AfterNumDeadlines.description {
+				print("hi")
+				return
+			}
+			
+			AS.setCostData(costOfEachDayTextField.text!, maxLimit: maxLimitTextField.text!, splitCost: splitCostSwitch.on, flatRate: flatRateSwitch.on, flatRate_AfterNumDeadlines: flatRate_NumOfDeadlines.text!, flatRate_EachDeadlineCost: flatRate_EachDeadlineCost.text!)
 		
 			let paymentSettingsDict = [
 				"Cost-Per-Day" : AS.costOfEachDay,
@@ -58,7 +69,7 @@ class CostOfEachDayTableViewController: UITableViewController {
 			costRef.setValue(paymentSettingsDict)
 			
 			// send notification to partner
-			sendNotification(AppState.sharedInstance.f_name! + " has changed your payment settings.")
+			sendNotification(AppState.sharedInstance.firstName! + " has changed your payment settings.")
 		}
 	}
 }
