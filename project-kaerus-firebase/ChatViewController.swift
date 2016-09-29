@@ -33,7 +33,7 @@ class ChatViewController: JSQMessagesViewController {
 		// set up view controller
 		self.senderId = AppState.sharedInstance.userID
 		self.senderDisplayName = AppState.sharedInstance.name
-		self.edgesForExtendedLayout = UIRectEdge.None
+		self.edgesForExtendedLayout = UIRectEdge.Top
 		self.setupBubbles()
 		// TODO
 		//		self.collectionView.collectionViewLayout.messageBubbleFont = UIFont.init(name: "Avenir Next", size: 15)
@@ -47,8 +47,6 @@ class ChatViewController: JSQMessagesViewController {
 		chatSetup()
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.partnerInfoChanged(_:)), name: "PartnerInfoChanged_Chat", object: nil)
 		self.showLoadEarlierMessagesHeader = true
-		self.collectionView.collectionViewLayout.springinessEnabled = true
-
 	}
 	
 	func partnerInfoChanged(_: NSNotification) {
@@ -92,13 +90,15 @@ class ChatViewController: JSQMessagesViewController {
 		let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
 		let rect = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.size.width, height: statusBarHeight)
 		let statusBarView = UIView.init(frame: rect)
-		statusBarView.backgroundColor = UIColor.init(red: 250/255, green: 117/255, blue: 100/255, alpha: 1)
+		//249	94	76
+		statusBarView.backgroundColor = UIColor.init(red: 250/255, green: 94/255, blue: 76/255, alpha: 1)
 		self.view.addSubview(statusBarView)
+		
+		self.collectionView.collectionViewLayout.springinessEnabled = true
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
 		super.viewWillDisappear(animated)
-		//		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 	
 	func removeRefObservers() {

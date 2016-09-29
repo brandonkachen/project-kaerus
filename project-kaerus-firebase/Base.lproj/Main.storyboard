@@ -476,7 +476,7 @@
                             <userDefinedRuntimeAttribute type="image" keyPath="selectedImage" value="SettingsFilled"/>
                         </userDefinedRuntimeAttributes>
                     </tabBarItem>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="0L5-tO-YL4">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="0L5-tO-YL4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.57852143049240112" green="0.64334189891815186" blue="0.64782792329788208" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -504,7 +504,7 @@
                         </userDefinedRuntimeAttributes>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="nPc-ON-YoL">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="nPc-ON-YoL">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -550,7 +550,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cay-gW-awB">
-                                                    <frame key="frameInset" minX="25" minY="4" width="61" height="20.5"/>
+                                                    <frame key="frameInset" minX="25" minY="3" width="61" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="deadline">
@@ -564,7 +564,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pfv-lJ-fsS">
-                                                    <frame key="frameInset" minX="25" minY="24.5" width="27" height="16.5"/>
+                                                    <frame key="frameInset" minX="25" minY="24" width="27" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Italic" family="Avenir Next" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -664,7 +664,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kcB-MH-NmD">
-                                                    <frame key="frameInset" minX="25" minY="4" width="61" height="20.5"/>
+                                                    <frame key="frameInset" minX="25" minY="3" width="61" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="deadline">
@@ -678,7 +678,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KZS-lP-RbM">
-                                                    <frame key="frameInset" minX="25" minY="24.5" width="27" height="16.5"/>
+                                                    <frame key="frameInset" minX="25" minY="24" width="27" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Italic" family="Avenir Next" pointSize="12"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -912,6 +912,7 @@ You must pay your partner before you can access this day.</string>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="RqE-G8-HE0"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="375" height="600"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vBW-a0-7Fj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1257,7 +1258,6 @@ If this is off, you'll be charged the entire cost. </string>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="knB-SN-9X7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.98644763231277466" green="0.36454761028289795" blue="0.26892751455307007" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="16"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
