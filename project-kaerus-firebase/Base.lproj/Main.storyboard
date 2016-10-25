@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2333a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ojq-dz-ZAK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ojq-dz-ZAK">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
@@ -301,9 +301,22 @@
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="107" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MhE-Zm-OOd">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Fz6-8N-gxY">
+                                            <rect key="frame" x="0.0" y="0.0" width="367" height="24"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <attributedString key="attributedText">
+                                                <fragment content="Friends Using Project Kaerus:">
+                                                    <attributes>
+                                                        <font key="NSFont" size="14" name="AvenirNext-Medium"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FindFriendsTableViewCell" rowHeight="107" id="YJa-DY-NOi" customClass="FindFriendsTableViewCell" customModule="project_kaerus_firebase" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="28" width="367" height="107"/>
+                                                <rect key="frame" x="0.0" y="52" width="367" height="107"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YJa-DY-NOi" id="mUU-xm-FRn">
                                                     <frame key="frameInset" width="367" height="107"/>
@@ -411,7 +424,7 @@
                                     </tableView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="MhE-Zm-OOd" firstAttribute="top" secondItem="9K8-ja-KSK" secondAttribute="top" constant="64" id="Hde-S9-Xcu"/>
+                                    <constraint firstItem="MhE-Zm-OOd" firstAttribute="top" secondItem="9K8-ja-KSK" secondAttribute="top" id="Hde-S9-Xcu"/>
                                     <constraint firstItem="MhE-Zm-OOd" firstAttribute="leading" secondItem="9K8-ja-KSK" secondAttribute="leading" id="gPf-SW-rgg"/>
                                     <constraint firstItem="MhE-Zm-OOd" firstAttribute="top" secondItem="9K8-ja-KSK" secondAttribute="top" constant="65" id="iPd-4R-6c1"/>
                                     <constraint firstItem="MhE-Zm-OOd" firstAttribute="trailing" secondItem="9K8-ja-KSK" secondAttribute="trailingMargin" id="osc-6b-vqf"/>

@@ -118,7 +118,6 @@ class ManagePartnerViewController: UIViewController, UITableViewDataSource, UITa
 						})
 					})
 				}
-				self.tableView.reloadData()
 			}
 		})
 	}

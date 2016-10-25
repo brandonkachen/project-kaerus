@@ -90,7 +90,6 @@ class ChatViewController: JSQMessagesViewController {
 		let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
 		let rect = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.size.width, height: statusBarHeight)
 		let statusBarView = UIView.init(frame: rect)
-		//249	94	76
 		statusBarView.backgroundColor = UIColor.init(red: 250/255, green: 94/255, blue: 76/255, alpha: 1)
 		self.view.addSubview(statusBarView)
 		
