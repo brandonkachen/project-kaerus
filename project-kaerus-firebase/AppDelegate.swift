@@ -29,9 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			handleNotificationAction: { (result) in self.notifAct(result) },
 			settings: [kOSSettingsKeyAutoPrompt : false, kOSSettingsKeyInAppAlerts : false])
 		
-		UIApplication.sharedApplication().applicationIconBadgeNumber = 1
-		UIApplication.sharedApplication().applicationIconBadgeNumber = 0
-			
 		checkIfUserLoggedIn()
 		return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 	}
@@ -59,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if let tabBarVC = topController as? UITabBarController where tabBarVC.selectedIndex != 1 {
 				AppState.sharedInstance.unseenMessagesCount += 1
 				tabBarVC.tabBar.items![1].badgeValue = String(AppState.sharedInstance.unseenMessagesCount)
+//				UIApplication.sharedApplication().applicationIconBadgeNumber += 1
 			}
 		}
 	}
@@ -72,8 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if let tabBarVC = topController as? UITabBarController {
 				tabBarVC.selectedIndex = 1
 				tabBarVC.tabBar.items![1].badgeValue = nil
-				AppState.sharedInstance.unseenMessagesCount = 0
-				UIApplication.sharedApplication().cancelAllLocalNotifications()
 			}
 		}
 	}
@@ -85,6 +81,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationDidBecomeActive(application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 		FBSDKAppEvents.activateApp()
+		AppState.sharedInstance.unseenMessagesCount = 0
+		UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+		UIApplication.sharedApplication().cancelAllLocalNotifications()
 	}
 	
 	func applicationDidEnterBackground(application: UIApplication) {

@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseCrash
 import FirebaseDatabase
 
 class SettingsTableViewController: UITableViewController {
@@ -49,7 +50,10 @@ class SettingsTableViewController: UITableViewController {
     }
 	
 	override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-		if indexPath.section == 0 || indexPath.section == 3 || AppState.sharedInstance.groupchat_id != nil {
+		if  indexPath.section == 0 ||
+			indexPath.section == 3 ||
+			indexPath.section == 4 ||
+			AppState.sharedInstance.groupchat_id != nil {
 			return indexPath
 		} else {
 			return nil
@@ -58,8 +62,11 @@ class SettingsTableViewController: UITableViewController {
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		if indexPath.section == 3 {
-			let email = "projectkaerus@gmail.com"
-			let url = NSURL(string: "mailto:\(email)")!
+			var url = NSURL(string: "https://projectkaerus.wordpress.com")!
+			if indexPath.row == 1 {
+				let privacy_page = "https://projectkaerus.wordpress.com/privacy-policy"
+				url = NSURL(string: privacy_page)!
+			}
 			UIApplication.sharedApplication().openURL(url)
 		}
 	}
@@ -98,9 +105,10 @@ class SettingsTableViewController: UITableViewController {
 				
 				let loginScreenViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
 				self.presentViewController(loginScreenViewController, animated: true, completion: nil)
+				FIRCrashMessage("Sign out success!")
 			}
 		} catch let signOutError as NSError {
-			print ("Error signing out: \(signOutError)")
+			FIRCrashMessage("Error signing out: \(signOutError)")
 		}
 	}
 }

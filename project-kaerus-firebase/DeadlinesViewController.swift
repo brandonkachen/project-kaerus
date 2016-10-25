@@ -115,6 +115,10 @@ class DeadlinesViewController: UIViewController {
 	}
 	
 	func reloadData(_: NSNotification) {
+		if let date = dateFormatter.dateFromString(self.dateUserIsLookingAt) {
+			calendarView.scrollToDate(date)
+			calendarView.selectDates([date])
+		}
 		self.deadlineTable.reloadData()
 	}
 	

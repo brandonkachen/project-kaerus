@@ -21,6 +21,7 @@
 */
 
 import UIKit
+import FirebaseCrash
 import FBSDKCoreKit
 import FBSDKLoginKit
 
@@ -32,10 +33,21 @@ class LoginViewController: UIViewController {
 		facebookLogin.logOut()
 		
 		facebookLogin.logInWithReadPermissions(["email", "user_friends"], fromViewController: self, handler:{(facebookResult, facebookError) -> Void in
-			if facebookError != nil { print("Facebook login failed. Error \(facebookError)")
-			} else if facebookResult.isCancelled { print("Facebook login was cancelled.")
-			} else { self.performSegueWithIdentifier("LoggedIn", sender: nil) }
+			if facebookError != nil {
+				FIRCrashMessage("Facebook login failed. Error \(facebookError)")
+			} else if facebookResult.isCancelled {
+				FIRCrashMessage("Facebook login was cancelled.")
+			} else {
+				FIRCrashMessage("Facebook login success!")
+				self.performSegueWithIdentifier("LoggedIn", sender: nil)
+			}
 		})
+	}
+	
+	@IBAction func didTapPivacyPolicyButton(sender: AnyObject) {
+		let privacy_page = "https://projectkaerus.wordpress.com/privacy-policy"
+		let url = NSURL(string: privacy_page)!
+		UIApplication.sharedApplication().openURL(url)
 	}
 	
 	override func viewDidLoad() {

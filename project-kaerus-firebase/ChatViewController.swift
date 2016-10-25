@@ -94,7 +94,7 @@ class ChatViewController: JSQMessagesViewController {
 		statusBarView.backgroundColor = UIColor.init(red: 250/255, green: 94/255, blue: 76/255, alpha: 1)
 		self.view.addSubview(statusBarView)
 		
-		self.collectionView.collectionViewLayout.springinessEnabled = true
+		self.collectionView.collectionViewLayout.springinessEnabled = false
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
