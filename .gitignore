@@ -1,0 +1,11 @@
+project-kaerus-firebase/Info.plist
+project-kaerus-firebase/GoogleService-Info.plist
+project-kaerus-firebase/project-kaerus-firebase.entitlements
+ios_push_certificate.cer
+ios_push_certificate.p12
+ios_push_certificate.pem
+Podfile.lock
+Podfile~
+Project_Kaerus_App_Development_Profile.mobileprovision
+Project_Kaerus_AdHoc_Provisioning_Profile-2.mobileprovision
+project-kaerus-firebase/project-kaerus-firebaseTests  
