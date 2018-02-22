@@ -47,7 +47,6 @@ class DeadlinesViewController: UIViewController {
 		ref = FIRDatabase.database().reference()
 		setPartnerStuff()
 
-//		fetchConfig()
 		logViewLoaded()
 		
 		// get today's deadlines on initial load
@@ -194,8 +193,8 @@ class DeadlinesViewController: UIViewController {
 			return
 		}
 		
-		// if user owes more than the limit allows, and is looking at their own tab
-		if self.userTotal >= AppState.sharedInstance.maxLimit && self.segControl.selectedSegmentIndex == 0 {
+		// if user owes more than the limit allows
+		if self.userTotal >= AppState.sharedInstance.maxLimit {
 			self.amtOwedLabel.text = "you must pay: "
 			self.amtOwedLabel.textColor = UIColor.redColor()
 			self.shouldLock = true
@@ -236,7 +235,7 @@ class DeadlinesViewController: UIViewController {
 			let str_nextDay = self.dateFormatter.stringFromDate(nextDay)
 			
 			// detect changes in user history from str_nextDay onwards
-			self.paymentsHistoryRef.child(AppState.sharedInstance.userID).queryOrderedByKey().queryStartingAtValue(str_nextDay).observeEventType(.Value)
+		self.paymentsHistoryRef.child(AppState.sharedInstance.userID).queryOrderedByKey().queryStartingAtValue(str_nextDay).observeEventType(.Value)
 			{ (snapshot: FIRDataSnapshot) in
 				self.userTotal = calculateTotal(snapshot)
 				self.owedTotalsRef.child(AppState.sharedInstance.userID).setValue(self.userTotal)
@@ -245,9 +244,7 @@ class DeadlinesViewController: UIViewController {
 				self.lastDayUserSetDeadlinesRef = self.ref.child("User-Deadlines").child(AppState.sharedInstance.userID).child("Deadlines")
 				self.lastDayUserSetDeadlinesRef.queryOrderedByKey().queryLimitedToLast(1).observeEventType(.Value) { (snapshot: FIRDataSnapshot) in
 					// only one item in snapshot.children
-					for item in snapshot.children {
-						self.lockDate = item.key!
-					}
+					self.lockDate = snapshot.children.first.key!
 					self.lockIfUserNeedsToPay()
 				}
 			}

@@ -17,17 +17,11 @@ class LoadingViewController: UIViewController {
 	var ref: FIRDatabaseReference!
 	var storageRef: FIRStorageReference!
 	var user: FIRUser!
-	var isStartingUp = false // is app loading for the first time? observers use this to avoid leaving a nonexistent group in refs
 	var selectedIndex = 0
 	
-	// Helper functions for entering and leaving dispatch group
-	func enterMainGroup() { if isStartingUp { dispatch_group_enter(self.mainGroup) } }
-	func leaveMainGroup() { if isStartingUp { dispatch_group_leave(self.mainGroup) } }
-		
     override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		isStartingUp = true
 		ref = FIRDatabase.database().reference()
 		storageRef = FIRStorage.storage().referenceForURL("gs://project-kaerus.appspot.com")
 		
@@ -66,7 +60,6 @@ class LoadingViewController: UIViewController {
 		
 		// when everything is loaded, go to DeadlineViewController
 		dispatch_group_notify(mainGroup, dispatch_get_main_queue()) {
-			self.isStartingUp = false
 			let tabBarController = self.storyboard!.instantiateViewControllerWithIdentifier("tabBarController") as! UITabBarController
 			tabBarController.selectedIndex = self.selectedIndex
 			self.presentViewController(tabBarController, animated: false, completion: nil)
@@ -87,12 +80,12 @@ extension LoadingViewController {
 				self.setNewUserInfo()
 			}
 			OneSignal.registerForPushNotifications()
-			self.leaveMainGroup()
+			dispatch_group_leave(self.mainGroup)
 		}
 	}
 	
 	func setReturningUserInfo(postDict: [String : String]) {
-		self.enterMainGroup()
+		dispatch_group_enter(self.mainGroup)
 		AppState.sharedInstance.firstName = postDict["firstName"]
 		let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID).child("profilePic.jpg")
 		profilePicRef.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
@@ -101,12 +94,12 @@ extension LoadingViewController {
 			} else {
 				AppState.sharedInstance.photo = UIImage(data: data!)!.circle
 			}
-			self.leaveMainGroup()
+			dispatch_group_leave(self.mainGroup)
 		}
 	}
 	
 	func setNewUserInfo() {
-		self.enterMainGroup()
+		dispatch_group_enter(self.mainGroup)
 		let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields" : "id, first_name, picture.width(200).height(200)"])
 		graphRequest.startWithCompletionHandler(){ (connection, result, error) -> Void in
 			if (error != nil) {
@@ -131,12 +124,12 @@ extension LoadingViewController {
 				// upload facebook profile pic to Firebase
 				self.uploadProfilePic(picData)
 			}
-			self.leaveMainGroup()
+			dispatch_group_leave(self.mainGroup)
 		}
 	}
 	
 	func uploadProfilePic(picData: NSData) {
-		self.enterMainGroup()
+		dispatch_group_enter(self.mainGroup)
 		let profilePicRef = self.storageRef.child("users").child(AppState.sharedInstance.userID).child("profilePic.jpg")
 		let uploadProfilePicTask = profilePicRef.putData(picData, metadata: nil)
 		
@@ -144,7 +137,7 @@ extension LoadingViewController {
 		
 		// Upload completed successfully
 		uploadProfilePicTask.observeStatus(.Success) { snapshot in
-			self.leaveMainGroup()
+			dispatch_group_leave(self.mainGroup)
 		}
 		
 		// Upload failed
@@ -168,7 +161,7 @@ extension LoadingViewController {
 			default:
 				break
 			}
-			self.leaveMainGroup()
+			dispatch_group_leave(self.mainGroup)
 		}
 	}
 	
@@ -215,7 +208,7 @@ extension LoadingViewController {
 			} else {
 				partnerStatusRef.setValue(false)
 			}
-			self.leaveMainGroup()
+			dispatch_group_leave(self.mainGroup)
 		}
 	}
 	
@@ -237,7 +230,6 @@ extension LoadingViewController {
 				self.partnerOneSignalIdSetup(partnerSetupGroup)
 				self.partnerProfilePicSetup(partnerSetupGroup)
 				self.paymentSettingsSetup(partnerSetupGroup)
-//				self.badgesSetup()
 			} else {
 				AppState.sharedInstance.setPartnerState(false,
 				                                        f_firstName: nil,
@@ -253,7 +245,7 @@ extension LoadingViewController {
 				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Manage", object: nil)
 				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Deadlines", object: nil)
 				NSNotificationCenter.defaultCenter().postNotificationName("PartnerInfoChanged_Chat", object: nil)
-				self.leaveMainGroup()
+				dispatch_group_leave(self.mainGroup)
 			}
 		}
 	}
@@ -306,17 +298,3 @@ extension LoadingViewController {
 			}
 		}
 	}
-	
-//	func badgesSetup() {
-//		self.enterGroup()
-//		let badgesRef = self.ref.child("Badges").child(AppState.sharedInstance.userID)
-//		badgesRef.observeEventType(.Value) { (snapshot: FIRDataSnapshot!) in
-//			if let unseenMessages = snapshot.childSnapshotForPath("Unseen-Messages").value as? Int {
-//				AppState.sharedInstance.unseenMessagesCount = unseenMessages
-//				NSNotificationCenter.defaultCenter().postNotificationName("MyBadgesChanged", object: nil)
-//			} else {
-//				AppState.sharedInstance.unseenMessagesCount = 0
-//			}
-//		}
-//	}
-}
